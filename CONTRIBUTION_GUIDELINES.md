@@ -48,11 +48,11 @@ Before contributing, set up the project locally:
    ```
 4. Install dependencies:
    ```bash
-   npm 
+   npm install
    ```
 5. Run the project:
    ```bash
-   npm start
+   npm expo start 
    ```
 6. Ensure everything works before making changes.
 
