@@ -15,6 +15,8 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@avnu/avnu-sdk": "^2.1.1",
+    "@avnu/gasless-sdk": "^0.1.6",
     "@expo/vector-icons": "^14.0.2",
     "@react-navigation/native": "^6.0.2",
     "expo": "~51.0.28",
