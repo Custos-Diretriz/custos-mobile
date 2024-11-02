@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useWindowDimensions, Text, GestureResponderEvent, TouchableOpacity } from 'react-native';
+import { ScrollView, useWindowDimensions } from 'react-native';
 import styled from 'styled-components/native';
 import { useTheme } from '@react-navigation/native';
-import { Link } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Nav from '@/components/Nav';
 import ArrowLeft from '@/assets/svgs/arrowLeft.svg';
-import NoAgreement from '@/assets/svgs/noAgreement.svg';
-import OutlinedButton from '@/components/OutlinedButton';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import NoAgreementScreen from '@/components/modalScreens/NoAgreementScreen';
 import SelectAgreementScreen from '@/components/modalScreens/SelectAgreementScreen';
 import VerifyIdentityScreen from '@/components/modalScreens/VerifyIdentityScreen';
 import AgreementContentScreen from '@/components/modalScreens/AgreementContentScreen';
+import SecondPartyWalletScreen from '@/components/modalScreens/SecondPartyWalletScreen';
+import AgreementSuccessful from '@/components/modalScreens/AgreementSuccessful';
+import PrintAgreementScreen from '@/components/modalScreens/PrintAgreementScreen';
+import Sidebar from '@/components/Sidebar';
+import Footer from '@/components/footer';
 
 const THEME_STORAGE_KEY = 'theme';
 
-const Agreement: React.FC = () => {
+const Agreement = () => {
   const { colors } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const [currentModal, setCurrentModal] = useState('NoAgreement');
+  const [isPrintScreenVisible, setIsPrintScreenVisible] =
+    useState<boolean>(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const { width } = useWindowDimensions();
 
   const handleBack = () => {
@@ -36,7 +40,16 @@ const Agreement: React.FC = () => {
       setCurrentModal('AgreementContent');
     else if (currentModal === 'AgreementContent')
       setCurrentModal('VerifyIdentity');
-    else if (currentModal === 'VerifyIdentity') setCurrentModal(null); // TODO: create a done modal
+    else if (currentModal === 'VerifyIdentity') setCurrentModal('SecondParty');
+    else if (currentModal === 'SecondParty') {
+      setCurrentModal('AgreementSuccessful');
+      setIsPrintScreenVisible(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsPrintScreenVisible(false);
+    setCurrentModal('PrintAgreementScreen');
   };
 
   // Collapse sidebar on mobile view (width < 768px)
@@ -60,19 +73,24 @@ const Agreement: React.FC = () => {
     await AsyncStorage.setItem(THEME_STORAGE_KEY, newTheme ? 'dark' : 'light');
   };
 
-  const handlePress = () => {
-    // Navigate to agreement creation screen
-    // Navigation.navigate('AgreementCreate');
+   const toggleSidebar = () => {
+     setIsSidebarVisible(!isSidebarVisible);
+
   };
+  
+  const connectWallet = () => {}
 
   return (
     <StyledView backgroundColor={colors.background}>
+      {/* Conditionally render Sidebar */}
+      {isSidebarVisible && <Sidebar onClose={toggleSidebar} />}
       <NavContainer>
-        <Nav />
+        <Nav toggleSidebar={toggleSidebar} />
       </NavContainer>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <BackButtonContainer onPress={handleBack}>
-          <ArrowLeft />
-          <StyledText color={colors.text}>Back</StyledText>
+        <ArrowLeft />
+        <StyledText color={colors.text}>Back</StyledText>
       </BackButtonContainer>
       <AgreementText color={colors.text}>Agreements</AgreementText>
       <NoAgreementContainer>
@@ -91,7 +109,23 @@ const Agreement: React.FC = () => {
         {currentModal === 'VerifyIdentity' && (
           <VerifyIdentityScreen onContinue={handleContinue} />
         )}
-      </NoAgreementContainer>
+        {/* Second Party Modal */}
+        {currentModal === 'SecondParty' && (
+          <SecondPartyWalletScreen onContinue={handleContinue} />
+        )}
+        {currentModal === 'AgreementSuccessful' && (
+          <AgreementSuccessful
+            isVisible={isPrintScreenVisible}
+            onClose={handleCloseModal}
+          />
+        )}
+        {/* Print Agreement Modal */}
+        {currentModal === 'PrintAgreementScreen' && (
+          <PrintAgreementScreen onContinue={handleContinue} />
+        )}
+        </NoAgreementContainer>
+        {/* <Footer /> */}
+        </ScrollView>
     </StyledView>
   );
 };
@@ -135,119 +169,3 @@ const NoAgreementContainer = styled.View`
   justify-content: center;
   align-items: center;
 `;
-
-// // Sidebar with collapsible behavior
-// interface SidebarProps {
-//   isCollapsed: boolean;
-// }
-
-// const Sidebar = styled.View<SidebarProps>`
-//   width: ${(props) => (props.isCollapsed ? '80px' : '250px')};
-//   background-color: #111;
-//   padding: 20px;
-//   height: 100%;
-//   transition: width 0.3s;
-// `;
-
-// // Header (top navigation)
-// const Header = styled.View`
-//   height: 60px;
-//   background-color: #333;
-//   padding: 10px;
-//   flex-direction: row;
-//   justify-content: space-between;
-//   align-items: center;
-// `;
-
-// const Button = styled.TouchableOpacity`
-//   background-color: #0066cc;
-//   padding: 10px 15px;
-//   border-radius: 5px;
-//   margin-top: 10px;
-// `;
-
-// const CollapseButton = styled.TouchableOpacity`
-//   background-color: transparent;
-//   padding: 10px;
-//   align-items: center;
-// `;
-
-// import ModeSwitch from '@/components/ModeSwitch';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { useTheme } from '@react-navigation/native';
-// import { useEffect, useState } from 'react';
-// import { Switch } from 'react-native';
-// import { SafeAreaView } from 'react-native-safe-area-context';
-// import styled from 'styled-components/native';
-
-// const THEME_STORAGE_KEY = 'theme';
-
-// export default function Index() {
-//   const { colors } = useTheme();
-//   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-
-//   useEffect(() => {
-//     const loadTheme = async () => {
-//       const savedTheme = await AsyncStorage.getItem(THEME_STORAGE_KEY);
-//       if (savedTheme) {
-//         setIsDarkMode(savedTheme === 'dark');
-//       }
-//     };
-//     loadTheme();
-//   }, []);
-
-//   const toggleTheme = async () => {
-//     const newTheme = !isDarkMode;
-//     setIsDarkMode(newTheme);
-//     await AsyncStorage.setItem(THEME_STORAGE_KEY, newTheme ? 'dark' : 'light');
-//   };
-
-//   return (
-//     <SafeAreaView
-//       style={{
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//       }}
-//     >
-//       <Container backgroundColor={colors.background}>
-//         {/* <StyledText>Edit app/index.tsx to edit this screen.</StyledText> */}
-
-//         {/* Switch for toggling the theme */}
-//         <SwitchContainer>
-//           {/* <StyledText color={colors.text}>
-//             {isDarkMode ? 'Dark Mode' : 'Light Mode'}
-//           </StyledText> */}
-//           {/* <Switch
-//             value={isDarkMode}
-//             onValueChange={toggleTheme}
-//           /> */}
-
-//           {/* <ModeSwitch
-//             isDarkMode={isDarkMode}
-//             toggleTheme={toggleTheme}
-//           /> */}
-//         </SwitchContainer>
-//       </Container>
-//     </SafeAreaView>
-//   );
-// }
-
-// // Styled components
-// const Container = styled.View<{ backgroundColor: string }>`
-//   flex: 1;
-//   justify-content: center;
-//   align-items: center;
-//   background-color: ${(props) => props.backgroundColor};
-// `;
-
-// const StyledText = styled.Text<{ color: string }>`
-//   color: ${(props) => props.color};
-//   font-size: 16px;
-// `;
-
-// const SwitchContainer = styled.View`
-//   flex-direction: row;
-//   align-items: center;
-//   margin-top: 20px;
-// `;

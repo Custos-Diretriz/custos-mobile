@@ -1,10 +1,9 @@
-// NoAgreementScreen.tsx
 import React from 'react';
-import { View, Text } from 'react-native';
 import styled from 'styled-components/native';
 import OutlinedButton from '@/components/OutlinedButton';
-import NoAgreement from '@/assets/svgs/noAgreement.svg';
 import { useTheme } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
+import emptyStateAnimation from '@/assets/animations/empty-state.json';
 
 const NoAgreementScreen: React.FC<{ onContinue: () => void }> = ({
   onContinue,
@@ -13,7 +12,15 @@ const NoAgreementScreen: React.FC<{ onContinue: () => void }> = ({
 
   return (
     <>
-      <NoAgreement />
+      <LottieContainer>
+        <LottieView
+          source={emptyStateAnimation}
+          autoPlay
+          loop
+          style={{ width: 280, height: 280 }}
+        />
+      </LottieContainer>
+
       <NoAgreementText color={colors.text}>
         You have not created any agreement yet. You can start creating one from
         here.
@@ -28,11 +35,14 @@ const NoAgreementScreen: React.FC<{ onContinue: () => void }> = ({
 
 export default NoAgreementScreen;
 
-
+const LottieContainer = styled.View`
+  width: 280px;
+  height: 280px;
+`;
 
 const NoAgreementText = styled.Text<{ color: string }>`
   color: ${(props) => props.color};
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
   width: 300px;
   margin-bottom: 30px;

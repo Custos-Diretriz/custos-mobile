@@ -4,7 +4,10 @@ import styled from 'styled-components/native';
 import { useTheme } from '@react-navigation/native';
 import MenuButton from '@/assets/svgs/menuOutline.svg';
 
-export default function Nav() {
+type NavProps = {
+  toggleSidebar: () => void;
+};
+export default function Nav({ toggleSidebar }: NavProps) {
   const { colors } = useTheme();
 
   return (
@@ -13,7 +16,7 @@ export default function Nav() {
         <TouchableOpacity>
           <Image source={require('../assets/images/custosLogo.png')} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={toggleSidebar}>
           <MenuButton />
         </TouchableOpacity>
       </StyledView>
@@ -32,9 +35,4 @@ const StyledView = styled.View<{ backgroundColor: string }>`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`;
-
-const StyledText = styled.Text<{ color: string }>`
-  color: ${(props) => props.color};
-  font-size: 16px;
 `;
