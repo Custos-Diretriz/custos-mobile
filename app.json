@@ -1,33 +1,37 @@
 {
   "expo": {
-    "name": "custos-mobile",
-    "slug": "custos-mobile",
+    "name": "Custos Diretriz",
+    "slug": "custos-diretriz",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "custos-diretriz",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/images/splash-screen.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#1E2F37"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/splash-screen.png",
+        "backgroundColor": "#1E2F37"
       }
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon.png"
     },
     "plugins": [
-      "expo-router"
+      "./queries.js",
+      "expo-router",
+      ["expo-font", {
+        "fonts": ["Outfit-Regular", "Outfit-SemiBold"]
+      }]
     ],
     "experiments": {
       "typedRoutes": true
