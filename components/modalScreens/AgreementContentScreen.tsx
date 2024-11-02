@@ -68,7 +68,7 @@ export default SelectAgreementScreen;
 // Outer container to ensure correct border appearance
 const OuterContainer = styled.View`
   margin-top: 70px;
-  width: 180px;
+  width: 170px;
   height: 501.5px;
   align-items: center;
   justify-content: center;

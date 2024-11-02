@@ -25,7 +25,7 @@ const SelectAgreementScreen: React.FC<{ onContinue: () => void }> = ({
         style={{ flex: 1, borderRadius: 20, padding: 2 }} // Padding to create space for the border
       >
         <Container background={colors.background}>
-          <StyledText color={colors.text}>Agreement Content</StyledText>
+          <StyledText color={colors.text}>Verify Your Identity</StyledText>
           <AgreementTypeText color={colors.text}>
             Agreement Type
           </AgreementTypeText>
@@ -108,7 +108,7 @@ export default SelectAgreementScreen;
 // Outer container to ensure correct border appearance
 const OuterContainer = styled.View`
   margin-top: 70px;
-  width: 180px;
+  width: 170px;
   height: 485px;
   align-items: center;
   justify-content: center;
