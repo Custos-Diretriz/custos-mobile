@@ -74,7 +74,7 @@ const Footer = () => {
         <LinkSection>
           <SectionTitle>Community</SectionTitle>
           <SocialLinks>
-            <SocialLink onPress={() => Linking.openURL('https://discord.com')}>
+            {/* <SocialLink onPress={() => Linking.openURL('https://discord.com')}>
               <Ionicons
                 name='logo-discord'
                 size={20}
@@ -101,7 +101,7 @@ const Footer = () => {
                 size={20}
                 color='#e6e6e6'
               />
-            </SocialLink>
+            </SocialLink> */}
           </SocialLinks>
         </LinkSection>
       </LinksContainer>

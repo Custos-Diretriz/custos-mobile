@@ -73,7 +73,6 @@ const SelectAgreementScreen: React.FC<{ onContinue: () => void }> = ({
 
 export default SelectAgreementScreen;
 
-// Outer container to ensure correct border appearance
 const OuterContainer = styled.View`
   margin-top: 100px;
   width: 170px;
@@ -82,7 +81,6 @@ const OuterContainer = styled.View`
   justify-content: center;
 `;
 
-// This container is for the content only
 const Container = styled.View<{ background: string }>`
   background-color: ${(props) => props.background};
   border-radius: 20px;

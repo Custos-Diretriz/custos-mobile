@@ -73,12 +73,11 @@ const Agreement = () => {
     await AsyncStorage.setItem(THEME_STORAGE_KEY, newTheme ? 'dark' : 'light');
   };
 
-   const toggleSidebar = () => {
-     setIsSidebarVisible(!isSidebarVisible);
-
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
   };
-  
-  const connectWallet = () => {}
+
+  const connectWallet = () => {};
 
   return (
     <StyledView backgroundColor={colors.background}>
@@ -87,45 +86,45 @@ const Agreement = () => {
       <NavContainer>
         <Nav toggleSidebar={toggleSidebar} />
       </NavContainer>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <BackButtonContainer onPress={handleBack}>
-        <ArrowLeft />
-        <StyledText color={colors.text}>Back</StyledText>
-      </BackButtonContainer>
-      <AgreementText color={colors.text}>Agreements</AgreementText>
-      <NoAgreementContainer>
-        {currentModal === 'NoAgreement' && (
-          <NoAgreementScreen onContinue={handleContinue} />
-        )}
-        {/* Select Agreement Modal */}
-        {currentModal === 'SelectAgreement' && (
-          <SelectAgreementScreen onContinue={handleContinue} />
-        )}
-        {/* Agreement Content Modal */}
-        {currentModal === 'AgreementContent' && (
-          <AgreementContentScreen onContinue={handleContinue} />
-        )}
-        {/* Verify Identity Modal */}
-        {currentModal === 'VerifyIdentity' && (
-          <VerifyIdentityScreen onContinue={handleContinue} />
-        )}
-        {/* Second Party Modal */}
-        {currentModal === 'SecondParty' && (
-          <SecondPartyWalletScreen onContinue={handleContinue} />
-        )}
-        {currentModal === 'AgreementSuccessful' && (
-          <AgreementSuccessful
-            isVisible={isPrintScreenVisible}
-            onClose={handleCloseModal}
-          />
-        )}
-        {/* Print Agreement Modal */}
-        {currentModal === 'PrintAgreementScreen' && (
-          <PrintAgreementScreen onContinue={handleContinue} />
-        )}
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <BackButtonContainer onPress={handleBack}>
+          <ArrowLeft />
+          <StyledText color={colors.text}>Back</StyledText>
+        </BackButtonContainer>
+        <AgreementText color={colors.text}>Agreements</AgreementText>
+        <NoAgreementContainer>
+          {currentModal === 'NoAgreement' && (
+            <NoAgreementScreen onContinue={handleContinue} />
+          )}
+          {/* Select Agreement Modal */}
+          {currentModal === 'SelectAgreement' && (
+            <SelectAgreementScreen onContinue={handleContinue} />
+          )}
+          {/* Agreement Content Modal */}
+          {currentModal === 'AgreementContent' && (
+            <AgreementContentScreen onContinue={handleContinue} />
+          )}
+          {/* Verify Identity Modal */}
+          {currentModal === 'VerifyIdentity' && (
+            <VerifyIdentityScreen onContinue={handleContinue} />
+          )}
+          {/* Second Party Modal */}
+          {currentModal === 'SecondParty' && (
+            <SecondPartyWalletScreen onContinue={handleContinue} />
+          )}
+          {currentModal === 'AgreementSuccessful' && (
+            <AgreementSuccessful
+              isVisible={isPrintScreenVisible}
+              onClose={handleCloseModal}
+            />
+          )}
+          {/* Print Agreement Modal */}
+          {currentModal === 'PrintAgreementScreen' && (
+            <PrintAgreementScreen onContinue={handleContinue} />
+          )}
         </NoAgreementContainer>
         {/* <Footer /> */}
-        </ScrollView>
+      </ScrollView>
     </StyledView>
   );
 };
