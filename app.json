@@ -1,40 +1,49 @@
 {
-  "expo": {
-    "name": "Custos Diretriz",
-    "slug": "custos-diretriz",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "custos-diretriz",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash-screen.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#1E2F37"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/splash-screen.png",
-        "backgroundColor": "#1E2F37"
-      }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/icon.png"
-    },
-    "plugins": [
-      "./queries.js",
-      "expo-router",
-      ["expo-font", {
-        "fonts": ["Outfit-Regular", "Outfit-SemiBold"]
-      }]
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
+	"expo": {
+	  "name": "Custos Diretriz",
+	  "slug": "custos-diretriz",
+	  "version": "1.0.0",
+	  "orientation": "portrait",
+	  "icon": "./assets/images/icon.png",
+	  "scheme": "custos-diretriz",
+	  "userInterfaceStyle": "automatic",
+	  "splash": {
+		"image": "./assets/images/splash-screen.png",
+		"resizeMode": "cover",
+		"backgroundColor": "#1E2F37"
+	  },
+	  "ios": {
+		"supportsTablet": true
+	  },
+	  "android": {
+		"adaptiveIcon": {
+		  "foregroundImage": "./assets/images/splash-screen.png",
+		  "backgroundColor": "#1E2F37"
+		}
+	  },
+	  "web": {
+		"bundler": "metro",
+		"output": "static",
+		"favicon": "./assets/images/icon.png"
+	  },
+	  "plugins": [
+		"./queries.js",
+		"expo-router",
+		["expo-font", {
+		  "fonts": ["Outfit-Regular", "Outfit-SemiBold"]
+		}],
+		[
+		  "expo-camera",
+		  {
+			"cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+			"microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+			"recordAudioAndroid": true
+		  }
+		]
+	  ],
+	  "experiments": {
+		"typedRoutes": true
+	  }
+	}
   }
-}
+  
