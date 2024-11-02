@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import GradientButton from '@/components/GradientButton';
 import Swiper from 'react-native-swiper';
 import { useAppKit } from '@reown/appkit-wagmi-react-native'
+import { useRouter } from 'expo-router';
 
 const slides = [
     {
@@ -29,7 +30,14 @@ const slides = [
 ];
 
 export default function SwiperScreen() {
-    const { open, close } = useAppKit()
+    const router = useRouter();
+    const { open } = useAppKit();
+
+    const handleConnect = async () => {
+        await open({ view: 'Connect' });
+        router.push("/(tabs)");
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <Swiper
@@ -68,8 +76,8 @@ export default function SwiperScreen() {
                     </View>
                 ))}
             </Swiper>
-            <GradientButton onPress={() => open({ view: 'Connect' })} width={248} />
-            <ImageBackground
+            <GradientButton onPress={handleConnect} width={248} />
+            <Image
                 source={require('../assets/images/ellipse.png')}
                 style={styles.backgroundImage}
             />
@@ -80,26 +88,29 @@ export default function SwiperScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'rgba(30, 47, 55, .3)',
+        zIndex: 2,
+        backgroundColor: '#000',
         paddingBottom: 150
     },
     backgroundImage: {
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        height: 586,
+        height: 300,
         zIndex: 0,
         resizeMode: 'cover',
         opacity: 0.5,
     },
     wrapper: {
-        height: '100%'
+        height: '100%',
+        zIndex: 2
     },
     slideContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 62,
+        zIndex: 2
     },
     titleContainer: {
         marginBottom: 20,
@@ -125,6 +136,7 @@ const styles = StyleSheet.create({
     img: {
         width: 118,
         height: 158.12,
+        zIndex: 2,
         marginBottom: 100,
         resizeMode: 'contain',
     },
