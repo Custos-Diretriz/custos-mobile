@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createAppKit, defaultWagmiConfig, AppKit } from '@reown/appkit-wagmi-react-native'
 
 const queryClient = new QueryClient()
-const projectId = '<YOUR PROJECTID>'
+const projectId = 'b26784ec0e0189fd763096b91bb6eb6d'
 
 const metadata = {
   name: 'Custos Diretriz',
@@ -69,12 +69,12 @@ export default function RootLayout() {
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <Stack>
-          {/* <Stack.Screen 
+          <Stack.Screen 
             name="index" 
             options={{ 
               headerShown: false 
             }} 
-          /> */}
+          />
           <Stack.Screen 
             name="(tabs)" 
             options={{ 
