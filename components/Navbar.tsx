@@ -1,14 +1,10 @@
-import React, { useState } from "react";
+import React from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
-  Image,
+  Pressable,
   Modal,
   StyleSheet,
-  Pressable,
-  SafeAreaView,
-  Button,
 } from "react-native";
 import { BlurView } from "expo-blur";
 import { useTheme } from "@react-navigation/native";
@@ -19,18 +15,8 @@ import {
   useWalletConnectModal,
 } from '@walletconnect/modal-react-native';
 
-const Navbar = () => {
-  const { colors } = useTheme();
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const handleConnectWallet = () => {
-    console.log("Connect Wallet clicked");
-    setModalVisible(false);
-  };
-
-
-  const projectId = '81db21c2e50629bb5a72570345514f84';
-
+// WalletConnect configuration
+const projectId = '81db21c2e50629bb5a72570345514f84';
 const providerMetadata = {
   name: 'YOUR_PROJECT_NAME',
   description: 'YOUR_PROJECT_DESCRIPTION',
@@ -42,86 +28,78 @@ const providerMetadata = {
   },
 };
 
+const Navbar = () => {
+  const { colors } = useTheme();
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const { open, isConnected, provider, address } = useWalletConnectModal();
 
-const {address, open, isConnected, provider} = useWalletConnectModal();
+  const handleConnection = async () => {
+    try {
+      if (isConnected) {
+        await provider?.disconnect();
+      } else {
+        await open();
+      }
+      setModalVisible(false);
+    } catch (error) {
+      console.error('Wallet connection error:', error);
+    }
+  };
 
-const handleConnection = () => {
-  if (isConnected) {
-    return provider?.disconnect();
+  interface MenuItemProps {
+    text: string;
+    icon?: React.ComponentType;
+    onPress?: () => void;
   }
 
-  return open();
-};
+  const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
+    <Pressable onPress={onPress} style={styles.item}>
+      <Text style={[styles.menuItem, { color: colors.text }]}>{text}</Text>
+      {Icon && <Icon />}
+    </Pressable>
+  );
+
   return (
     <>
       <View style={[styles.navbar, { backgroundColor: colors.background }]}>
-        <TouchableOpacity>
+        <Pressable>
           <Logo />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Text style={[styles.hamburger, { color: colors.text }]}>
-            <Menu />
-          </Text>
-        </TouchableOpacity>
+        </Pressable>
+        <Pressable onPress={() => setModalVisible(true)}>
+          <Menu />
+        </Pressable>
       </View>
 
-      <Modal transparent={true} visible={modalVisible} animationType="fade">
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={() => setModalVisible(false)}
-        >
+      <Modal transparent visible={modalVisible} animationType="fade">
+        <Pressable style={styles.modalOverlay} onPress={() => setModalVisible(false)}>
           <LinearGradient
             colors={['transparent', 'rgba(0,0,0,0)']}
             style={styles.backgr}
           />
           <BlurView intensity={20} style={styles.blurContainer}>
-            <View style={styles.item}>
-              <Text style={[styles.menuItem, { color: colors.text }]}>
-                Home
-              </Text>
-            </View>
-            <View style={styles.item}>
-              <Text style={[styles.menuItem, { color: colors.text }]}>
-                Company
-              </Text>
-            </View>
+            <MenuItem text="Home" icon={undefined} onPress={undefined} />
+            <MenuItem text="Company" icon={undefined} onPress={undefined} />
+            <MenuItem text="Agreement" icon={Cross} onPress={undefined} />
+            <MenuItem text="Video" icon={Video} onPress={undefined} />
 
-            <View style={styles.item}>
-              <Text style={[styles.menuItem, { color: colors.text }]}>
-                Agreement{" "}
-              </Text>
-              <Cross />
-            </View>
-
-            <View style={styles.item}>
-              <Text style={[styles.menuItem, { color: colors.text }]}>
-                Video{" "}
-              </Text>
-              <Video />
-            </View>
-
-            <TouchableOpacity onPress={handleConnectWallet}>
-            
-                <LinearGradient
-                      colors={['#19B1D2', '#0094FF']}
-                  style={styles.border}
-                >
-                    <TouchableOpacity style={styles.item}
-                     onPress={handleConnection}>
+            <Pressable onPress={handleConnection}>
+              <LinearGradient
+                colors={['#19B1D2', '#0094FF']}
+                style={styles.border}
+              >
+                <View style={styles.buttonItem}>
                   <Text style={[styles.menuItem, { color: colors.text }]}>
-                    Connect Wallet
+                    {isConnected ? `Connected: ${address?.slice(0, 6)}...` : 'Connect Wallet'}
                   </Text>
-
                   <Arrow />
+                </View>
+              </LinearGradient>
+            </Pressable>
 
-              </TouchableOpacity>
-                </LinearGradient>
-            </TouchableOpacity>
-            <Text>{isConnected ? address : "No Connected"}</Text>
             <WalletConnectModal
-        projectId={projectId}
-        providerMetadata={providerMetadata}
-      />
+              projectId={projectId}
+              providerMetadata={providerMetadata}
+            />
           </BlurView>
         </Pressable>
       </Modal>
@@ -139,48 +117,17 @@ const styles = StyleSheet.create({
     elevation: 3,
     paddingTop: 40,
   },
-  backgr:{
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  logo: {
-    width: 100,
-    height: 80,
-    resizeMode: "contain",
-  },
-  hamburger: {
-    fontSize: 24,
+  backgr: {
+    ...StyleSheet.absoluteFillObject,
   },
   modalOverlay: {
     flex: 1,
   },
   blurContainer: {
-    flex: 1,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  menu: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    fontSize: 18,
-    textAlign: "left",
-    paddingTop: 40,
-    fontFamily: "SpaceMono",
-    width: "100%",
   },
   item: {
     flexDirection: "row",
@@ -192,14 +139,14 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontFamily: "SpaceMono",
     paddingLeft: 10,
+    marginRight: 10,
   },
   border: {
-    borderWidth: 2,
-    borderRadius: 50, 
+    borderRadius: 50,
     padding: 2,
     marginTop: 50,
   },
-  buttonItem :{
+  buttonItem: {
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
