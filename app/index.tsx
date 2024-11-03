@@ -1,78 +1,162 @@
-import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import React, { useEffect } from 'react';
-import 'react-native-reanimated';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import Navbar from '@/components/Navbar';
-import HomeScreen from './screens/HomeScreen';
-import { WalletConnectModal } from '@walletconnect/modal-react-native';
-import Layout from './_layout';
-import { LogBox } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import { View, Text, Image, StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import MaskedView from '@react-native-masked-view/masked-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import GradientButton from '@/components/GradientButton';
+import Swiper from 'react-native-swiper';
+import { useAppKit } from '@reown/appkit-wagmi-react-native'
+import { useRouter } from 'expo-router';
 
-// Ignore specific log messages
-LogBox.ignoreLogs([
-    'Emitting expirer_expired', // Ignore this specific log message
-    'Inactive pairings cleared', // Ignore this specific log message
-    'Emitting subscription_created', // Ignore this specific log message
-    'Emitting expirer_created', // Ignore this specific log message
-    'Emitting history_created', // Ignore this specific log message
-  ]);
-  
-  // Optionally, you can override console.info to suppress these logs
-  const originalConsoleInfo = console.info;
-  console.info = (...args) => {
-    const logMessagesToIgnore = [
-      'Emitting expirer_expired',
-      'Inactive pairings cleared',
-      'Emitting subscription_created',
-      'Emitting expirer_created',
-      'Emitting history_created',
-    ];
-  
-    if (args[0] && typeof args[0] === 'string' && logMessagesToIgnore.some(msg => args[0].includes(msg))) {
-      return;
+const slides = [
+    {
+        id: '1',
+        title: `Create Legal \n Agreements`,
+        content: 'Create new legal agreements by providing the \nagreement content, the address of the second \n party, and details about the first party.',
+        imgSrc: require('../assets/images/slide1.png')
+    },
+    {
+        id: '2',
+        title: 'Crime Recorder',
+        content: 'We are providing an advanced platform \n for documenting and sharing crime \n events securely and transparently.',
+        imgSrc: require('../assets/images/slide2.png')
+    },
+    {
+        id: '3',
+        title: 'We Paid the Gas Fee',
+        content: 'We paid the price to keep your videos \n and legal agreements safe. Connect \n your wallet to get started.',
+        imgSrc: require('../assets/images/slide3.png')
     }
-    originalConsoleInfo(...args);
-  };
+];
 
+export default function SwiperScreen() {
+    const router = useRouter();
+    const { open } = useAppKit();
 
-// Prevent the splash screen from auto-hiding
-SplashScreen.preventAutoHideAsync();
+    const handleConnect = async () => {
+        await open({ view: 'Connect' });
+        router.push("/(tabs)");
+    };
 
-const projectId = '81db21c2e50629bb5a72570345514f84';
-const providerMetadata = {
-  name: 'YOUR_PROJECT_NAME',
-  description: 'YOUR_PROJECT_DESCRIPTION',
-  url: 'https://your-project-website.com/',
-  icons: ['https://your-project-logo.com/'],
-  redirect: {
-    native: 'YOUR_APP_SCHEME://',
-    universal: 'YOUR_APP_UNIVERSAL_LINK.com',
-  },
-};
+    return (
+        <SafeAreaView style={styles.container}>
+            <Swiper
+                style={styles.wrapper}
+                loop={false}
+                dot={<View style={styles.dot} />}
+                activeDot={
+                    <LinearGradient
+                        colors={['#2D8EFF', '#9C3FE4']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={styles.activeDot}
+                    />
+                }
+            >
+                {slides.map((slide) => (
+                    <View style={styles.slideContainer} key={slide.id}>
+                        <View style={styles.titleContainer}>
+                            <MaskedView
+                                maskElement={<Text style={styles.title}>{slide.title}</Text>}
+                            >
+                                <LinearGradient
+                                    colors={['rgba(0, 148, 255, 1)', 'rgba(160, 34, 148, 1)']}
+                                    start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 0 }}
+                                    style={styles.gradient}
+                                />
+                            </MaskedView>
+                        </View>
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return (
-        <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Layout />
-        </NavigationContainer>
-      );
+                        <Text style={styles.subtitle}>{slide.content}</Text>
+                        <Image
+                            source={slide.imgSrc}
+                            style={styles.img}
+                        />
+                    </View>
+                ))}
+            </Swiper>
+            <GradientButton onPress={handleConnect} width={248} />
+            <Image
+                source={require('../assets/images/ellipse.png')}
+                style={styles.backgroundImage}
+            />
+        </SafeAreaView>
+    );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        zIndex: 2,
+        backgroundColor: '#000',
+        paddingBottom: 150
+    },
+    backgroundImage: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        height: 300,
+        zIndex: 0,
+        resizeMode: 'cover',
+        opacity: 0.5,
+    },
+    wrapper: {
+        height: '100%',
+        zIndex: 2
+    },
+    slideContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 62,
+        zIndex: 2
+    },
+    titleContainer: {
+        marginBottom: 20,
+    },
+    title: {
+        fontSize: 32,
+        fontFamily: 'Outfit-SemiBold',
+        textAlign: 'center',
+    },
+    gradient: {
+        height: 120,
+        width: Dimensions.get('window').width - 40,
+    },
+    subtitle: {
+        fontSize: 14,
+        fontFamily: 'Outfit-Regular',
+        color: '#A0AEC0',
+        marginBottom: 40,
+        textAlign: 'center',
+        maxWidth: '100%',
+        zIndex: 2
+    },
+    img: {
+        width: 118,
+        height: 158.12,
+        zIndex: 2,
+        marginBottom: 100,
+        resizeMode: 'contain',
+    },
+    dot: {
+        backgroundColor: '#D9D9D9',
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 3,
+        marginBottom: 3
+    },
+    activeDot: {
+        width: 24,
+        height: 8,
+        borderRadius: 4,
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 3,
+        marginBottom: 3
+    },
+});
