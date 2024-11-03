@@ -10,41 +10,24 @@ import { BlurView } from "expo-blur";
 import { useTheme } from "@react-navigation/native";
 import { Arrow, Cross, Logo, Menu, Video } from "@/assets/images/icons/Icons";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  WalletConnectModal,
-  useWalletConnectModal,
-} from '@walletconnect/modal-react-native';
+import { useAppKit } from '@reown/appkit-wagmi-react-native';
+import { useRouter } from 'expo-router';
+import GradientButton from './GradientButton';
 
-// WalletConnect configuration
-const projectId = '81db21c2e50629bb5a72570345514f84';
-const providerMetadata = {
-  name: 'YOUR_PROJECT_NAME',
-  description: 'YOUR_PROJECT_DESCRIPTION',
-  url: 'https://your-project-website.com/',
-  icons: ['https://your-project-logo.com/'],
-  redirect: {
-    native: 'YOUR_APP_SCHEME://',
-    universal: 'YOUR_APP_UNIVERSAL_LINK.com',
-  },
-};
+
 
 const Navbar = () => {
   const { colors } = useTheme();
   const [modalVisible, setModalVisible] = React.useState(false);
-  const { open, isConnected, provider, address } = useWalletConnectModal();
 
-  const handleConnection = async () => {
-    try {
-      if (isConnected) {
-        await provider?.disconnect();
-      } else {
-        await open();
-      }
-      setModalVisible(false);
-    } catch (error) {
-      console.error('Wallet connection error:', error);
-    }
+  const router = useRouter();
+  const { open } = useAppKit();
+
+  const handleConnect = async () => {
+      await open({ view: 'Connect' });
+      router.push("/(tabs)");
   };
+
 
   interface MenuItemProps {
     text: string;
@@ -82,24 +65,11 @@ const Navbar = () => {
             <MenuItem text="Agreement" icon={Cross} onPress={undefined} />
             <MenuItem text="Video" icon={Video} onPress={undefined} />
 
-            <Pressable onPress={handleConnection}>
-              <LinearGradient
-                colors={['#19B1D2', '#0094FF']}
-                style={styles.border}
-              >
+          
                 <View style={styles.buttonItem}>
-                  <Text style={[styles.menuItem, { color: colors.text }]}>
-                    {isConnected ? `Connected: ${address?.slice(0, 6)}...` : 'Connect Wallet'}
-                  </Text>
-                  <Arrow />
+                <GradientButton onPress={handleConnect} width={248} />
                 </View>
-              </LinearGradient>
-            </Pressable>
 
-            <WalletConnectModal
-              projectId={projectId}
-              providerMetadata={providerMetadata}
-            />
           </BlurView>
         </Pressable>
       </Modal>
@@ -137,7 +107,6 @@ const styles = StyleSheet.create({
   menuItem: {
     fontSize: 23,
     textAlign: "left",
-    fontFamily: "SpaceMono",
     paddingLeft: 10,
     marginRight: 10,
   },

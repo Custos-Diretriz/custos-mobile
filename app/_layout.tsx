@@ -15,6 +15,7 @@ import { mainnet, polygon } from '@wagmi/core/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createAppKit, defaultWagmiConfig, AppKit } from '@reown/appkit-wagmi-react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import Navbar from '@/components/Navbar';
 
 const projectId = 'b26784ec0e0189fd763096b91bb6eb6d';
 
@@ -67,6 +68,7 @@ export default function RootLayout() {
       <PaperProvider theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
+            <Navbar/>
             <Stack>
               <Stack.Screen
                 name='index'

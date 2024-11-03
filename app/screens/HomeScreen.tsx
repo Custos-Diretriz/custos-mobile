@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 24,
-    fontFamily: 'SpaceMono', 
   },
 });
 
