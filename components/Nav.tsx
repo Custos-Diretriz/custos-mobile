@@ -16,9 +16,9 @@ export default function Nav({ toggleSidebar }: NavProps) {
         <TouchableOpacity>
           <Image source={require('../assets/images/custosLogo.png')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={toggleSidebar}>
+        <MenuButtonContainer onPress={toggleSidebar}>
           <MenuButton />
-        </TouchableOpacity>
+        </MenuButtonContainer>
       </StyledView>
     </Container>
   );
@@ -27,6 +27,11 @@ export default function Nav({ toggleSidebar }: NavProps) {
 const Container = styled.View<{ backgroundColor: string }>`
   flex: 1;
   background-color: ${(props) => props.backgroundColor};
+`;
+
+const MenuButtonContainer = styled.TouchableOpacity`
+  position: absolute;
+  right: 0;
 `;
 
 const StyledView = styled.View<{ backgroundColor: string }>`

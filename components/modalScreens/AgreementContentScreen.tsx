@@ -120,7 +120,7 @@ const ButtonsContainer = styled.View`
   align-items: center;
   margin-top: 5px;
   width: 100%;
-  gap: 30;
+  gap: 30px;
 `;
 
 const InputTitle = styled.Text<{ color: string }>`

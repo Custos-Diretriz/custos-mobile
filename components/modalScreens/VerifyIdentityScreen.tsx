@@ -169,7 +169,7 @@ const ButtonsContainer = styled.View`
   align-items: center;
   margin-top: 20px;
   width: 100%;
-  gap: 30;
+  gap: 30px;
 `;
 
 const Input = styled.TextInput`

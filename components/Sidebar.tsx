@@ -3,12 +3,16 @@ import { TouchableOpacity, Text } from 'react-native';
 import styled from 'styled-components/native';
 import CloseIcon from '@/assets/svgs/closeIcon.svg';
 import OutlinedButton from './ContinueButton';
+import GradientButton from './GradientButton';
 
 type SidebarProps = {
     onClose: () => void;
     connectWallet: () => void;
 };
 
+ const handleConnect = async () => {
+   
+ };
 
 const Sidebar: React.FC<SidebarProps> = ({ onClose, connectWallet }) => {
   return (
@@ -23,7 +27,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose, connectWallet }) => {
         <SidebarItem>Agreement +</SidebarItem>
         <SidebarItem>Videos 🎥</SidebarItem>
         <ConnectButton>
-          <ButtonText onPress={connectWallet}>Connect Wallet ➔</ButtonText>
+          <GradientButton
+            onPress={handleConnect}
+            width={248}
+          />
         </ConnectButton>
       </SidebarContainer>
     </Container>
@@ -32,11 +39,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose, connectWallet }) => {
 
 export default Sidebar;
 
-const Container = styled.View`
+const Container = styled.SafeAreaView`
   position: absolute;
-  top: 0;
+  top: 50px;
   left: 0;
-  width: 100%;
+  width: 90%;
   height: 100%;
   z-index: 10;
   flex-direction: row;
