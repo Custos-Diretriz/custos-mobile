@@ -15,9 +15,6 @@ import { mainnet, polygon } from '@wagmi/core/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createAppKit, defaultWagmiConfig, AppKit } from '@reown/appkit-wagmi-react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import Navbar from '@/components/Navbar';
-import HomeScreen from './screens/HomeScreen';
-import { WalletConnectModal } from '@walletconnect/modal-react-native';
 
 const projectId = 'b26784ec0e0189fd763096b91bb6eb6d';
 
@@ -36,18 +33,6 @@ const chains = [mainnet, polygon] as const;
 const queryClient = new QueryClient();
 
 SplashScreen.preventAutoHideAsync();
-
-const projectId = '81db21c2e50629bb5a72570345514f84';
-const providerMetadata = {
-  name: 'YOUR_PROJECT_NAME',
-  description: 'YOUR_PROJECT_DESCRIPTION',
-  url: 'https://your-project-website.com/',
-  icons: ['https://your-project-logo.com/'],
-  redirect: {
-    native: 'YOUR_APP_SCHEME://',
-    universal: 'YOUR_APP_UNIVERSAL_LINK.com',
-  },
-};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

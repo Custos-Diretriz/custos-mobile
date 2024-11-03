@@ -169,4 +169,3 @@ const NoAgreementContainer = styled.View`
   justify-content: center;
   align-items: center;
 `;
-
