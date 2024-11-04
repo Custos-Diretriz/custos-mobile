@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import Navbar from '@/components/Navbar';
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();
@@ -12,13 +13,16 @@ export default function TabLayout() {
         <Tabs
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-                headerShown: false,
+                header:()=>{
+                    return <Navbar/>
+                },
                 tabBarStyle: styles.tabBar
             }}
         >
             <Tabs.Screen
                 name="index"
                 options={{
+            
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ focused, size }) => (
                         <LinearGradient

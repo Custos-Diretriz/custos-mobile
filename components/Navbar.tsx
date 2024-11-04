@@ -5,42 +5,37 @@ import {
   Pressable,
   Modal,
   StyleSheet,
+  useWindowDimensions,
+  Dimensions,
 } from "react-native";
 import { BlurView } from "expo-blur";
-import { useTheme } from "@react-navigation/native";
+import { DrawerActions, useNavigation, useTheme } from "@react-navigation/native";
 import { Arrow, Cross, Logo, Menu, Video } from "@/assets/images/icons/Icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAppKit } from '@reown/appkit-wagmi-react-native';
 import { useRouter } from 'expo-router';
 import GradientButton from './GradientButton';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { X } from 'lucide-react-native';
+
+interface MenuItemProps {
+  text: string;
+  icon?: React.ComponentType;
+  onPress?: () => void;
+}
 
 
-
-const Navbar = () => {
+const Navbar = () =>{
   const { colors } = useTheme();
   const [modalVisible, setModalVisible] = React.useState(false);
-
+  const navigation = useNavigation();
   const router = useRouter();
   const { open } = useAppKit();
 
-  const handleConnect = async () => {
-      await open({ view: 'Connect' });
-      router.push("/(tabs)");
-  };
 
 
-  interface MenuItemProps {
-    text: string;
-    icon?: React.ComponentType;
-    onPress?: () => void;
-  }
 
-  const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
-    <Pressable onPress={onPress} style={styles.item}>
-      <Text style={[styles.menuItem, { color: colors.text }]}>{text}</Text>
-      {Icon && <Icon />}
-    </Pressable>
-  );
+
 
   return (
     <>
@@ -48,17 +43,59 @@ const Navbar = () => {
         <Pressable>
           <Logo />
         </Pressable>
-        <Pressable onPress={() => setModalVisible(true)}>
+        <Pressable onPress={()=>{
+          navigation.dispatch(DrawerActions.toggleDrawer())
+        }}>
           <Menu />
         </Pressable>
       </View>
 
-      <Modal transparent visible={modalVisible} animationType="fade">
-        <Pressable style={styles.modalOverlay} onPress={() => setModalVisible(false)}>
+      
+    </>
+  );
+};
+
+
+
+
+
+export default Navbar;
+
+
+export const DrawerContent = () => {
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const width = Dimensions.get("screen").width;
+  const { colors } = useTheme();
+  const navigation = useNavigation();
+  const router = useRouter();
+  const { open } = useAppKit();
+  const handleConnect = async () => {
+    await open({ view: 'Connect' });
+    router.push("/(tabs)");
+};
+const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
+  <Pressable onPress={onPress} style={styles.item}>
+    <Text style={[styles.menuItem, { color: colors.text }]}>{text}</Text>
+    {Icon && <Icon />}
+  </Pressable>
+);
+
+  return (
+    <>
+    {/* <Modal transparent visible={modalVisible} animationType="fade"> */}
+        <Pressable style={[styles.modalOverlay,{width:width,left:0}]} onPress={() => setModalVisible(false)}>
           <LinearGradient
             colors={['transparent', 'rgba(0,0,0,0)']}
             style={styles.backgr}
           />
+          <X
+           size={30}
+           color="white"
+           style={styles.closeIcon}
+           onPress={()=>{
+            navigation.dispatch(DrawerActions.toggleDrawer())
+            setModalVisible(false)
+          }} />
           <BlurView intensity={20} style={styles.blurContainer}>
             <MenuItem text="Home" icon={undefined} onPress={undefined} />
             <MenuItem text="Company" icon={undefined} onPress={undefined} />
@@ -72,10 +109,11 @@ const Navbar = () => {
 
           </BlurView>
         </Pressable>
-      </Modal>
+      {/* </Modal> */}
     </>
-  );
-};
+  )
+}
+
 
 const styles = StyleSheet.create({
   navbar: {
@@ -91,7 +129,10 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   modalOverlay: {
+    ...StyleSheet.absoluteFillObject,
     flex: 1,
+    position:'relative',
+    backgroundColor: "rgb(0, 0, 0)",
   },
   blurContainer: {
     ...StyleSheet.absoluteFillObject,
@@ -119,7 +160,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-  }
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    zIndex: 1,
+  },
 });
-
-export default Navbar;

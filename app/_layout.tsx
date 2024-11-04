@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+'use strict'
+
+import React, { useEffect, useRef } from 'react';
 import {
   DarkTheme,
   DefaultTheme,
+  NavigationContainer,
   ThemeProvider,
 } from '@react-navigation/native';
 import '@walletconnect/react-native-compat';
-import { Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { PaperProvider } from 'react-native-paper';
@@ -15,7 +17,11 @@ import { mainnet, polygon } from '@wagmi/core/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createAppKit, defaultWagmiConfig, AppKit } from '@reown/appkit-wagmi-react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import Navbar from '@/components/Navbar';
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import {Drawer} from "expo-router/drawer"
+import MainScreen from './screens/MainScreen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Navbar, { DrawerContent } from '@/components/Navbar';
 
 const projectId = 'b26784ec0e0189fd763096b91bb6eb6d';
 
@@ -35,8 +41,11 @@ const queryClient = new QueryClient();
 
 SplashScreen.preventAutoHideAsync();
 
+
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const drawerRef = useRef(null);
 
   const [loaded] = useFonts({
     'Outfit-Regular': require('../assets/fonts/Outfit-Regular.ttf'),
@@ -68,21 +77,47 @@ export default function RootLayout() {
       <PaperProvider theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
-            <Navbar/>
-            <Stack>
-              <Stack.Screen
-                name='index'
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name='(tabs)'
-                options={{ headerShown: false }}
-              />
-            </Stack>
+            <GestureHandlerRootView style={{flex:1,width:"100%"}} >  
+                <Drawer  drawerContent={
+                  ()=>{
+                    return <DrawerContent/>
+                  }
+                }
+                 screenOptions={{
+                  drawerContentStyle:{
+                    width:"100%"
+                  }
+                }} >
+                {/* <Drawer.Navigator
+                drawerContent={(props:any) => <CustomDrawerContent {...props} />}
+                ref={drawerRef}
+                screenOptions={{
+                  drawerStyle: {
+                    width: '100%',
+                  },
+                }}
+              > */}
+                <Drawer.Screen name="index"  options={{
+                 header:()=>(
+                  <Navbar/>
+                 )
+                }}/>
+              {/* </Drawer.Navigator> */}
+                </Drawer>
+            </GestureHandlerRootView>
+              
             <AppKit />
           </QueryClientProvider>
         </WagmiProvider>
       </PaperProvider>
     </ThemeProvider>
+  );
+}
+
+function CustomDrawerContent(props:any) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+    </DrawerContentScrollView>
   );
 }
