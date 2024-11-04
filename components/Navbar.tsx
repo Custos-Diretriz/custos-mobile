@@ -64,7 +64,6 @@ export default Navbar;
 
 export const DrawerContent = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const width = Dimensions.get("screen").width;
   const { colors } = useTheme();
   const navigation = useNavigation();
   const router = useRouter();
@@ -83,7 +82,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
   return (
     <>
     {/* <Modal transparent visible={modalVisible} animationType="fade"> */}
-        <Pressable style={[styles.modalOverlay,{width:width,left:0}]} onPress={() => setModalVisible(false)}>
+        <Pressable style={[styles.modalOverlay]} onPress={() => setModalVisible(false)}>
           <LinearGradient
             colors={['transparent', 'rgba(0,0,0,0)']}
             style={styles.backgr}
@@ -93,7 +92,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
            color="white"
            style={styles.closeIcon}
            onPress={()=>{
-            navigation.dispatch(DrawerActions.toggleDrawer())
+            navigation.dispatch(DrawerActions.closeDrawer())
             setModalVisible(false)
           }} />
           <BlurView intensity={20} style={styles.blurContainer}>
