@@ -41,8 +41,6 @@ const queryClient = new QueryClient();
 
 SplashScreen.preventAutoHideAsync();
 
-
-
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const drawerRef = useRef(null);
@@ -106,11 +104,45 @@ export default function RootLayout() {
                 </Drawer>
             </GestureHandlerRootView>
               
+
+    <><ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <PaperProvider theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <WagmiProvider config={wagmiConfig}>
+          <QueryClientProvider client={queryClient}>
+            <Stack>
+              <Stack.Screen
+                name='index'
+                options={{
+                  headerShown: false,
+                }} />
+              <Stack.Screen
+                name='(tabs)'
+                options={{
+                  headerShown: false,
+                }} />
+            </Stack>
             <AppKit />
           </QueryClientProvider>
         </WagmiProvider>
       </PaperProvider>
     </ThemeProvider>
+    </ThemeProvider><WagmiProvider config={wagmiConfig}>
+        <QueryClientProvider client={queryClient}>
+          <Stack>
+            <Stack.Screen
+              name="index"
+              options={{
+                headerShown: false
+              }} />
+            <Stack.Screen
+              name="(tabs)"
+              options={{
+                headerShown: false
+              }} />
+          </Stack>
+          <AppKit />
+        </QueryClientProvider>
+      </WagmiProvider></>
   );
 }
 
