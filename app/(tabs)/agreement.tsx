@@ -13,7 +13,6 @@ import SecondPartyWalletScreen from '@/components/modalScreens/SecondPartyWallet
 import AgreementSuccessful from '@/components/modalScreens/AgreementSuccessful';
 import PrintAgreementScreen from '@/components/modalScreens/PrintAgreementScreen';
 import Sidebar from '@/components/Sidebar';
-import Footer from '@/components/footer';
 
 const THEME_STORAGE_KEY = 'theme';
 
@@ -124,7 +123,9 @@ const Agreement = () => {
         </NoAgreementContainer>
         {/* <Footer /> */}
       </ScrollView>
-      {isSidebarVisible && <Sidebar onClose={toggleSidebar} />}
+      {isSidebarVisible && <Sidebar onClose={toggleSidebar} connectWallet={function (): void {
+        throw new Error('Function not implemented.');
+      } } />}
     </StyledView>
   );
 };
@@ -168,15 +169,3 @@ const NoAgreementContainer = styled.View`
   justify-content: center;
   align-items: center;
 `;
-import React from 'react'
-import { Text, View } from 'react-native';
-
-function Agreement() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Agreement Screen</Text>
-        </View>
-    )
-}
-
-export default Agreement;
