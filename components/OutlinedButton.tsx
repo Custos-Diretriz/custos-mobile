@@ -14,17 +14,18 @@ const GradientButton: React.FC<BottonProps> = ({ title, onPress }) => {
   const { colors } = useTheme();
 
   return (
-    <GradientBorder colors={['#0094FF', '#A02294']}>
-      <ButtonContainer
-        background={colors.background}
-        onPress={onPress}
-      >
-        <ButtonText color={colors.text}>{title}</ButtonText>
-        <PlusIconContainer>
-          <Plus fill={colors.text} />
-        </PlusIconContainer>
-      </ButtonContainer>
-    </GradientBorder>
+    // <GradientBorder colors={['#0094FF', '#A02294']}>
+    //   <ButtonContainer
+    //     background={colors.background}
+    //     onPress={onPress}
+    //   >
+    //     <ButtonText color={colors.text}>{title}</ButtonText>
+    //     <PlusIconContainer>
+    //       <Plus fill={colors.text} />
+    //     </PlusIconContainer>
+    //   </ButtonContainer>
+    // </GradientBorder>
+    <ButtonText color={colors.text}>{title}</ButtonText>
   );
 };
 

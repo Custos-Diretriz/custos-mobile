@@ -18,10 +18,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createAppKit, defaultWagmiConfig, AppKit } from '@reown/appkit-wagmi-react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import {Drawer} from "expo-router/drawer"
+import { Drawer } from "expo-router/drawer"
 import MainScreen from './screens/MainScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Navbar, { DrawerContent } from '@/components/Navbar';
+import { Stack } from 'expo-router';
 
 const projectId = 'b26784ec0e0189fd763096b91bb6eb6d';
 
@@ -75,60 +76,35 @@ export default function RootLayout() {
       <PaperProvider theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
-            <GestureHandlerRootView style={{flex:1,width:"100%"}} >  
-                <Drawer  drawerContent={
-                  ()=>{
-                    return <DrawerContent/>
-                  }
+            <GestureHandlerRootView style={{ flex: 1, width: "100%" }} >
+              <Drawer drawerContent={
+                () => {
+                  return <DrawerContent />
                 }
-                 screenOptions={{
-                  drawerContentStyle:{
-                    width:"100%"
+              }
+                screenOptions={{
+                  drawerContentStyle: {
+                    width: "100%"
                   }
                 }} >
                 {/* <Drawer.Navigator
-                drawerContent={(props:any) => <CustomDrawerContent {...props} />}
-                ref={drawerRef}
-                screenOptions={{
-                  drawerStyle: {
-                    width: '100%',
-                  },
-                }}
-              > */}
-                <Drawer.Screen name="index"  options={{
-                 header:()=>(
-                  <Navbar/>
-                 )
-                }}/>
-              {/* </Drawer.Navigator> */}
-                </Drawer>
+                  drawerContent={(props: any) => <CustomDrawerContent {...props} />}
+                  ref={drawerRef}
+                  screenOptions={{
+                    drawerStyle: {
+                      width: '100%',
+                    },
+                  }}
+                > */}
+                  <Drawer.Screen name="index" options={{
+                    header: () => (
+                      <Navbar />
+                    )
+                  }} />
+                {/* </Drawer.Navigator> */}
+              </Drawer>
             </GestureHandlerRootView>
-              
-
-    <><ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <PaperProvider theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <WagmiProvider config={wagmiConfig}>
-          <QueryClientProvider client={queryClient}>
-            <Stack>
-              <Stack.Screen
-                name='index'
-                options={{
-                  headerShown: false,
-                }} />
-              <Stack.Screen
-                name='(tabs)'
-                options={{
-                  headerShown: false,
-                }} />
-            </Stack>
-            <AppKit />
-          </QueryClientProvider>
-        </WagmiProvider>
-      </PaperProvider>
-    </ThemeProvider>
-    </ThemeProvider><WagmiProvider config={wagmiConfig}>
-        <QueryClientProvider client={queryClient}>
-          <Stack>
+            {/* <Stack>
             <Stack.Screen
               name="index"
               options={{
@@ -139,14 +115,16 @@ export default function RootLayout() {
               options={{
                 headerShown: false
               }} />
-          </Stack>
-          <AppKit />
-        </QueryClientProvider>
-      </WagmiProvider></>
+          </Stack> */}
+            <AppKit />
+          </QueryClientProvider>
+        </WagmiProvider>
+      </PaperProvider>
+    </ThemeProvider>
   );
 }
 
-function CustomDrawerContent(props:any) {
+function CustomDrawerContent(props: any) {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
