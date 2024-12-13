@@ -13,27 +13,26 @@ type DrawerParamList = {
 
 const MainScreen: React.FC = () => {
   // Use the useNavigation hook to get the navigation prop with the correct type
-  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+  // const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
 
   return (
     <View style={styles.container}>
-    
       <Stack screenOptions={{
-        headerShown:false
-      }} >
+        headerShown: false
+      }}>
         <Stack.Screen
           name="index"
-         options={{
-          header:()=>(
-              <Navbar  />
-          )
-         }}
+          options={{
+            header: () => (
+              <Navbar/>
+            ),
+          }}
         />
         <Stack.Screen
           name="(tabs)"
-         options={{
-           headerShown:false
-         }}
+          options={{
+            headerShown: false
+          }}
         />
       </Stack>
     </View>

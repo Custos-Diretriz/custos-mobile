@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { Text, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
 import styled from 'styled-components/native';
 import { useTheme } from '@react-navigation/native';
@@ -15,6 +15,7 @@ export default function Nav({ toggleSidebar }: NavProps) {
       <StyledView backgroundColor={colors.background}>
         <TouchableOpacity>
           <Image source={require('../assets/images/custosLogo.png')} />
+          <Text>Available</Text>
         </TouchableOpacity>
         <MenuButtonContainer onPress={toggleSidebar}>
           <MenuButton />
