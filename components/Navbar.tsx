@@ -1,22 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  Modal,
-  StyleSheet,
-  useWindowDimensions,
-  Dimensions,
-} from "react-native";
-import { BlurView } from "expo-blur";
-import { DrawerActions, useNavigation, useTheme } from "@react-navigation/native";
-import { Arrow, Cross, Logo, Menu, Video } from "@/assets/images/icons/Icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useAppKit } from '@reown/appkit-wagmi-react-native';
-import { useRouter } from 'expo-router';
+import {Pressable, StyleSheet, Text, View,} from "react-native";
+import {BlurView} from "expo-blur";
+import {DrawerActions, useNavigation, useTheme} from "@react-navigation/native";
+import {Cross, Logo, Menu, Video} from "@/assets/images/icons/Icons";
+import {LinearGradient} from "expo-linear-gradient";
+import {useAppKit} from '@reown/appkit-wagmi-react-native';
+import {useRouter} from 'expo-router';
 import GradientButton from './GradientButton';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { X } from 'lucide-react-native';
+import {X} from 'lucide-react-native';
 
 interface MenuItemProps {
   text: string;
@@ -25,38 +16,31 @@ interface MenuItemProps {
 }
 
 
-const Navbar = () =>{
-  const { colors } = useTheme();
+const Navbar = () => {
+  const {colors} = useTheme();
   const [modalVisible, setModalVisible] = React.useState(false);
   const navigation = useNavigation();
   const router = useRouter();
-  const { open } = useAppKit();
-
-
-
-
+  const {open} = useAppKit();
 
 
   return (
     <>
-      <View style={[styles.navbar, { backgroundColor: colors.background }]}>
+      <View style={[styles.navbar, {backgroundColor: colors.background}]}>
         <Pressable>
-          <Logo />
+          <Logo/>
         </Pressable>
-        <Pressable onPress={()=>{
+        <Pressable onPress={() => {
           navigation.dispatch(DrawerActions.toggleDrawer())
         }}>
-          <Menu />
+          <Menu/>
         </Pressable>
       </View>
 
-      
+
     </>
   );
 };
-
-
-
 
 
 export default Navbar;
@@ -64,50 +48,50 @@ export default Navbar;
 
 export const DrawerContent = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const { colors } = useTheme();
+  const {colors} = useTheme();
   const navigation = useNavigation();
   const router = useRouter();
-  const { open } = useAppKit();
+  const {open} = useAppKit();
   const handleConnect = async () => {
-    await open({ view: 'Connect' });
+    await open({view: 'Connect'});
     router.push("/(tabs)");
-};
-const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
-  <Pressable onPress={onPress} style={styles.item}>
-    <Text style={[styles.menuItem, { color: colors.text }]}>{text}</Text>
-    {Icon && <Icon />}
-  </Pressable>
-);
+  };
+  const MenuItem: React.FC<MenuItemProps> = ({text, icon: Icon, onPress}) => (
+    <Pressable onPress={onPress} style={styles.item}>
+      <Text style={[styles.menuItem, {color: colors.text}]}>{text}</Text>
+      {Icon && <Icon/>}
+    </Pressable>
+  );
 
   return (
     <>
-    {/* <Modal transparent visible={modalVisible} animationType="fade"> */}
-        <Pressable style={[styles.modalOverlay]} onPress={() => setModalVisible(false)}>
-          <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0)']}
-            style={styles.backgr}
-          />
-          <X
-           size={30}
-           color="white"
-           style={styles.closeIcon}
-           onPress={()=>{
+      {/* <Modal transparent visible={modalVisible} animationType="fade"> */}
+      <Pressable style={[styles.modalOverlay]} onPress={() => setModalVisible(false)}>
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0)']}
+          style={styles.backgr}
+        />
+        <X
+          size={30}
+          color="white"
+          style={styles.closeIcon}
+          onPress={() => {
             navigation.dispatch(DrawerActions.closeDrawer())
             setModalVisible(false)
-          }} />
-          <BlurView intensity={20} style={styles.blurContainer}>
-            <MenuItem text="Home" icon={undefined} onPress={undefined} />
-            <MenuItem text="Company" icon={undefined} onPress={undefined} />
-            <MenuItem text="Agreement" icon={Cross} onPress={undefined} />
-            <MenuItem text="Video" icon={Video} onPress={undefined} />
+          }}/>
+        <BlurView intensity={20} style={styles.blurContainer}>
+          <MenuItem text="Home" icon={undefined} onPress={undefined}/>
+          <MenuItem text="Company" icon={undefined} onPress={undefined}/>
+          <MenuItem text="Agreement" icon={Cross} onPress={undefined}/>
+          <MenuItem text="Video" icon={Video} onPress={undefined}/>
 
-          
-                <View style={styles.buttonItem}>
-                <GradientButton onPress={handleConnect} width={248} />
-                </View>
 
-          </BlurView>
-        </Pressable>
+          <View style={styles.buttonItem}>
+            <GradientButton onPress={handleConnect} width={248}/>
+          </View>
+
+        </BlurView>
+      </Pressable>
       {/* </Modal> */}
     </>
   )
@@ -130,7 +114,7 @@ const styles = StyleSheet.create({
   modalOverlay: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    position:'relative',
+    position: 'relative',
     backgroundColor: "rgb(0, 0, 0)",
   },
   blurContainer: {
