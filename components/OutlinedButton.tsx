@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Text, TouchableOpacity } from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@react-navigation/native';
 import Plus from '@/assets/svgs/plus.svg';
+import {ThemedView} from "@/components/ThemedView";
+import {ThemedText} from "@/components/ThemedText";
 
 export type BottonProps = {
   title: string;
@@ -14,17 +16,19 @@ const GradientButton: React.FC<BottonProps> = ({ title, onPress }) => {
   const { colors } = useTheme();
 
   return (
-    <GradientBorder colors={['#0094FF', '#A02294']}>
-      <ButtonContainer
-        background={colors.background}
-        onPress={onPress}
-      >
-        <ButtonText color={colors.text}>{title}</ButtonText>
-        <PlusIconContainer>
-          <Plus fill={colors.text} />
-        </PlusIconContainer>
-      </ButtonContainer>
-    </GradientBorder>
+    <ButtonContainer
+      background={colors.background}
+      onPress={onPress}
+    >
+      <GradientBorder colors={['#0094FF', '#A02294']}>
+        <ButtonView>
+          <ButtonText color={colors.text}>{title}</ButtonText>
+          <PlusIconContainer>
+            <Plus fill={colors.text}/>
+          </PlusIconContainer>
+        </ButtonView>
+      </GradientBorder>
+    </ButtonContainer>
   );
 };
 
@@ -35,12 +39,13 @@ const GradientBorder = styled(LinearGradient).attrs({
   end: { x: 1, y: 0 },
 })`
   padding: 3px;
-  border-radius: 50%;
+  border-radius: 100px 100px;
+  width: 292px;
 `;
 
 const ButtonContainer = styled(TouchableOpacity)<{ background: string }>`
   background-color: ${(props) => props.background};
-  border-radius: 50%;
+  border-radius: 100px;
   padding: 15px 20px;
   align-items: center;
   justify-content: center;
@@ -51,7 +56,16 @@ const PlusIconContainer = styled(TouchableOpacity)`
   margin-left: 10px;
 `;
 
-const ButtonText = styled(Text)<{ color: string }>`
+const ButtonView = styled(ThemedView)`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  //background-color: #000;
+  border-radius: 30px;
+  padding: 16px 0;
+`;
+
+const ButtonText = styled(ThemedText)<{ color: string }>`
   color: ${(props) => props.color};
   font-size: 16px;
 `;

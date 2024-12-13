@@ -81,9 +81,9 @@ const Agreement = () => {
   return (
     <StyledView backgroundColor={colors.background}>
       {/* Conditionally render Sidebar */}
-      <NavContainer>
+      {/* <NavContainer>
         <Nav toggleSidebar={toggleSidebar} />
-      </NavContainer>
+      </NavContainer> */}
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <BackButtonContainer onPress={handleBack}>
           <ArrowLeft />
