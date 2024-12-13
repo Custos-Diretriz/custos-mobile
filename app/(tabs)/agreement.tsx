@@ -90,7 +90,7 @@ const Agreement = () => {
       </NavContainer> */}
       {/*<ScrollView contentContainerStyle={{flexGrow: 1}}>*/}
         <ThemedView style={{flexGrow: 1}}>
-          <PageHeader title={"Agreement"} />
+          <PageHeader title={"Agreements"} />
           {/*<AgreementText color={colors.text}>Agreements</AgreementText>*/}
           <BackButtonContainer onPress={handleBack}>
             <ArrowLeft/>
