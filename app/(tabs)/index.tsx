@@ -5,6 +5,7 @@ import {ThemedText} from "@/components/ThemedText";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {PageHeader} from "@/components/PageHeader";
 import OutlinedButton from "@/components/Buttons/OutlinedButton";
+import {router} from "expo-router";
 
 export default function Home() {
   return (
@@ -13,13 +14,13 @@ export default function Home() {
         <PageHeader title={"Home"}></PageHeader>
 
         <ThemedView style={styles.agreementContainer}>
-          <ThemedText type={"subtitle"}>Agreements</ThemedText>
+          <ThemedText type={"subtitle"}>Agreement</ThemedText>
           <ThemedText type={"default"}>No Agreements found</ThemedText>
           <ThemedView style={styles.noAgreementContainer}>
             <OutlinedButton
               text={"Create New Agreement"}
               textType={"defaultSemiBold"}
-              onPress={() => {}}
+              onPress={() => {router.push("/(tabs)/agreement")}}
             />
           </ThemedView>
         </ThemedView>
