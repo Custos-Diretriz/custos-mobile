@@ -5,6 +5,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Video, ArrowLeft, Image as ImageIcon, Pause, X, Check } from 'lucide-react-native';
 import { Camera as ExpoCamera, CameraView } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import {ThemedView} from "@/components/ThemedView";
+import {ThemedText} from "@/components/ThemedText";
+import {PageHeader} from "@/components/PageHeader";
 
 export default function VideoRecorderScreen() {
     const [showCamera, setShowCamera] = useState(false);
@@ -266,30 +269,32 @@ export default function VideoRecorderScreen() {
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" />
 
-            <View style={styles.header}>
-                <Text style={styles.title}>Video Recorder</Text>
-                <LinearGradient
-                    colors={['#2D8EFF', '#9C3FE4']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    style={styles.profileContainer}
-                >
-                    <Image
-                        source={require('../../assets/images/avatar.png')}
-                        style={styles.avatar}
-                    />
-                    <Text style={styles.walletAddress}>0xc...</Text>
-                </LinearGradient>
-            </View>
+            <PageHeader title={"Video Recorder"} />
 
-            <View style={styles.content}>
+          {/*<ThemedView style={styles.header}>
+            <ThemedText style={styles.title}>Video Recorder</ThemedText>
+            <LinearGradient
+              colors={['#2D8EFF', '#9C3FE4']}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              style={styles.profileContainer}
+            >
+              <Image
+                source={require('../../assets/images/avatar.png')}
+                style={styles.avatar}
+              />
+              <ThemedText style={styles.walletAddress}>0xc...</ThemedText>
+            </LinearGradient>
+          </ThemedView>*/}
+
+            <ThemedView style={styles.content}>
                 <Image
                     source={require('../../assets/images/recorder-illustration.png')}
                     style={styles.illustration}
                 />
-                <Text style={styles.message}>
+                <ThemedText style={styles.message}>
                     You have not saved any video or image {'\n'}on the blockchain yet. Launch your {'\n'}camera to record your evidence.
-                </Text>
+                </ThemedText>
                 <TouchableOpacity onPress={requestPermissions}>
                     <LinearGradient
                         colors={['#2D8EFF', '#9C3FE4']}
@@ -297,13 +302,13 @@ export default function VideoRecorderScreen() {
                         end={{ x: 1, y: 0 }}
                         style={styles.recordButtonContainer}
                     >
-                        <View style={styles.recordButton}>
-                            <Text style={styles.recordButtonText}>Start Recording</Text>
+                        <ThemedView style={styles.recordButton}>
+                            <ThemedText style={styles.recordButtonText}>Start Recording</ThemedText>
                             <Video size={24} color="#fff" style={styles.recordIcon} />
-                        </View>
+                        </ThemedView>
                     </LinearGradient>
                 </TouchableOpacity>
-            </View>
+            </ThemedView>
         </SafeAreaView>
     );
 }
@@ -311,7 +316,7 @@ export default function VideoRecorderScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000',
+        // backgroundColor: '#000',
     },
     header: {
         flexDirection: 'row',
@@ -334,7 +339,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit-SemiBold',
         fontSize: 24,
         fontWeight: '600',
-        color: '#fff',
+        // color: '#fff',
     },
     profileContainer: {
         flexDirection: 'row',
@@ -366,7 +371,7 @@ const styles = StyleSheet.create({
     },
     message: {
         fontSize: 16,
-        color: '#fff',
+        // color: '#fff',
         fontFamily: 'Outfit-Regular',
         textAlign: 'center',
         lineHeight: 24,
@@ -375,18 +380,18 @@ const styles = StyleSheet.create({
         margin: 20,
         width: 292,
         borderRadius: 30,
-        padding: 1,
+        padding: 3,
     },
     recordButton: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        // backgroundColor: '#000',
         borderRadius: 30,
         paddingVertical: 16,
     },
     recordButtonText: {
-        color: '#fff',
+        // color: '#fff',
         fontSize: 18,
         fontFamily: 'Outfit-Regular',
         fontWeight: '500',
@@ -398,7 +403,7 @@ const styles = StyleSheet.create({
     cameraContainer: {
         flex: 1,
         width: '100%',
-        backgroundColor: '#000',
+        // backgroundColor: '#000',
     },
     camera: {
         flex: 1,
