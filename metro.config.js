@@ -13,6 +13,7 @@ module.exports = (() => {
     ...resolver,
     assetExts: resolver.assetExts.filter((ext) => ext !== 'svg'),
     sourceExts: [...resolver.sourceExts, 'svg'],
+    crypto: require.resolve('crypto-browserify'),
   };
 
   return config;

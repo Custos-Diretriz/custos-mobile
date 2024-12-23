@@ -92,10 +92,12 @@ const Agreement = () => {
         <ThemedView style={{flexGrow: 1}}>
           <PageHeader title={"Agreements"} />
           {/*<AgreementText color={colors.text}>Agreements</AgreementText>*/}
-          <BackButtonContainer onPress={handleBack}>
-            <ArrowLeft/>
-            <StyledText color={colors.text}>Back</StyledText>
-          </BackButtonContainer>
+          {currentModal !== 'NoAgreement' &&
+              <BackButtonContainer onPress={handleBack}>
+                  <ArrowLeft/>
+                  <StyledText color={colors.text}>Back</StyledText>
+              </BackButtonContainer>
+          }
           <NoAgreementContainer>
             {currentModal === 'NoAgreement' && (
               <NoAgreementScreen onContinue={handleContinue}/>
