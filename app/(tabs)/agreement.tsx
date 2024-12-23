@@ -88,14 +88,16 @@ const Agreement = () => {
       {/* <NavContainer>
         <Nav toggleSidebar={toggleSidebar} />
       </NavContainer> */}
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      {/*<ScrollView contentContainerStyle={{flexGrow: 1}}>*/}
         <ThemedView style={{flexGrow: 1}}>
-          <PageHeader title={"Agreement"} />
+          <PageHeader title={"Agreements"} />
           {/*<AgreementText color={colors.text}>Agreements</AgreementText>*/}
-          <BackButtonContainer onPress={handleBack}>
-            <ArrowLeft/>
-            <StyledText color={colors.text}>Back</StyledText>
-          </BackButtonContainer>
+          {currentModal !== 'NoAgreement' &&
+              <BackButtonContainer onPress={handleBack}>
+                  <ArrowLeft/>
+                  <StyledText color={colors.text}>Back</StyledText>
+              </BackButtonContainer>
+          }
           <NoAgreementContainer>
             {currentModal === 'NoAgreement' && (
               <NoAgreementScreen onContinue={handleContinue}/>
@@ -129,7 +131,7 @@ const Agreement = () => {
           </NoAgreementContainer>
           {/* <Footer /> */}
         </ThemedView>
-      </ScrollView>
+      {/*</ScrollView>*/}
       {isSidebarVisible && <Sidebar onClose={toggleSidebar} connectWallet={function (): void {
         throw new Error('Function not implemented.');
       }}/>}
@@ -173,7 +175,8 @@ const AgreementText = styled.Text<{ color: string }>`
     margin-top: 10px;
 `;
 
-const NoAgreementContainer = styled.View`
+const NoAgreementContainer = styled(ThemedView)`
+    margin-top: 40px;
     justify-content: center;
     align-items: center;
 `;

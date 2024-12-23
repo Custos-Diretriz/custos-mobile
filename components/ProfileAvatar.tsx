@@ -4,8 +4,12 @@ import {LinearGradient} from "expo-linear-gradient";
 import React from "react";
 import Avatar from "@/assets/images/avatar.png"
 import {ThemedView} from "@/components/ThemedView";
+import {useWalletContext} from "@/context";
 
 export const ProfileAvatar = () => {
+  const {account} = useWalletContext();
+  console.log("Account", account);
+
   return (
     <LinearGradient
       colors={['#2D8EFF', '#9C3FE4']}
@@ -18,7 +22,7 @@ export const ProfileAvatar = () => {
           source={Avatar}
           style={styles.avatar}
         />
-        <ThemedText style={styles.walletAddress}>0xc...</ThemedText>
+        <ThemedText style={styles.walletAddress}>{(account?.address)}</ThemedText>
       </ThemedView>
     </LinearGradient>
   )

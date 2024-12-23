@@ -8,6 +8,7 @@ import {useAppKit} from '@reown/appkit-wagmi-react-native';
 import {useRouter} from 'expo-router';
 import GradientButton from './GradientButton';
 import {X} from 'lucide-react-native';
+import {useWalletContext} from "@/context";
 
 interface MenuItemProps {
   text: string;
@@ -21,7 +22,7 @@ const Navbar = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const navigation = useNavigation();
   const router = useRouter();
-  const {open} = useAppKit();
+  // const {open} = useAppKit();
 
 
   return (
@@ -51,9 +52,12 @@ export const DrawerContent = () => {
   const {colors} = useTheme();
   const navigation = useNavigation();
   const router = useRouter();
-  const {open} = useAppKit();
+  // const {open} = useAppKit();
+  const {createArgentWallet} = useWalletContext()
+
   const handleConnect = async () => {
-    await open({view: 'Connect'});
+    // await open({view: 'Connect'});
+    createArgentWallet();
     router.push("/(tabs)");
   };
   const MenuItem: React.FC<MenuItemProps> = ({text, icon: Icon, onPress}) => (
