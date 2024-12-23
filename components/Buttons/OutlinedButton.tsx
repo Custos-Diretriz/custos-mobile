@@ -12,17 +12,16 @@ export type ButtonProps = {
   textType?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
   icon?: React.ReactNode;
   onPress: () => void;
-  customStyles?: any;
   children?: React.ReactNode;
 };
 
-const OutlinedButton: React.FC<ButtonProps> = ({text, textType, icon, onPress, customStyles, children}) => {
+const GradientButton: React.FC<ButtonProps> = ({text, textType, icon, onPress, children}) => {
   const colorScheme = useColorScheme();
   const _textType = textType || 'default';
 
   return (
     <TouchableOpacity
-      style={[styles.buttonContainer, customStyles]}
+      style={styles.buttonContainer}
       onPress={onPress}
     >
       <LinearGradient
@@ -42,7 +41,7 @@ const OutlinedButton: React.FC<ButtonProps> = ({text, textType, icon, onPress, c
   );
 };
 
-export default OutlinedButton;
+export default GradientButton;
 
 const styles = StyleSheet.create({
   buttonContainer: {

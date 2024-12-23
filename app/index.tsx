@@ -5,9 +5,8 @@ import MaskedView from '@react-native-masked-view/masked-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GradientButton from '@/components/GradientButton';
 import Swiper from 'react-native-swiper';
-// import { useAppKit } from '@reown/appkit-wagmi-react-native'
+import { useAppKit } from '@reown/appkit-wagmi-react-native'
 import { useRouter } from 'expo-router';
-import {useWalletContext} from "@/context";
 
 const slides = [
     {
@@ -32,12 +31,10 @@ const slides = [
 
 export default function SwiperScreen() {
     const router = useRouter();
-    // const { open } = useAppKit();
-    const {createArgentWallet, deployArgentWallet} = useWalletContext()
+    const { open } = useAppKit();
 
     const handleConnect = async () => {
-        // await open({ view: 'Connect' });
-        createArgentWallet();
+        await open({ view: 'Connect' });
         router.push("/(tabs)");
     };
 
