@@ -4,10 +4,11 @@
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
-    "esModuleInterop": true,  
+    "esModuleInterop": true,
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "moduleResolution": "bundler"
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }
