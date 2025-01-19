@@ -1,14 +1,18 @@
-import React from 'react';
-import {Pressable, StyleSheet, Text, View,} from "react-native";
-import {BlurView} from "expo-blur";
-import {DrawerActions, useNavigation, useTheme} from "@react-navigation/native";
-import {Cross, Logo, Menu, Video} from "@/assets/images/icons/Icons";
-import {LinearGradient} from "expo-linear-gradient";
-import {useAppKit} from '@reown/appkit-wagmi-react-native';
-import {useRouter} from 'expo-router';
-import GradientButton from './GradientButton';
-import {X} from 'lucide-react-native';
-import {useWalletContext} from "@/context";
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { BlurView } from "expo-blur";
+import {
+  DrawerActions,
+  useNavigation,
+  useTheme,
+} from "@react-navigation/native";
+import { Cross, Logo, Menu, Video } from "@/assets/images/icons/Icons";
+import { LinearGradient } from "expo-linear-gradient";
+// import {useAppKit} from '@reown/appkit-wagmi-react-native';
+import { useRouter } from "expo-router";
+import GradientButton from "./GradientButton";
+import { X } from "lucide-react-native";
+// import { connectWallet } from "@/app/_layout";
 
 interface MenuItemProps {
   text: string;
@@ -16,63 +20,58 @@ interface MenuItemProps {
   onPress?: () => void;
 }
 
-
 const Navbar = () => {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const [modalVisible, setModalVisible] = React.useState(false);
   const navigation = useNavigation();
   const router = useRouter();
-  // const {open} = useAppKit();
-
 
   return (
     <>
-      <View style={[styles.navbar, {backgroundColor: colors.background}]}>
+      <View style={[styles.navbar, { backgroundColor: colors.background }]}>
         <Pressable>
-          <Logo/>
+          <Logo />
         </Pressable>
-        <Pressable onPress={() => {
-          navigation.dispatch(DrawerActions.toggleDrawer())
-        }}>
-          <Menu/>
+        <Pressable
+          onPress={() => {
+            navigation.dispatch(DrawerActions.toggleDrawer());
+          }}
+        >
+          <Menu />
         </Pressable>
       </View>
-
-
     </>
   );
 };
 
-
 export default Navbar;
-
 
 export const DrawerContent = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation();
   const router = useRouter();
-  // const {open} = useAppKit();
-  const {createArgentWallet} = useWalletContext()
-
+  // const open = connectWallet();
   const handleConnect = async () => {
-    // await open({view: 'Connect'});
-    createArgentWallet();
+    // await connectWallet();
     router.push("/(tabs)");
   };
-  const MenuItem: React.FC<MenuItemProps> = ({text, icon: Icon, onPress}) => (
+  const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
     <Pressable onPress={onPress} style={styles.item}>
-      <Text style={[styles.menuItem, {color: colors.text}]}>{text}</Text>
-      {Icon && <Icon/>}
+      <Text style={[styles.menuItem, { color: colors.text }]}>{text}</Text>
+      {Icon && <Icon />}
     </Pressable>
   );
 
   return (
     <>
       {/* <Modal transparent visible={modalVisible} animationType="fade"> */}
-      <Pressable style={[styles.modalOverlay]} onPress={() => setModalVisible(false)}>
+      <Pressable
+        style={[styles.modalOverlay]}
+        onPress={() => setModalVisible(false)}
+      >
         <LinearGradient
-          colors={['transparent', 'rgba(0,0,0,0)']}
+          colors={["transparent", "rgba(0,0,0,0)"]}
           style={styles.backgr}
         />
         <X
@@ -80,27 +79,25 @@ export const DrawerContent = () => {
           color="white"
           style={styles.closeIcon}
           onPress={() => {
-            navigation.dispatch(DrawerActions.closeDrawer())
-            setModalVisible(false)
-          }}/>
+            navigation.dispatch(DrawerActions.closeDrawer());
+            setModalVisible(false);
+          }}
+        />
         <BlurView intensity={20} style={styles.blurContainer}>
-          <MenuItem text="Home" icon={undefined} onPress={undefined}/>
-          <MenuItem text="Company" icon={undefined} onPress={undefined}/>
-          <MenuItem text="Agreement" icon={Cross} onPress={undefined}/>
-          <MenuItem text="Video" icon={Video} onPress={undefined}/>
-
+          <MenuItem text="Home" icon={undefined} onPress={undefined} />
+          <MenuItem text="Company" icon={undefined} onPress={undefined} />
+          <MenuItem text="Agreement" icon={Cross} onPress={undefined} />
+          <MenuItem text="Video" icon={Video} onPress={undefined} />
 
           <View style={styles.buttonItem}>
-            <GradientButton onPress={handleConnect} width={248}/>
+            <GradientButton onPress={handleConnect} width={248} />
           </View>
-
         </BlurView>
       </Pressable>
       {/* </Modal> */}
     </>
-  )
-}
-
+  );
+};
 
 const styles = StyleSheet.create({
   navbar: {
@@ -118,7 +115,7 @@ const styles = StyleSheet.create({
   modalOverlay: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    position: 'relative',
+    position: "relative",
     backgroundColor: "rgb(0, 0, 0)",
   },
   blurContainer: {
@@ -149,7 +146,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   closeIcon: {
-    position: 'absolute',
+    position: "absolute",
     top: 50,
     right: 20,
     zIndex: 1,

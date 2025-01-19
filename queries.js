@@ -5,21 +5,19 @@ const {
 	withAndroidManifest,
 	createRunOncePlugin,
   } = require("expo/config-plugins");
-
+  
   const queries = {
 	package: [
 	  { $: { "android:name": "com.wallet.crypto.trustapp" } },
-	  // { $: { "android:name": "io.metamask" } },
-	  // { $: { "android:name": "me.rainbow" } },
-	  // { $: { "android:name": "io.zerion.android" } },
-	  // { $: { "android:name": "io.gnosis.safe" } },
+	  { $: { "android:name": "io.metamask" } },
+	  { $: { "android:name": "me.rainbow" } },
+	  { $: { "android:name": "io.zerion.android" } },
+	  { $: { "android:name": "io.gnosis.safe" } },
 	  { $: { "android:name": "com.uniswap.mobile" } },
 	  // Add other wallet package names here
-	  { $: { "android:name": "im.argent.android" } },	// Argent
-		{ $: { "android:name": "com.braavos.app" } },          // Braavos
 	],
   };
-
+  
   /**
    * @param {import('@expo/config-plugins').ExportedConfig} config
    */
@@ -29,13 +27,14 @@ const {
 		...config.modResults.manifest,
 		queries,
 	  };
-
+  
 	  return config;
 	});
   };
-
+  
   module.exports = createRunOncePlugin(
 	withAndroidManifestService,
 	"withAndroidManifestService",
 	"1.0.0"
   );
+  
