@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { BlurView } from "expo-blur";
 import {
@@ -8,11 +8,10 @@ import {
 } from "@react-navigation/native";
 import { Cross, Logo, Menu, Video } from "@/assets/images/icons/Icons";
 import { LinearGradient } from "expo-linear-gradient";
-// import {useAppKit} from '@reown/appkit-wagmi-react-native';
 import { useRouter } from "expo-router";
 import GradientButton from "./GradientButton";
 import { X } from "lucide-react-native";
-// import { connectWallet } from "@/app/_layout";
+import { WalletContext } from "@/app/context/WalletContext";
 
 interface MenuItemProps {
   text: string;
@@ -48,14 +47,15 @@ export default Navbar;
 
 export const DrawerContent = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
+  const { accountAddress }: any = useContext(WalletContext);
   const { colors } = useTheme();
   const navigation = useNavigation();
   const router = useRouter();
   // const open = connectWallet();
-  const handleConnect = async () => {
-    // await connectWallet();
-    router.push("/(tabs)");
-  };
+  // const handleConnect = async () => {
+  // await connectWallet();
+  //   router.push("/(tabs)");
+  // };
   const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
     <Pressable onPress={onPress} style={styles.item}>
       <Text style={[styles.menuItem, { color: colors.text }]}>{text}</Text>
@@ -90,7 +90,9 @@ export const DrawerContent = () => {
           <MenuItem text="Video" icon={Video} onPress={undefined} />
 
           <View style={styles.buttonItem}>
-            <GradientButton onPress={handleConnect} width={248} />
+            <GradientButton
+              /*onPress={handleConnect}*/ width={248}
+            ></GradientButton>
           </View>
         </BlurView>
       </Pressable>

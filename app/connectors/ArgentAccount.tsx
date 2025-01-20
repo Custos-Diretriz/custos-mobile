@@ -24,6 +24,7 @@ import {
 } from "starknet";
 import { WalletContext } from "../context/WalletContext";
 import ERC20_ABI from "../abi/ERC20.json";
+import { useRouter } from "expo-router";
 
 type WalletPop = {
   isVisible: boolean;
@@ -41,10 +42,10 @@ const ArgentAccount: React.FC<WalletPop> = ({ isVisible, onClose }) => {
   }: any = useContext(WalletContext);
   const [callData, setCallData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   //new Argent X account v0.3.0
-  const argentXaccountClassHash =
-    "0x1a736d6ed154502257f02b1ccdf4d9d1089f80811cd6acad48e6b6a9d1f2003";
+  const argentXaccountClassHash = process.env.EXPO_PUBLIC_ARGENT_CLASS_HASH;
 
   const provider = new RpcProvider({
     nodeUrl: `${process.env.EXPO_PUBLIC_BASE_URL}`,
@@ -67,7 +68,7 @@ const ArgentAccount: React.FC<WalletPop> = ({ isVisible, onClose }) => {
 
     const AXcontractAddress = hash.calculateContractAddressFromHash(
       starkKeyPubAX,
-      argentXaccountClassHash,
+      argentXaccountClassHash!,
       AXConstructorCallData,
       0
     );
@@ -88,7 +89,7 @@ const ArgentAccount: React.FC<WalletPop> = ({ isVisible, onClose }) => {
       // }
 
       const deployAccountPayload = {
-        classHash: argentXaccountClassHash,
+        classHash: argentXaccountClassHash!,
         constructorCalldata: callData,
         contractAddress: accountAddress,
         addressSalt: pubKey,
@@ -106,6 +107,7 @@ const ArgentAccount: React.FC<WalletPop> = ({ isVisible, onClose }) => {
       }
     }
     setLoading(false);
+    router.push("/(tabs)");
   };
 
   const fundAddress = async () => {
@@ -119,13 +121,12 @@ const ArgentAccount: React.FC<WalletPop> = ({ isVisible, onClose }) => {
 
     console.log("setting up accounts");
 
-    const contractAddress =
-      "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
+    const contractAddress = process.env.EXPO_PUBLIC_ERC20_ADDRESS;
 
     console.log("setting up erc contracts");
 
     try {
-      const erc20 = new Contract(ERC20_ABI, contractAddress, provider);
+      const erc20 = new Contract(ERC20_ABI, contractAddress!, provider);
       erc20.connect(account);
 
       console.log(
@@ -135,7 +136,7 @@ const ArgentAccount: React.FC<WalletPop> = ({ isVisible, onClose }) => {
 
       const transferCall: Call = erc20.populate("transfer", {
         recipient: accountAddress,
-        amount: 100000000000000n,
+        amount: 3000000000000n,
       });
       const { transaction_hash: transferTxHash } = await account.execute(
         transferCall
