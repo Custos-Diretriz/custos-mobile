@@ -1,11 +1,11 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import { BlurView } from 'expo-blur';
-import { Ionicons } from '@expo/vector-icons';
-import { View, Text, Modal } from 'react-native';
-import { useTheme } from '@react-navigation/native';
-import Done from '@/assets/svgs/done.svg';
-import { LinearGradient } from 'expo-linear-gradient';
+import React from "react";
+import styled from "styled-components/native";
+import { BlurView } from "expo-blur";
+import { Ionicons } from "@expo/vector-icons";
+import { View, Text, Modal } from "react-native";
+import { useTheme } from "@react-navigation/native";
+import Done from "@/assets/svgs/done.svg";
+import { LinearGradient } from "expo-linear-gradient";
 
 export type AgreementSuccessfulProp = {
   isVisible: boolean;
@@ -21,25 +21,18 @@ const AgreementSuccessful: React.FC<AgreementSuccessfulProp> = ({
     <Modal
       visible={isVisible}
       onRequestClose={onClose}
-      animationType='slide'
+      animationType="slide"
       transparent={true}
     >
-      <BlurredBackground
-        intensity={50}
-        tint='dark'
-      >
+      <BlurredBackground intensity={50} tint="dark">
         <LinearGradientWrapper
-          colors={['#19b1d2', '#0094ff']}
+          colors={["#19b1d2", "#0094ff"]}
           style={{ borderRadius: 20, padding: 2 }}
         >
           <ModalContainer>
             <Title color={colors.text}>Agreement Creation Successful</Title>
             <CloseButton onPress={onClose}>
-              <Ionicons
-                name='close'
-                size={24}
-                color='white'
-              />
+              <Ionicons name="close" size={24} color="white" />
             </CloseButton>
 
             <SuccessIconContainer>
@@ -69,7 +62,7 @@ const LinearGradientWrapper = styled(LinearGradient).attrs({
   height: auto;
 `;
 
-const BlurredBackground = styled(BlurView)`
+export const BlurredBackground = styled(BlurView)`
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -77,7 +70,7 @@ const BlurredBackground = styled(BlurView)`
   height: 100%;
 `;
 
-const ModalContainer = styled(View)`
+export const ModalContainer = styled(View)`
   width: 80%;
   height: 320px;
   background-color: rgba(0, 0, 0, 0.8);
@@ -86,7 +79,7 @@ const ModalContainer = styled(View)`
   align-items: center;
 `;
 
-const CloseButton = styled.TouchableOpacity`
+export const CloseButton = styled.TouchableOpacity`
   position: absolute;
   top: 20px;
   right: 20px;

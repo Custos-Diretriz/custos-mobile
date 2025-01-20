@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -12,8 +12,8 @@ import MaskedView from "@react-native-masked-view/masked-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import GradientButton from "@/components/GradientButton";
 import Swiper from "react-native-swiper";
-// import { useAppKit } from '@reown/appkit-wagmi-react-native'
 import { useRouter } from "expo-router";
+import ArgentAccount from "./connectors/ArgentAccount";
 
 const slides = [
   {
@@ -41,11 +41,11 @@ const slides = [
 
 export default function SwiperScreen() {
   const router = useRouter();
-  //   const { open } = useAppKit();
+  const [visible, setVisible] = useState(false);
 
   const handleConnect = async () => {
     // await open({ view: "Connect" });
-    router.push("/(tabs)");
+    setVisible(true);
   };
 
   return (
@@ -84,6 +84,10 @@ export default function SwiperScreen() {
         ))}
       </Swiper>
       <GradientButton onPress={handleConnect} width={248} />
+      <ArgentAccount
+        isVisible={visible}
+        onClose={() => (router.push("/(tabs)"), setVisible(!visible))}
+      />
       <Image
         source={require("../assets/images/ellipse.png")}
         style={styles.backgroundImage}
