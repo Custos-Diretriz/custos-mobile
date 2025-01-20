@@ -12,14 +12,16 @@ const WalletDetails = ({ children }: any) => {
 
   return (
     <WalletContext.Provider
-      value={{
-        pubKey,
-        setPubKey,
-        setPrivKey,
-        privKey,
-        accountAddress,
-        setAccountAddress,
-      }}
+      value={
+        {
+          pubKey,
+          setPubKey,
+          setPrivKey,
+          privKey,
+          accountAddress,
+          setAccountAddress,
+        } as any
+      }
     >
       {children}
     </WalletContext.Provider>
