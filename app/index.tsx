@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import GradientButton from "@/components/GradientButton";
 import Swiper from "react-native-swiper";
 import { useRouter } from "expo-router";
 import ArgentAccount from "./connectors/ArgentAccount";
+import { WalletContext } from "./context/WalletContext";
 
 const slides = [
   {
@@ -42,10 +43,15 @@ const slides = [
 export default function SwiperScreen() {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
+  const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
 
   const handleConnect = async () => {
-    // await open({ view: "Connect" });
-    setVisible(true);
+    const loaded = SecureStore.getItem(ACCOUNT_STORE_KEY);
+    if (loaded) {
+      loaded && router.push("/(tabs)");
+    } else {
+      setVisible(true);
+    }
   };
 
   return (

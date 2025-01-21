@@ -65,7 +65,8 @@
     "starknet": "^6.11.0",
     "styled-components": "6.1.13",
     "viem": "2.21.37",
-    "wagmi": "2.12.25"
+    "wagmi": "2.12.25",
+    "expo-secure-store": "~14.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
