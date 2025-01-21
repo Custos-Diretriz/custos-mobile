@@ -1,11 +1,11 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import {TouchableOpacity} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useTheme } from '@react-navigation/native';
-import Plus from '@/assets/svgs/plus.svg';
-import {ThemedView} from "@/components/ThemedView";
-import {ThemedText} from "@/components/ThemedText";
+import React from "react";
+import styled from "styled-components/native";
+import { TouchableOpacity } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { useTheme } from "@react-navigation/native";
+import Plus from "@/assets/svgs/plus.svg";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
 
 export type BottonProps = {
   title: string;
@@ -16,15 +16,12 @@ const GradientButton: React.FC<BottonProps> = ({ title, onPress }) => {
   const { colors } = useTheme();
 
   return (
-    <ButtonContainer
-      background={colors.background}
-      onPress={onPress}
-    >
-      <GradientBorder colors={['#0094FF', '#A02294']}>
+    <ButtonContainer background={colors.background} onPress={onPress}>
+      <GradientBorder colors={["#0094FF", "#A02294"]}>
         <ButtonView>
           <ButtonText color={colors.text}>{title}</ButtonText>
           <PlusIconContainer>
-            <Plus fill={colors.text}/>
+            <Plus fill={colors.text} />
           </PlusIconContainer>
         </ButtonView>
       </GradientBorder>
@@ -46,7 +43,7 @@ const GradientBorder = styled(LinearGradient).attrs({
 const ButtonContainer = styled(TouchableOpacity)<{ background: string }>`
   background-color: ${(props) => props.background};
   border-radius: 100px;
-  padding: 15px 20px;
+  margin: 15px 20px;
   align-items: center;
   justify-content: center;
   flex-direction: row;

@@ -11,7 +11,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import GradientButton from "./GradientButton";
 import { X } from "lucide-react-native";
-import { WalletContext } from "@/app/context/WalletContext";
 
 interface MenuItemProps {
   text: string;
@@ -47,15 +46,10 @@ export default Navbar;
 
 export const DrawerContent = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const { accountAddress }: any = useContext(WalletContext);
   const { colors } = useTheme();
   const navigation = useNavigation();
   const router = useRouter();
-  // const open = connectWallet();
-  // const handleConnect = async () => {
-  // await connectWallet();
-  //   router.push("/(tabs)");
-  // };
+
   const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
     <Pressable onPress={onPress} style={styles.item}>
       <Text style={[styles.menuItem, { color: colors.text }]}>{text}</Text>
@@ -68,7 +62,7 @@ export const DrawerContent = () => {
       {/* <Modal transparent visible={modalVisible} animationType="fade"> */}
       <Pressable
         style={[styles.modalOverlay]}
-        onPress={() => setModalVisible(false)}
+        onPress={() => setModalVisible(true)}
       >
         <LinearGradient
           colors={["transparent", "rgba(0,0,0,0)"]}
