@@ -1,9 +1,8 @@
-import React from 'react';
-import { useTheme } from '@react-navigation/native';
-import styled from 'styled-components/native';
-import { Button } from 'react-native-paper';
-import { LinearGradient } from 'expo-linear-gradient';
-import { TouchableOpacity } from 'react-native';
+import React from "react";
+import { useTheme } from "@react-navigation/native";
+import styled from "styled-components/native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Button, TouchableOpacity } from "react-native";
 
 export type ButtonProps = {
   onPress: () => void;
@@ -15,32 +14,16 @@ const OutlinedButton: React.FC<ButtonProps> = ({ onPress, title }) => {
 
   return (
     <LinearGradientCont
-      colors={['#00f', '#f0f']}
+      colors={["#19B1D2", "#0094FF"]}
       style={{
         borderWidth: 1,
-        borderColor: 'transparent',
-        overflow: 'hidden',
+        borderColor: "transparent",
+        overflow: "hidden",
         paddingVertical: 0,
       }}
     >
       <ButtonContainer>
-        <ButtonContained
-          mode='contained'
-          onPress={onPress}
-          labelStyle={{ color: `${colors.text}` }}
-          contentStyle={{
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-          }}
-          style={{
-            borderRadius: 32,
-            paddingVertical: 6,
-            paddingHorizontal: 18,
-          }}
-        >
-          {title}
-        </ButtonContained>
+        <ButtonContained onPress={onPress} color={colors.text} title={title} />
       </ButtonContainer>
     </LinearGradientCont>
   );
@@ -54,12 +37,16 @@ const ButtonContainer = styled(TouchableOpacity)`
   border-radius: 32px;
   align-items: center;
   justify-content: center;
+  border-color: #a02294;
+  border-width: 1px;
 `;
 
 const ButtonContained = styled(Button)`
   width: 100%;
   height: 100%;
   border-radius: 50px;
+  justify-content: center;
+  padding: 6px;
 `;
 
 const LinearGradientCont = styled(LinearGradient).attrs({

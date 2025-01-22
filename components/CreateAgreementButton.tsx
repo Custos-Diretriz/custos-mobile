@@ -1,9 +1,9 @@
-import React from 'react';
-import { useTheme } from '@react-navigation/native';
-import styled from 'styled-components/native';
-import { Button } from 'react-native-paper';
-import { LinearGradient } from 'expo-linear-gradient';
-import { TouchableOpacity } from 'react-native';
+import React from "react";
+import { useTheme } from "@react-navigation/native";
+import styled from "styled-components/native";
+import { Button } from "react-native-paper";
+import { LinearGradient } from "expo-linear-gradient";
+import { TouchableOpacity } from "react-native";
 
 export type ButtonProps = {
   onPress: () => void;
@@ -15,18 +15,18 @@ const CreateAgreementBut: React.FC<ButtonProps> = ({ onPress, title }) => {
 
   return (
     <LinearGradientCont
-      colors={['#00f', '#f0f']}
+      colors={["#00f", "#f0f"]}
       style={{
         borderWidth: 1,
-        borderColor: 'transparent',
+        borderColor: "transparent",
         borderRadius: 50,
-        overflow: 'hidden',
+        overflow: "hidden",
         paddingVertical: 0,
       }}
     >
       <ButtonContainer>
         <Button
-          mode='contained'
+          mode="contained"
           onPress={onPress}
           labelStyle={{ color: `${colors.text}` }}
           style={{
