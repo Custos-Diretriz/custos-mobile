@@ -5,7 +5,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { BigNumberish, CallData, SignerInterface } from "starknet";
+import {
+  BigNumberish,
+  CallData,
+  RawArgsObject,
+  SignerInterface,
+} from "starknet";
 import * as SecureStore from "expo-secure-store";
 import { isJsonString } from "@/app/utils";
 
@@ -26,7 +31,7 @@ export interface I_Account {
   address: string;
   publicKey: string;
   privateKey: string;
-  callData?: CallData | undefined;
+  callData?: RawArgsObject | undefined;
   balance?: string;
 }
 
