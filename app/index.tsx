@@ -13,8 +13,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import GradientButton from "@/components/GradientButton";
 import Swiper from "react-native-swiper";
 import { useRouter } from "expo-router";
-import ArgentAccount from "./connectors/ArgentAccount";
+import ArgentAccount, { provider } from "./connectors/ArgentAccount";
 import { WalletContext } from "./context/WalletContext";
+import { Account, Contract } from "starknet";
+import ERC20_ABI from "@/app/abi/ERC20.json";
 
 const slides = [
   {
@@ -43,14 +45,32 @@ const slides = [
 export default function SwiperScreen() {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
-  const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
+  const { SecureStore, ACCOUNT_STORE_KEY, deleteAccountsFromStore } =
+    useContext(WalletContext);
+  const loaded = JSON.parse(SecureStore.getItem(ACCOUNT_STORE_KEY));
+
+  const contractAddress = process.env.EXPO_PUBLIC_ERC20_ADDRESS;
+  const erc20 = new Contract(ERC20_ABI, contractAddress!, provider);
 
   const handleConnect = async () => {
-    const loaded = SecureStore.getItem(ACCOUNT_STORE_KEY);
-    if (loaded) {
-      loaded && router.push("/(tabs)");
-    } else {
+    if (!loaded) {
       setVisible(true);
+    }
+    const account = new Account(
+      provider,
+      loaded[0]?.address,
+      loaded[0]?.privateKey
+    );
+    if (account) {
+      try {
+        erc20.connect(account);
+        let balance = await erc20.balanceOf(account.address);
+        console.log("Account is deployed and has balance:", balance.toString());
+        loaded && router.push("/(tabs)");
+      } catch (error) {
+        await deleteAccountsFromStore();
+        setVisible(true);
+      }
     }
   };
 
@@ -90,10 +110,7 @@ export default function SwiperScreen() {
         ))}
       </Swiper>
       <GradientButton onPress={handleConnect} width={248} />
-      <ArgentAccount
-        isVisible={visible}
-        onClose={() => (router.push("/(tabs)"), setVisible(!visible))}
-      />
+      <ArgentAccount isVisible={visible} onClose={() => setVisible(!visible)} />
       <Image
         source={require("../assets/images/ellipse.png")}
         style={styles.backgroundImage}
