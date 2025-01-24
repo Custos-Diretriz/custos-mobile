@@ -6,7 +6,7 @@ export const HeaderContainer = styled(ThemedView)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 8px;
+  padding: 16px 0px;
   background: transparent;
 `;
 
@@ -14,6 +14,6 @@ export const HeaderText = styled(ThemedText)<{ color?: string }>`
   //color: ${(props) => props.color};
   font-size: 24px;
   font-weight: 600;
-  padding-left: 10px;
+  padding-left: 16px;
   //margin-top: 10px;
 `;
