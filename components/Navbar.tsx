@@ -52,7 +52,7 @@ export const DrawerContent = () => {
 
   const MenuItem: React.FC<MenuItemProps> = ({ text, icon: Icon, onPress }) => (
     <Pressable onPress={onPress} style={styles.item}>
-      <Text style={[styles.menuItem, { color: colors.text }]}>{text}</Text>
+      <Text style={[styles.menuItem, { color: "#FFF" }]}>{text}</Text>
       {Icon && <Icon />}
     </Pressable>
   );
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
+    gap: 20,
     padding: 20,
   },
   item: {

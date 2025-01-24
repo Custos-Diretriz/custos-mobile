@@ -20,6 +20,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Navbar, { DrawerContent } from "@/components/Navbar";
 import { Stack } from "expo-router";
 import WalletDetails from "./context/WalletContext";
+import { customDarkTheme } from "@/constants/theme";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,9 +46,11 @@ export default function RootLayout() {
 
   return (
     <WalletDetails>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider
+        value={colorScheme === "dark" ? customDarkTheme : DefaultTheme}
+      >
         <PaperProvider
-          theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          theme={colorScheme === "dark" ? customDarkTheme : DefaultTheme}
         >
           <GestureHandlerRootView style={{ flex: 1, width: "100%" }}>
             <Drawer

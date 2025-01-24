@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/native';
-import { useTheme } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient';
-import DropDownPicker from 'react-native-dropdown-picker';
-import CancelButton from '../CancelButton';
-import ContinueButton from '../ContinueButton';
+import React, { useState } from "react";
+import styled from "styled-components/native";
+import { useTheme } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
+import DropDownPicker from "react-native-dropdown-picker";
+import CancelButton from "../CancelButton";
+import ContinueButton from "../ContinueButton";
 
 const SelectAgreementScreen: React.FC<{ onContinue: () => void }> = ({
   onContinue,
@@ -14,14 +14,14 @@ const SelectAgreementScreen: React.FC<{ onContinue: () => void }> = ({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: 'Loan', value: 'loan' },
-    { label: 'Mortgage', value: 'mortgage' },
+    { label: "Loan", value: "loan" },
+    { label: "Mortgage", value: "mortgage" },
   ]);
 
   return (
     <OuterContainer>
       <LinearGradient
-        colors={['#19b1d2', '#0094ff']}
+        colors={["#19b1d2", "#0094ff"]}
         style={{ flex: 1, borderRadius: 20, padding: 1 }} // Padding to create space for the border
       >
         <Container background={colors.background}>
@@ -34,11 +34,11 @@ const SelectAgreementScreen: React.FC<{ onContinue: () => void }> = ({
           </AgreementTypeText>
 
           <DropDownPickerWrapper
-            colors={['#19B1D2', '#0094FF']}
+            colors={["#19B1D2", "#0094FF"]}
             style={{ borderRadius: 10, padding: 2 }}
           >
             <DropDownPicker
-              placeholder='Collaborative Research Agreement'
+              placeholder="Collaborative Research Agreement"
               open={open}
               value={value}
               items={items}
@@ -51,19 +51,13 @@ const SelectAgreementScreen: React.FC<{ onContinue: () => void }> = ({
                 color: `${colors.text}`,
                 fontSize: 16,
               }}
-              arrowIconStyle={{ tintColor: 'white' }}
+              arrowIconStyle={{ tintColor: "white" }}
             />
           </DropDownPickerWrapper>
 
           <ButtonsContainer>
-            <CancelButton
-              onPress={onContinue}
-              title='Cancel'
-            />
-            <ContinueButton
-              onPress={onContinue}
-              title='Continue'
-            />
+            <CancelButton onPress={onContinue} title="Cancel" />
+            <ContinueButton onPress={onContinue} title="Continue" />
           </ButtonsContainer>
         </Container>
       </LinearGradient>
