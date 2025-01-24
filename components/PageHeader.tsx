@@ -16,7 +16,7 @@ export const PageHeader = ({
       <ThemedText
         type={"title"}
         darkColor={Colors.dark.text}
-        style={{ fontSize: 24 }}
+        style={{ fontSize: 24, fontWeight: 600 }}
       >
         {title}
       </ThemedText>
