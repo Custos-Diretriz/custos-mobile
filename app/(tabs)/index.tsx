@@ -30,7 +30,8 @@ type RootStackParamList = {
   agreement: undefined;
 };
 const videos: { title: string; timestamp: string }[] = [
-  /* {
+  /*
+  {
     title: "Domestic Abuse From Husband",
     timestamp: "Tuesday, 24th January 2024. 10:39:21 a.m.",
   },
@@ -45,11 +46,13 @@ const videos: { title: string; timestamp: string }[] = [
   {
     title: "Theft",
     timestamp: "Monday, 4th March 2024. 10:39:21 a.m.",
-  }, */
+  },
+  */
 ];
 
 const agreements: { title: string; timestamp: string }[] = [
-  /*   {
+  /*
+  {
     title: "Non Disclosure Agreement",
     timestamp: "Friday, 2nd May 2024. 10:39:21 a.m.",
   },
@@ -80,7 +83,8 @@ const agreements: { title: string; timestamp: string }[] = [
   {
     title: "********",
     timestamp: "Tuesday, 24th January 2024. 10:39:21 a.m.",
-  }, */
+  },
+  */
 ];
 
 export default function Home() {
@@ -124,37 +128,54 @@ export default function Home() {
                     >
                       {videos.length > 0 ? (
                         <ScrollView style={{ flex: 1 }}>
-                          <View>
-                            {videos.map((agreement, index) => (
-                              <CardContainer key={`agreement-${index}`}>
-                                <CardHeader>
-                                  <LinearGradient
-                                    colors={["#2D8EFF", "#9C3FE4"]}
-                                    start={{ x: 0, y: 0 }}
-                                    end={{ x: 1, y: 0 }}
-                                    style={styles.profileContainer}
-                                  >
-                                    <ThemedView
-                                      style={styles.gradientOverlayContainer}
-                                    >
-                                      <CardTitle>{agreement.title}</CardTitle>
-                                    </ThemedView>
-                                  </LinearGradient>
+                          <View
+                            style={{ flex: 1, gap: 12, paddingHorizontal: 6 }}
+                          >
+                            {videos.map((video, index) => (
+                              <LinearGradient
+                                key={`agreement-${index}`}
+                                colors={[
+                                  "rgba(25, 177, 210, 0.1)",
+                                  "rgba(0, 148, 255, 0.1)",
+                                ]}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 0 }}
+                                style={{ padding: 1, borderRadius: 8 }}
+                              >
+                                <CardContainer>
+                                  <CardContent>
+                                    <CardHeader>
+                                      <LinearGradient
+                                        colors={["#2D8EFF", "#9C3FE4"]}
+                                        start={{ x: 0, y: 0 }}
+                                        end={{ x: 1, y: 0 }}
+                                        style={styles.profileContainer}
+                                      >
+                                        <ThemedView
+                                          style={
+                                            styles.gradientOverlayContainer
+                                          }
+                                        >
+                                          <CardTitle>{video.title}</CardTitle>
+                                        </ThemedView>
+                                      </LinearGradient>
 
-                                  <ViewButton>
-                                    <ViewButtonText>View</ViewButtonText>
-                                    <ViewButtonIcon>
-                                      <ArrowRight />
-                                    </ViewButtonIcon>
-                                  </ViewButton>
-                                </CardHeader>
-                                <TimestampContainer>
-                                  <TimestampLabel color={colors.text}>
-                                    Time Stamp:{" "}
-                                  </TimestampLabel>
-                                  <TimestampValue value={agreement.timestamp} />
-                                </TimestampContainer>
-                              </CardContainer>
+                                      <ViewButton>
+                                        <ViewButtonText>View</ViewButtonText>
+                                        <ViewButtonIcon>
+                                          <ArrowRight />
+                                        </ViewButtonIcon>
+                                      </ViewButton>
+                                    </CardHeader>
+                                    <TimestampContainer>
+                                      <TimestampLabel color={colors.text}>
+                                        Time Stamp:{" "}
+                                      </TimestampLabel>
+                                      <TimestampValue value={video.timestamp} />
+                                    </TimestampContainer>
+                                  </CardContent>
+                                </CardContainer>
+                              </LinearGradient>
                             ))}
                           </View>
                         </ScrollView>
@@ -223,37 +244,58 @@ export default function Home() {
                     >
                       {agreements.length > 0 ? (
                         <ScrollView style={{ flex: 1 }}>
-                          <View>
+                          <View
+                            style={{ flex: 1, gap: 12, paddingHorizontal: 6 }}
+                          >
                             {agreements.map((agreement, index) => (
-                              <CardContainer key={`agreement-${index}`}>
-                                <CardHeader>
-                                  <LinearGradient
-                                    colors={["#2D8EFF", "#9C3FE4"]}
-                                    start={{ x: 0, y: 0 }}
-                                    end={{ x: 1, y: 0 }}
-                                    style={styles.profileContainer}
-                                  >
-                                    <ThemedView
-                                      style={styles.gradientOverlayContainer}
-                                    >
-                                      <CardTitle>{agreement.title}</CardTitle>
-                                    </ThemedView>
-                                  </LinearGradient>
+                              <LinearGradient
+                                key={`agreement-${index}`}
+                                colors={[
+                                  "rgba(25, 177, 210, 0.1)",
+                                  "rgba(0, 148, 255, 0.1)",
+                                ]}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 0 }}
+                                style={{ padding: 1, borderRadius: 8 }}
+                              >
+                                <CardContainer>
+                                  <CardContent>
+                                    <CardHeader>
+                                      <LinearGradient
+                                        colors={["#2D8EFF", "#9C3FE4"]}
+                                        start={{ x: 0, y: 0 }}
+                                        end={{ x: 1, y: 0 }}
+                                        style={styles.profileContainer}
+                                      >
+                                        <ThemedView
+                                          style={
+                                            styles.gradientOverlayContainer
+                                          }
+                                        >
+                                          <CardTitle>
+                                            {agreement.title}
+                                          </CardTitle>
+                                        </ThemedView>
+                                      </LinearGradient>
 
-                                  <ViewButton>
-                                    <ViewButtonText>View</ViewButtonText>
-                                    <ViewButtonIcon>
-                                      <ArrowRight />
-                                    </ViewButtonIcon>
-                                  </ViewButton>
-                                </CardHeader>
-                                <TimestampContainer>
-                                  <TimestampLabel color={colors.text}>
-                                    Time Stamp:{" "}
-                                  </TimestampLabel>
-                                  <TimestampValue value={agreement.timestamp} />
-                                </TimestampContainer>
-                              </CardContainer>
+                                      <ViewButton>
+                                        <ViewButtonText>View</ViewButtonText>
+                                        <ViewButtonIcon>
+                                          <ArrowRight />
+                                        </ViewButtonIcon>
+                                      </ViewButton>
+                                    </CardHeader>
+                                    <TimestampContainer>
+                                      <TimestampLabel color={colors.text}>
+                                        Time Stamp:{" "}
+                                      </TimestampLabel>
+                                      <TimestampValue
+                                        value={agreement.timestamp}
+                                      />
+                                    </TimestampContainer>
+                                  </CardContent>
+                                </CardContainer>
+                              </LinearGradient>
                             ))}
                           </View>
                         </ScrollView>
@@ -436,9 +478,14 @@ const ScrollContent = styled.ScrollView`
 `;
 
 const CardContainer = styled.View`
+  margin: 0px;
+  border-radius: 8px;
+  overflow: hidden;
+`;
+
+const CardContent = styled.View`
   padding: 8px;
-  border-bottom-width: 1px;
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(4, 8, 12, 0.6);
 `;
 
 const CardHeader = styled.View`
