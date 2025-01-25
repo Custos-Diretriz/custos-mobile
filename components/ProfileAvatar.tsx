@@ -10,7 +10,7 @@ export const ProfileAvatar = () => {
   const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
   const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
   const account = JSON.parse(response);
-  let address = account[0].address.slice(0, 5).concat("...");
+  let address = account[0].address.slice(0, 3).concat("...");
   console.log(account[0].address);
 
   return (
