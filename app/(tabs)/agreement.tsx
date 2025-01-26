@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
-  ImageBackground,
   ScrollView,
   StyleSheet,
+  Image,
   useWindowDimensions,
 } from "react-native";
 import styled from "styled-components/native";
@@ -87,59 +87,56 @@ const Agreement = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Image
+        style={{ position: "absolute", width: "100%", height: "100%" }}
+        source={require("@/assets/images/gradient.png")}
+      />
       {/*<StyledView backgroundColor={colors.background}>*/}
       {/* Conditionally render Sidebar */}
       {/* <NavContainer>
         <Nav toggleSidebar={toggleSidebar} />
       </NavContainer> */}
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <ImageBackground
-          source={require("@/assets/images/background.png")}
-          style={{ flex: 1 }}
-        >
-          <ThemedView style={{ flexGrow: 1 }} noBackground>
-            <PageHeader title={"Agreement"} />
-            {/*<AgreementText color={colors.text}>Agreements</AgreementText>*/}
-            {currentModal !== "NoAgreement" && (
-              <BackButtonContainer onPress={handleBack}>
-                <ArrowLeft />
-                <StyledText color={colors.text}>Back</StyledText>
-              </BackButtonContainer>
+        <ThemedView style={{ flexGrow: 1 }}>
+          <PageHeader title={"Agreement"} />
+          {/*<AgreementText color={colors.text}>Agreements</AgreementText>*/}
+          <BackButtonContainer onPress={handleBack}>
+            <ArrowLeft />
+            <StyledText color={colors.text}>Back</StyledText>
+          </BackButtonContainer>
+          <NoAgreementContainer>
+            {currentModal === "NoAgreement" && (
+              <NoAgreementScreen onContinue={handleContinue} />
             )}
-            <NoAgreementContainer>
-              {currentModal === "NoAgreement" && (
-                <NoAgreementScreen onContinue={handleContinue} />
-              )}
-              {/* Select Agreement Modal */}
-              {currentModal === "SelectAgreement" && (
-                <SelectAgreementScreen onContinue={handleContinue} />
-              )}
-              {/* Agreement Content Modal */}
-              {currentModal === "AgreementContent" && (
-                <AgreementContentScreen onContinue={handleContinue} />
-              )}
-              {/* Verify Identity Modal */}
-              {currentModal === "VerifyIdentity" && (
-                <VerifyIdentityScreen onContinue={handleContinue} />
-              )}
-              {/* Second Party Modal */}
-              {currentModal === "SecondParty" && (
-                <SecondPartyWalletScreen onContinue={handleContinue} />
-              )}
-              {currentModal === "AgreementSuccessful" && (
-                <AgreementSuccessful
-                  isVisible={isPrintScreenVisible}
-                  onClose={handleCloseModal}
-                />
-              )}
-              {/* Print Agreement Modal */}
-              {currentModal === "PrintAgreementScreen" && (
-                <PrintAgreementScreen onContinue={handleContinue} />
-              )}
-            </NoAgreementContainer>
-            {/* <Footer /> */}
-          </ThemedView>
-        </ImageBackground>
+            {/* Select Agreement Modal */}
+            {currentModal === "SelectAgreement" && (
+              <SelectAgreementScreen onContinue={handleContinue} />
+            )}
+            {/* Agreement Content Modal */}
+            {currentModal === "AgreementContent" && (
+              <AgreementContentScreen onContinue={handleContinue} />
+            )}
+            {/* Verify Identity Modal */}
+            {currentModal === "VerifyIdentity" && (
+              <VerifyIdentityScreen onContinue={handleContinue} />
+            )}
+            {/* Second Party Modal */}
+            {currentModal === "SecondParty" && (
+              <SecondPartyWalletScreen onContinue={handleContinue} />
+            )}
+            {currentModal === "AgreementSuccessful" && (
+              <AgreementSuccessful
+                isVisible={isPrintScreenVisible}
+                onClose={handleCloseModal}
+              />
+            )}
+            {/* Print Agreement Modal */}
+            {currentModal === "PrintAgreementScreen" && (
+              <PrintAgreementScreen onContinue={handleContinue} />
+            )}
+          </NoAgreementContainer>
+          {/* <Footer /> */}
+        </ThemedView>
       </ScrollView>
       {isSidebarVisible && (
         <Sidebar

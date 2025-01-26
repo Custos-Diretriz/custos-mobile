@@ -76,6 +76,10 @@ export default function SwiperScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Image
+        style={{ position: "absolute", width: "100%", height: "100%" }}
+        source={require("@/assets/images/gradient.png")}
+      />
       <Swiper
         style={styles.wrapper}
         loop={false}
@@ -147,7 +151,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   titleContainer: {
-    marginBottom: 20,
+    marginBottom: 0,
   },
   title: {
     fontSize: 32,
@@ -171,7 +175,7 @@ const styles = StyleSheet.create({
     width: 118,
     height: 158.12,
     zIndex: 2,
-    marginBottom: 100,
+    marginBottom: 170,
     resizeMode: "contain",
   },
   dot: {
