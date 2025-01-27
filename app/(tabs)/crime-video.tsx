@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -27,6 +27,8 @@ import { PageHeader } from "@/components/PageHeader";
 import LottieView from "lottie-react-native";
 import emptyStateAnimation from "@/assets/animations/empty-state.json";
 import styled from "styled-components/native";
+import { WalletContext } from "../context/WalletContext";
+import { generateAvatarUrl } from "../utils";
 
 export default function VideoRecorderScreen() {
   const [showCamera, setShowCamera] = useState(false);
@@ -41,6 +43,11 @@ export default function VideoRecorderScreen() {
 
   const cameraRef = useRef<any>(null);
   const recordingTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
+  const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
+  const account = JSON.parse(response);
+  const truncatedAddress = account[0].address.slice(0, 3).concat("...");
 
   useEffect(() => {
     return () => {
@@ -220,10 +227,10 @@ export default function VideoRecorderScreen() {
             style={styles.profileContainer}
           >
             <Image
-              source={require("../../assets/images/avatar.png")}
+              source={{ uri: generateAvatarUrl(account[0]?.address) }}
               style={styles.avatar}
             />
-            <Text style={styles.walletAddress}>0xc...</Text>
+            <Text style={styles.walletAddress}>{truncatedAddress}</Text>
           </LinearGradient>
         </View>
 

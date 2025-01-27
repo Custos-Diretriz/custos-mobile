@@ -53,25 +53,26 @@ export default function SwiperScreen() {
   const erc20 = new Contract(ERC20_ABI, contractAddress!, provider);
 
   const handleConnect = async () => {
-    if (!loaded) {
-      setVisible(true);
-    }
-    const account = new Account(
-      provider,
-      loaded[0]?.address,
-      loaded[0]?.privateKey
-    );
-    if (account) {
-      try {
-        erc20.connect(account);
-        let balance = await erc20.balanceOf(account.address);
-        console.log("Account is deployed and has balance:", balance.toString());
-        loaded && router.push("/(tabs)");
-      } catch (error) {
-        await deleteAccountsFromStore();
-        setVisible(true);
-      }
-    }
+    // if (!loaded) {
+    //   setVisible(true);
+    // }
+    // const account = new Account(
+    //   provider,
+    //   loaded[0]?.address,
+    //   loaded[0]?.privateKey
+    // );
+    // if (account) {
+    //   try {
+    //     erc20.connect(account);
+    //     let balance = await erc20.balanceOf(account.address);
+    //     console.log("Account is deployed and has balance:", balance.toString());
+    //     loaded &&
+    router.push("/(tabs)");
+    //   } catch (error) {
+    //     await deleteAccountsFromStore();
+    //     setVisible(true);
+    //   }
+    // }
   };
 
   return (

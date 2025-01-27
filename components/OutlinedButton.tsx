@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "@react-navigation/native";
 import Plus from "@/assets/svgs/plus.svg";
@@ -16,16 +16,18 @@ const GradientButton: React.FC<BottonProps> = ({ title, onPress }) => {
   const { colors } = useTheme();
 
   return (
-    <ButtonContainer background={colors.background} onPress={onPress}>
-      <GradientBorder colors={["#0094FF", "#A02294"]}>
-        <ButtonView>
-          <ButtonText color={colors.text}>{title}</ButtonText>
-          <PlusIconContainer>
-            <Plus fill={colors.text} />
-          </PlusIconContainer>
-        </ButtonView>
-      </GradientBorder>
-    </ButtonContainer>
+    <ShadowContainer>
+      <ButtonContainer background={colors.background} onPress={onPress}>
+        <GradientBorder colors={["#0094FF", "#A02294"]}>
+          <ButtonView>
+            <ButtonText color={colors.text}>{title}</ButtonText>
+            <PlusIconContainer>
+              <Plus fill={colors.text} />
+            </PlusIconContainer>
+          </ButtonView>
+        </GradientBorder>
+      </ButtonContainer>
+    </ShadowContainer>
   );
 };
 
@@ -65,6 +67,19 @@ const ButtonView = styled(ThemedView)`
 const ButtonText = styled(ThemedText)<{ color: string }>`
   color: ${(props) => props.color};
   font-size: 16px;
+`;
+
+const ShadowContainer = styled(View)`
+  shadow-color: #0094ff;
+  shadow-offset: 0px 0px;
+  shadow-opacity: 1;
+  shadow-radius: 1px;
+  elevation: 1;
+  shadow-color: #1ca7d669;
+  shadow-offset: 0px 0px;
+  shadow-opacity: 1;
+  shadow-radius: 3px;
+  elevation: 3;
 `;
 
 // import React from 'react';

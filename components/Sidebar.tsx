@@ -1,18 +1,16 @@
-import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import styled from 'styled-components/native';
-import CloseIcon from '@/assets/svgs/closeIcon.svg';
-import OutlinedButton from './ContinueButton';
-import GradientButton from './GradientButton';
+import React from "react";
+import { TouchableOpacity, Text } from "react-native";
+import styled from "styled-components/native";
+import CloseIcon from "@/assets/svgs/closeIcon.svg";
+import OutlinedButton from "./ContinueButton";
+import GradientButton from "./GradientButton";
 
 type SidebarProps = {
-    onClose: () => void;
-    connectWallet: () => void;
+  onClose: () => void;
+  connectWallet: () => void;
 };
 
- const handleConnect = async () => {
-   
- };
+const handleConnect = async () => {};
 
 const Sidebar: React.FC<SidebarProps> = ({ onClose, connectWallet }) => {
   return (
@@ -25,12 +23,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose, connectWallet }) => {
         <SidebarItem>Home</SidebarItem>
         <SidebarItem>Company</SidebarItem>
         <SidebarItem>Agreement +</SidebarItem>
-        <SidebarItem>Videos 🎥</SidebarItem>
+        <SidebarItem>Videos 🎥 </SidebarItem>
         <ConnectButton>
-          <GradientButton
-            onPress={handleConnect}
-            width={248}
-          />
+          <GradientButton onPress={handleConnect} width={248} />
         </ConnectButton>
       </SidebarContainer>
     </Container>
