@@ -62,7 +62,7 @@ const ArgentAccount: React.FC<WalletPop> = ({ isVisible, onClose }) => {
 
   const createAndDeployAccount = async () => {
     try {
-      /* setLoading(true);
+      setLoading(true);
       setError(null);
 
       const privateKeyAX = stark.randomAddress();
@@ -114,18 +114,6 @@ const ArgentAccount: React.FC<WalletPop> = ({ isVisible, onClose }) => {
 
       await saveAccountsToStore(
         account ? JSON.stringify([newAccount]) : JSON.stringify([newAccount])
-      ); */
-
-      // dummy account
-      await saveAccountsToStore(
-        JSON.stringify([
-          {
-            address: "0x1234567890",
-            publicKey: "0x1234567890",
-            privateKey: "0x1234567890",
-            callData: {},
-          },
-        ])
       );
 
       router.push("/(tabs)");
