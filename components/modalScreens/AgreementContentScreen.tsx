@@ -12,6 +12,8 @@ const SelectAgreementScreen: React.FC<{ onContinue: () => void }> = ({
 }) => {
   const { colors } = useTheme();
 
+  //dks
+
   return (
     <OuterContainer>
       <LinearGradient
