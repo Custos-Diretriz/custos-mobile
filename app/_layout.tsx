@@ -21,6 +21,7 @@ import Navbar, { DrawerContent } from "@/components/Navbar";
 import { Stack } from "expo-router";
 import WalletDetails from "./context/WalletContext";
 import { customDarkTheme } from "@/constants/theme";
+import { Providers } from "@/providers/Provider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,7 +46,7 @@ export default function RootLayout() {
   }
 
   return (
-    <WalletDetails>
+    <WalletDetails><Providers>
       <ThemeProvider
         value={colorScheme === "dark" ? customDarkTheme : DefaultTheme}
       >
@@ -101,7 +102,7 @@ export default function RootLayout() {
               </Stack>*/}
           </GestureHandlerRootView>
         </PaperProvider>
-      </ThemeProvider>
+      </ThemeProvider></Providers>
     </WalletDetails>
   );
 }

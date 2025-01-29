@@ -1,7 +1,7 @@
 import { Image, StyleSheet } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ThemedView } from "@/components/ThemedView";
 import { I_Account, WalletContext } from "@/app/context/WalletContext";
 import { generateAvatarUrl } from "@/app/utils";
@@ -9,7 +9,28 @@ import { generateAvatarUrl } from "@/app/utils";
 export const ProfileAvatar = () => {
   const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
   const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
-  const account = JSON.parse(response);
+  const [account, setAccount] = useState<any | null>(null);
+  // const account = JSON.parse(response);
+
+  useEffect(() => {
+    const fetchAccount = async () => {
+      try {
+        const response = await SecureStore.getItem(ACCOUNT_STORE_KEY);
+        if (response) {
+          setAccount(JSON.parse(response));
+        }
+      } catch (error) {
+        console.error("Error fetching account:", error);
+      }
+    };
+
+    fetchAccount();
+  }, []);
+
+  if (!account || !account[0]) {
+    return null; // Or return a placeholder UI
+  }
+
   let address = account[0].address.slice(0, 3).concat("...");
 
   return (

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
+import { useAccount, useConnect } from "@starknet-react/core";
 
 interface GradientButtonProps {
   onPress?: () => void;
@@ -21,6 +22,7 @@ export default function Component({
   width = "100%",
   disabled = false,
 }: GradientButtonProps) {
+  
   return (
     <View style={[styles.container, { width }]}>
       <Pressable
