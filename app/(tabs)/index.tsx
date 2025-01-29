@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   Text,
   StyleProp,
   TextStyle,
+  Alert,
 } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
@@ -24,34 +25,30 @@ import { Plus, Video } from "lucide-react-native";
 import ArrowRight from "@/assets/svgs/arrowRight.svg";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { ScrollView } from "react-native-gesture-handler";
+import { Abi, useAccount, useContract, useReadContract, useSendTransaction } from "@starknet-react/core";
+import { ABI } from "@/app/abi/abi"
 
-type RootStackParamList = {
-  "crime-video": undefined;
-  agreement: undefined;
-};
-const videos: { title: string; timestamp: string }[] = [
-  /*
-  {
-    title: "Domestic Abuse From Husband",
-    timestamp: "Tuesday, 24th January 2024. 10:39:21 a.m.",
-  },
-  {
-    title: "North Avenue Murder",
-    timestamp: "Tuesday, 15th June 2024. 10:39:21 a.m.",
-  },
-  {
-    title: "Vandalization",
-    timestamp: "Monday, 4th March 2024. 10:39:21 a.m.",
-  },
-  {
-    title: "Theft",
-    timestamp: "Monday, 4th March 2024. 10:39:21 a.m.",
-  },
-  */
-];
+// const videos: { title: string; timestamp: string }[] = [
+//   {
+//     title: "Domestic Abuse From Husband",
+//     timestamp: "Tuesday, 24th January 2024. 10:39:21 a.m.",
+//   },
+//   {
+//     title: "North Avenue Murder",
+//     timestamp: "Tuesday, 15th June 2024. 10:39:21 a.m.",
+//   },
+//   {
+//     title: "Vandalization",
+//     timestamp: "Monday, 4th March 2024. 10:39:21 a.m.",
+//   },
+//   {
+//     title: "Theft",
+//     timestamp: "Monday, 4th March 2024. 10:39:21 a.m.",
+//   },
+// ];
 
 const agreements: { title: string; timestamp: string }[] = [
-  /*
+
   {
     title: "Non Disclosure Agreement",
     timestamp: "Friday, 2nd May 2024. 10:39:21 a.m.",
@@ -84,15 +81,150 @@ const agreements: { title: string; timestamp: string }[] = [
     title: "********",
     timestamp: "Tuesday, 24th January 2024. 10:39:21 a.m.",
   },
-  */
 ];
 
+type RootStackParamList = {
+  "crime-video": { onSubmit: (videoData: any) => Promise<void> };
+  "agreement": undefined;
+  "video-detail": {
+    videoUri: string;
+    title: string;
+    timestamp: string;
+  };
+};
+
+interface VideoData {
+  title: string;
+  timestamp: string;
+  uri: string;
+  data?: any;
+}
+
 export default function Home() {
+  const { address } = useAccount();
+  const [videos, setVideos] = useState<{ title: String; timestamp: string }[]>([])
+  const [loading, setLoading] = useState(true);
   const { colors } = useTheme();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const crimeContractAddress = "0x03cbefe95450dddc88638f7b23f34d83fc48b570e476d87a608c07724aaaa342"; // testnet
+  // const contractAddress = "0x020bd5ec01c672e69e3ca74df376620a6be8a2b104ab70a9f0885be00dd38fb9"; // mainnet
+  const typedABI = ABI as Abi;
+  const { contract } = useContract({
+    abi: typedABI,
+    address: crimeContractAddress
+  })
+
+  // Fetch crime records from blockchain
+  const fetchCrimeRecords = async () => {
+    if (!address || !contract ) return;
+
+    try {
+      setLoading(true);
+      // Call contract method to get user's token IDs
+      const { data: tokenIds, error, isLoading } = useReadContract(
+        {
+          functionName: "get_all_user_uploads",
+          abi: typedABI,
+          address: crimeContractAddress,
+          watch: true,
+        }
+      )
+
+      if (error) {
+        console.error("Error fetching crime records:", error);
+        return;
+      }
+
+      if (!tokenIds) {
+        console.log("No records found.");
+        return;
+      }
+
+      const numericTokenIds = (tokenIds as bigint[])?.map((id: bigint) => Number(id));
+
+      // Fetch metadata for each token
+      const videoPromises = numericTokenIds.map(async (id: number) => {
+        const uri = await contract.get_token_uri(id);
+        const metadata = await fetchIPFSData(uri);
+        return {
+          title: metadata.title || "Untitled Evidence",
+          timestamp: new Date(metadata.timestamp).toLocaleDateString(),
+          uri: metadata.videoUrl || uri,
+        };
+      });
+
+      const videoData = (await Promise.all(videoPromises)).filter(Boolean);
+      setVideos(videoData)
+    } catch (error) {
+      console.error("Error fetching crime records:", error);
+      Alert.alert("Error", "Failed to load crime records");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCrimeRecords();
+  }, [address]);
+
+  const handleViewVideo = (video: VideoData) => {
+    navigation.navigate("video-detail", {
+      videoUri: `https://ipfs.io/ipfs/${video.uri.split('//').pop()}`,
+      title: video.title,
+      timestamp: video.timestamp
+    });
+  };
+
+  const fetchIPFSData = async (ipfsHash: string) => {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+
+      const response = await fetch(`https://ipfs.io/ipfs/${ipfsHash}`, {
+        signal: controller.signal
+      });
+
+      clearTimeout(timeout);
+      if (!response.ok) {
+        throw new Error(`IPFS request failed with status: ${response.status}`)
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching IPFS data:", error);
+      return {
+        title: "Unknown Crime",
+        timestamp: Date.now(),
+        videoUrl: ipfsHash
+      };
+    }
+  };
+
   const handlePress = (tab: "agreement" | "crime-video") => {
-    navigation.navigate(tab);
+    if (tab === "crime-video") {
+      navigation.navigate(tab, { onSubmit: handleNewRecording });
+    } else {
+      navigation.navigate(tab);
+    }
+  };
+  
+
+  const handleNewRecording = async (video: VideoData) => {
+    if (!address || !contract) return;
+
+    try {
+      // Call contract method to create new crime record
+      const { send, error, isPending } = useSendTransaction({
+        calls: contract && address
+          ? [contract.populate("crime_record", [video.uri,
+            video.data])]
+          : undefined,
+      }); 
+      // Refresh list after successful submission
+      await fetchCrimeRecords();
+    } catch (error) {
+      console.error("Error submitting crime record:", error);
+    }
   };
 
   return (
@@ -107,7 +239,7 @@ export default function Home() {
           <WrapperContainer>
             <OuterContainer hasData={videos.length > 0}>
               <SectionTitle color={colors.text}>
-                My Videos ({videos.length})
+                My Videos ({loading ? "..." : videos.length})
               </SectionTitle>
               <GradientBorder
                 colors={["#19B1D2", "#0094FF"]}
@@ -151,16 +283,17 @@ export default function Home() {
                                         end={{ x: 1, y: 0 }}
                                         style={styles.profileContainer}
                                       >
-                                        <ThemedView
-                                          style={
+                                          <ThemedView
+                                            style={
                                             styles.gradientOverlayContainer
                                           }
                                         >
                                           <CardTitle>{video.title}</CardTitle>
                                         </ThemedView>
+                                        
                                       </LinearGradient>
 
-                                      <ViewButton>
+                                      <ViewButton onPress={() => handleViewVideo(video)}>
                                         <ViewButtonText>View</ViewButtonText>
                                         <ViewButtonIcon>
                                           <ArrowRight />
@@ -193,7 +326,7 @@ export default function Home() {
                           </ThemedText>
 
                           <TouchableOpacity
-                            onPress={() => handlePress("crime-video")}
+                              onPress={() => handlePress("crime-video")}
                           >
                             <LinearGradient
                               colors={["#2D8EFF", "#9C3FE4"]}
@@ -358,6 +491,7 @@ export default function Home() {
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

@@ -16,7 +16,9 @@ import { useRouter } from "expo-router";
 import ArgentAccount, { provider } from "./connectors/ArgentAccount";
 import { WalletContext } from "./context/WalletContext";
 import { Account, Contract } from "starknet";
-import ERC20_ABI from "@/app/abi/ERC20.json";
+import {ABI} from "@/app/abi/abi";
+import ConnectButton from "@/components/ConnectButton";
+import { useAccount, useConnect } from "@starknet-react/core";
 
 const slides = [
   {
@@ -50,9 +52,14 @@ export default function SwiperScreen() {
   const loaded = JSON.parse(SecureStore.getItem(ACCOUNT_STORE_KEY));
 
   const contractAddress = process.env.EXPO_PUBLIC_ERC20_ADDRESS;
-  const erc20 = new Contract(ERC20_ABI, contractAddress!, provider);
+  const erc20 = new Contract(ABI, contractAddress!, provider);
+  const privateKey = "";
+  const { connect, connectors } = useConnect()
+  const { address } = useAccount()
 
   const handleConnect = async () => {
+    router.push("/(tabs)");
+
     // if (!loaded) {
     //   setVisible(true);
     // }
@@ -67,12 +74,33 @@ export default function SwiperScreen() {
     //     let balance = await erc20.balanceOf(account.address);
     //     console.log("Account is deployed and has balance:", balance.toString());
     //     loaded &&
-    router.push("/(tabs)");
+    // router.push("/(tabs)");
     //   } catch (error) {
     //     await deleteAccountsFromStore();
     //     setVisible(true);
     //   }
     // }
+
+    if (!address) {
+      setVisible(true);
+      return;
+    }
+
+    try {
+      const account = new Account(provider, address, privateKey);
+      if (account) {
+        erc20.connect(account);
+        let balance = await erc20.balanceOf(account.address);
+        console.log("Account is deployed and has balance:", balance.toString());
+
+        // If connected, navigate to tabs
+        router.push("/(tabs)");
+      }
+    } catch (error) {
+      console.error("Error connecting account:", error);
+      await deleteAccountsFromStore();
+      setVisible(true);
+    }
   };
 
   return (
