@@ -10,7 +10,7 @@ export const ProfileAvatar = () => {
   const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
   const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
   const account = JSON.parse(response);
-  let address = account[0].address.slice(0, 3).concat("...");
+  // let address = account[0].address.slice(0, 3).concat("...");
 
   return (
     <LinearGradient
@@ -20,8 +20,9 @@ export const ProfileAvatar = () => {
       style={styles.profileContainer}
     >
       <ThemedView style={styles.gradientOverlayContainer}>
-        <Image source={{ uri: generateAvatarUrl(account[0]?.address) }} style={styles.avatar} />
-        <ThemedText style={styles.walletAddress}>{address}</ThemedText>
+{/*         <Image source={{ uri: generateAvatarUrl(account[0]?.address) }} style={styles.avatar} />         */}
+        <Image source={{ uri: "" }} style={styles.avatar} />
+        <ThemedText style={styles.walletAddress}>{"0x01"}</ThemedText>
       </ThemedView>
     </LinearGradient>
   );
