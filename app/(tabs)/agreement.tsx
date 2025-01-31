@@ -1,74 +1,74 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ImageBackground,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
-import styled from "styled-components/native";
-import { useTheme } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import ArrowLeft from "@/assets/svgs/arrowLeft.svg";
-import NoAgreementScreen from "@/components/modalScreens/NoAgreementScreen";
-import SelectAgreementScreen from "@/components/modalScreens/SelectAgreementScreen";
-import VerifyIdentityScreen from "@/components/modalScreens/VerifyIdentityScreen";
-import AgreementContentScreen from "@/components/modalScreens/AgreementContentScreen";
-import SecondPartyWalletScreen from "@/components/modalScreens/SecondPartyWalletScreen";
-import AgreementSuccessful from "@/components/modalScreens/AgreementSuccessful";
-import PrintAgreementScreen from "@/components/modalScreens/PrintAgreementScreen";
-import Sidebar from "@/components/Sidebar";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemedView } from "@/components/ThemedView";
-import { PageHeader } from "@/components/PageHeader";
+import { ThemedView, ThemedText, PageHeader } from "@/components";
+import ArrowLeft from "@/assets/svgs/arrowLeft.svg";
+import {
+  NoAgreementScreen,
+  SelectAgreementScreen,
+  VerifyIdentityScreen,
+  AgreementContentScreen,
+  SecondPartyWalletScreen,
+  AgreementSuccessful,
+  PrintAgreementScreen,
+} from "@/components/modalScreens";
+import Sidebar from "@/components/Sidebar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const FLOW_STEPS = [
+  "NoAgreement",
+  "SelectAgreement",
+  "AgreementContent",
+  "VerifyIdentity",
+  "SecondParty",
+  "AgreementSuccessful",
+  "PrintAgreementScreen",
+] as const;
 
 const THEME_STORAGE_KEY = "theme";
 
+type FlowStep = typeof FLOW_STEPS[number];
+
 const Agreement = () => {
-  const { colors } = useTheme();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-  const [currentModal, setCurrentModal] = useState("NoAgreement");
-  const [isPrintScreenVisible, setIsPrintScreenVisible] =
-    useState<boolean>(false);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const { width } = useWindowDimensions();
+  const { colors } = useTheme();
+  
+  // Flow state
+  const [currentStep, setCurrentStep] = useState<FlowStep>("NoAgreement");
+  const [selectedAgreement, setSelectedAgreement] = useState<string>("");
+  const [secondPartyAddress, setSecondPartyAddress] = useState<string>("");
+  
+  // UI state
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
-  const handleBack = () => {
-    if (currentModal === "VerifyIdentity") setCurrentModal("AgreementContent");
-    else if (currentModal === "AgreementContent")
-      setCurrentModal("SelectAgreement");
-    else if (currentModal === "SelectAgreement") setCurrentModal("NoAgreement");
-  };
-
+  // Navigation handlers
   const handleContinue = () => {
-    if (currentModal === "NoAgreement") setCurrentModal("SelectAgreement");
-    else if (currentModal === "SelectAgreement")
-      setCurrentModal("AgreementContent");
-    else if (currentModal === "AgreementContent")
-      setCurrentModal("VerifyIdentity");
-    else if (currentModal === "VerifyIdentity") setCurrentModal("SecondParty");
-    else if (currentModal === "SecondParty") {
-      setCurrentModal("AgreementSuccessful");
-      setIsPrintScreenVisible(true);
+    const currentIndex = FLOW_STEPS.indexOf(currentStep);
+    if (currentIndex < FLOW_STEPS.length - 1) {
+      setCurrentStep(FLOW_STEPS[currentIndex + 1]);
     }
   };
 
-  const handleCloseModal = () => {
-    setIsPrintScreenVisible(false);
-    setCurrentModal("PrintAgreementScreen");
+  const handleBack = () => {
+    const currentIndex = FLOW_STEPS.indexOf(currentStep);
+    if (currentIndex > 0) {
+      setCurrentStep(FLOW_STEPS[currentIndex - 1]);
+    }
   };
 
-  // Collapse sidebar on mobile view (width < 768px)
-  const handleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-
+  // Theme management
   useEffect(() => {
     const loadTheme = async () => {
       const savedTheme = await AsyncStorage.getItem(THEME_STORAGE_KEY);
-      if (savedTheme) {
-        setIsDarkMode(savedTheme === "dark");
-      }
+      setIsDarkMode(savedTheme === "dark");
     };
     loadTheme();
   }, []);
@@ -79,124 +79,165 @@ const Agreement = () => {
     await AsyncStorage.setItem(THEME_STORAGE_KEY, newTheme ? "dark" : "light");
   };
 
+  // Responsive sidebar
+  const handleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
+  // Wallet connection placeholder
   const connectWallet = () => {};
 
   return (
     <SafeAreaView style={styles.container}>
-      {/*<StyledView backgroundColor={colors.background}>*/}
-      {/* Conditionally render Sidebar */}
-      {/* <NavContainer>
-        <Nav toggleSidebar={toggleSidebar} />
-      </NavContainer> */}
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView 
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <ImageBackground
           source={require("@/assets/images/background.png")}
-          style={{ flex: 1 }}
+          style={[styles.background, { backgroundColor: colors.background }]}
         >
-          <ThemedView style={{ flexGrow: 1 }} noBackground>
-            <PageHeader title={"Agreement"} />
-            {/*<AgreementText color={colors.text}>Agreements</AgreementText>*/}
-            {currentModal !== "NoAgreement" && (
-              <BackButtonContainer onPress={handleBack}>
-                <ArrowLeft />
-                <StyledText color={colors.text}>Back</StyledText>
-              </BackButtonContainer>
+          {/* Sidebar toggle (original Nav implementation) */}
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={toggleSidebar}
+          >
+            <MenuIcon width={24} height={24} fill={colors.text} />
+          </TouchableOpacity>
+
+          <ThemedView style={styles.contentContainer}>
+            <PageHeader title="Agreement Flow" />
+            
+            {/* Back button with theme-aware styling */}
+            {currentStep !== "NoAgreement" && (
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={handleBack}
+              >
+                <ArrowLeft width={24} height={24} fill={colors.text} />
+                <ThemedText style={[styles.backText, { color: colors.text }]}>
+                  Back
+                </ThemedText>
+              </TouchableOpacity>
             )}
-            <NoAgreementContainer>
-              {currentModal === "NoAgreement" && (
+
+            {/* Main flow container */}
+            <ThemedView style={[
+              styles.modalContainer,
+              width < 768 && styles.mobileContainer
+            ]}>
+              {currentStep === "NoAgreement" && (
                 <NoAgreementScreen onContinue={handleContinue} />
               )}
-              {/* Select Agreement Modal */}
-              {currentModal === "SelectAgreement" && (
-                <SelectAgreementScreen onContinue={handleContinue} />
-              )}
-              {/* Agreement Content Modal */}
-              {currentModal === "AgreementContent" && (
-                <AgreementContentScreen onContinue={handleContinue} />
-              )}
-              {/* Verify Identity Modal */}
-              {currentModal === "VerifyIdentity" && (
-                <VerifyIdentityScreen onContinue={handleContinue} />
-              )}
-              {/* Second Party Modal */}
-              {currentModal === "SecondParty" && (
-                <SecondPartyWalletScreen onContinue={handleContinue} />
-              )}
-              {currentModal === "AgreementSuccessful" && (
-                <AgreementSuccessful
-                  isVisible={isPrintScreenVisible}
-                  onClose={handleCloseModal}
+
+              {currentStep === "SelectAgreement" && (
+                <SelectAgreementScreen
+                  onContinue={handleContinue}
+                  onSelectAgreement={setSelectedAgreement}
+                  theme={isDarkMode ? "dark" : "light"}
                 />
               )}
-              {/* Print Agreement Modal */}
-              {currentModal === "PrintAgreementScreen" && (
-                <PrintAgreementScreen onContinue={handleContinue} />
+
+              {currentStep === "AgreementContent" && (
+                <AgreementContentScreen
+                  onContinue={handleContinue}
+                  agreementTitle={selectedAgreement}
+                  theme={isDarkMode ? "dark" : "light"}
+                />
               )}
-            </NoAgreementContainer>
-            {/* <Footer /> */}
+
+              {currentStep === "VerifyIdentity" && (
+                <VerifyIdentityScreen 
+                  onContinue={handleContinue}
+                  theme={isDarkMode ? "dark" : "light"}
+                />
+              )}
+
+              {currentStep === "SecondParty" && (
+                <SecondPartyWalletScreen
+                  onContinue={handleContinue}
+                  onAddressChange={setSecondPartyAddress}
+                  theme={isDarkMode ? "dark" : "light"}
+                />
+              )}
+
+              {currentStep === "AgreementSuccessful" && (
+                <AgreementSuccessful
+                  onClose={() => setCurrentStep("PrintAgreementScreen")}
+                  theme={isDarkMode ? "dark" : "light"}
+                />
+              )}
+
+              {currentStep === "PrintAgreementScreen" && (
+                <PrintAgreementScreen
+                  onFinish={() => setCurrentStep("NoAgreement")}
+                  theme={isDarkMode ? "dark" : "light"}
+                />
+              )}
+            </ThemedView>
           </ThemedView>
         </ImageBackground>
       </ScrollView>
+
+      {/* Collapsible sidebar */}
       {isSidebarVisible && (
         <Sidebar
           onClose={toggleSidebar}
-          connectWallet={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          isCollapsed={isCollapsed}
+          onCollapse={handleCollapse}
+          connectWallet={connectWallet}
+          theme={isDarkMode ? "dark" : "light"}
         />
       )}
-      {/*</StyledView>*/}
     </SafeAreaView>
   );
 };
 
-export default Agreement;
-
-const StyledView = styled.SafeAreaView<{ backgroundColor: string }>`
-  flex: 1;
-  background-color: ${(props) => props.backgroundColor};
-  //flex-direction: column;
-  //justify-content: center;
-`;
-
-const NavContainer = styled.View`
-  padding: 20px;
-`;
-
-const BackButtonContainer = styled.TouchableOpacity`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  //margin-top: 40px;
-  padding-left: 10px;
-  width: 75px;
-`;
-
-const StyledText = styled.Text<{ color: string }>`
-  color: ${(props) => props.color};
-  font-size: 16px;
-`;
-
-const AgreementText = styled.Text<{ color: string }>`
-  color: ${(props) => props.color};
-  font-size: 24px;
-  font-weight: 600;
-  padding-left: 10px;
-  margin-top: 10px;
-`;
-
-const NoAgreementContainer = styled.View`
-  justify-content: center;
-  align-items: center;
-`;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#000',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  contentContainer: {
+    flex: 1,
+    padding: 16,
+  },
+  navButton: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    zIndex: 100,
+    padding: 8,
+  },
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 24,
+    paddingHorizontal: 8,
+  },
+  backText: {
+    marginLeft: 8,
+    fontSize: 16,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  mobileContainer: {
+    padding: 10,
   },
 });
+
+export default Agreement;
