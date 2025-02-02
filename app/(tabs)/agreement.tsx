@@ -16,41 +16,41 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/ThemedView";
 import { PageHeader } from "@/components/PageHeader";
 
-const THEME_STORAGE_KEY = 'theme';
+const THEME_STORAGE_KEY = "theme";
 
 const Agreement = () => {
   const { colors } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-  const [currentModal, setCurrentModal] = useState('NoAgreement');
+  const [currentModal, setCurrentModal] = useState("NoAgreement");
   const [isPrintScreenVisible, setIsPrintScreenVisible] =
     useState<boolean>(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const { width } = useWindowDimensions();
 
   const handleBack = () => {
-    if (currentModal === 'VerifyIdentity') setCurrentModal('AgreementContent');
-    else if (currentModal === 'AgreementContent')
-      setCurrentModal('SelectAgreement');
-    else if (currentModal === 'SelectAgreement') setCurrentModal('NoAgreement');
+    if (currentModal === "VerifyIdentity") setCurrentModal("AgreementContent");
+    else if (currentModal === "AgreementContent")
+      setCurrentModal("SelectAgreement");
+    else if (currentModal === "SelectAgreement") setCurrentModal("NoAgreement");
   };
 
   const handleContinue = () => {
-    if (currentModal === 'NoAgreement') setCurrentModal('SelectAgreement');
-    else if (currentModal === 'SelectAgreement')
-      setCurrentModal('AgreementContent');
-    else if (currentModal === 'AgreementContent')
-      setCurrentModal('VerifyIdentity');
-    else if (currentModal === 'VerifyIdentity') setCurrentModal('SecondParty');
-    else if (currentModal === 'SecondParty') {
-      setCurrentModal('AgreementSuccessful');
+    if (currentModal === "NoAgreement") setCurrentModal("SelectAgreement");
+    else if (currentModal === "SelectAgreement")
+      setCurrentModal("AgreementContent");
+    else if (currentModal === "AgreementContent")
+      setCurrentModal("VerifyIdentity");
+    else if (currentModal === "VerifyIdentity") setCurrentModal("SecondParty");
+    else if (currentModal === "SecondParty") {
+      setCurrentModal("AgreementSuccessful");
       setIsPrintScreenVisible(true);
     }
   };
 
   const handleCloseModal = () => {
     setIsPrintScreenVisible(false);
-    setCurrentModal('PrintAgreementScreen');
+    setCurrentModal("PrintAgreementScreen");
   };
 
   // Collapse sidebar on mobile view (width < 768px)
@@ -62,7 +62,7 @@ const Agreement = () => {
     const loadTheme = async () => {
       const savedTheme = await AsyncStorage.getItem(THEME_STORAGE_KEY);
       if (savedTheme) {
-        setIsDarkMode(savedTheme === 'dark');
+        setIsDarkMode(savedTheme === "dark");
       }
     };
     loadTheme();
@@ -71,15 +71,14 @@ const Agreement = () => {
   const toggleTheme = async () => {
     const newTheme = !isDarkMode;
     setIsDarkMode(newTheme);
-    await AsyncStorage.setItem(THEME_STORAGE_KEY, newTheme ? 'dark' : 'light');
+    await AsyncStorage.setItem(THEME_STORAGE_KEY, newTheme ? "dark" : "light");
   };
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
-  const connectWallet = () => {
-  };
+  const connectWallet = () => {};
 
 
   const renderScreems = () => {
@@ -199,14 +198,14 @@ const Agreement = () => {
 export default Agreement;
 
 const StyledView = styled.SafeAreaView<{ backgroundColor: string }>`
-    flex: 1;
-    background-color: ${(props) => props.backgroundColor};
-    //flex-direction: column;
-    //justify-content: center;
+  flex: 1;
+  background-color: ${(props) => props.backgroundColor};
+  //flex-direction: column;
+  //justify-content: center;
 `;
 
 const NavContainer = styled.View`
-    padding: 20px;
+  padding: 20px;
 `;
 
 const BackButtonContainer = styled.TouchableOpacity`
@@ -222,16 +221,16 @@ const BackButtonContainer = styled.TouchableOpacity`
 `;
 
 const StyledText = styled.Text<{ color: string }>`
-    color: ${(props) => props.color};
-    font-size: 16px;
+  color: ${(props) => props.color};
+  font-size: 16px;
 `;
 
 const AgreementText = styled.Text<{ color: string }>`
-    color: ${(props) => props.color};
-    font-size: 24px;
-    font-weight: 600;
-    padding-left: 10px;
-    margin-top: 10px;
+  color: ${(props) => props.color};
+  font-size: 24px;
+  font-weight: 600;
+  padding-left: 10px;
+  margin-top: 10px;
 `;
 
 const NoAgreementContainer = styled.View`

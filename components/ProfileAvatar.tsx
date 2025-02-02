@@ -2,32 +2,28 @@ import { Image, StyleSheet } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useContext, useEffect, useRef } from "react";
-import Avatar from "@/assets/images/avatar.png";
 import { ThemedView } from "@/components/ThemedView";
 import { I_Account, WalletContext } from "@/app/context/WalletContext";
+import { generateAvatarUrl } from "@/app/utils";
 
 export const ProfileAvatar = () => {
-  // const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
-  // const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
-  // const account = JSON.parse(response);
-  // let address = account[0].address.slice(0, 5).concat("...");
-  // console.log(account[0].address);
+  const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
+  const response = SecureStore?.getItem(ACCOUNT_STORE_KEY);
+  const account = JSON.parse(response);
+  let address = account[0]?.address?.slice(0, 3)?.concat("...");
 
   return (
-
-    <>
-      <LinearGradient
-        colors={["#2D8EFF", "#9C3FE4"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.profileContainer}
-      >
-        <ThemedView style={styles.gradientOverlayContainer}>
-          <Image source={Avatar} style={styles.avatar} />
-          <ThemedText style={styles.walletAddress}>{"0xc..."}</ThemedText>
-        </ThemedView>
-      </LinearGradient>v
-    </>
+    <LinearGradient
+      colors={["#2D8EFF", "#9C3FE4"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={styles.profileContainer}
+    >
+      <ThemedView style={styles.gradientOverlayContainer}>
+        <Image source={{ uri: generateAvatarUrl(account[0]?.address) }} style={styles.avatar} />
+        <ThemedText style={styles.walletAddress}>{address}</ThemedText>
+      </ThemedView>
+    </LinearGradient>
   );
 };
 

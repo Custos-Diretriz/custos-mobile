@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -28,8 +28,10 @@ import { PageHeader } from "@/components/PageHeader";
 import LottieView from "lottie-react-native";
 import emptyStateAnimation from "@/assets/animations/empty-state.json";
 import styled from "styled-components/native";
-import { Colors } from "@/constants/Colors";
+import { WalletContext } from "../context/WalletContext";
+import { generateAvatarUrl } from "../utils";
 import MediaSavedSuccessModal from "@/components/modalScreens/MediaSavedSuccess";
+import { Colors } from "@/constants/Colors";
 
 export default function VideoRecorderScreen() {
   const [showCamera, setShowCamera] = useState(false);
@@ -44,6 +46,11 @@ export default function VideoRecorderScreen() {
 
   const cameraRef = useRef<any>(null);
   const recordingTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
+  const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
+  const account = JSON.parse(response);
+  const truncatedAddress = account[0].address.slice(0, 3).concat("...");
 
   useEffect(() => {
     return () => {
@@ -212,7 +219,24 @@ export default function VideoRecorderScreen() {
             backgroundColor: Colors.transparentBg,
           }} source={require("../../assets/images/background-image.png")} resizeMode="cover" >
 
-            <StatusBar barStyle="light-content" backgroundColor={'#050A0F'} />
+            <View style={styles.header}>
+              <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+                <ArrowLeft color="#fff" size={24} />
+                <Text style={styles.backText}>Back</Text>
+              </TouchableOpacity>
+              <LinearGradient
+                colors={["#2D8EFF", "#9C3FE4"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.profileContainer}
+              >
+                <Image
+                  source={{ uri: generateAvatarUrl(account[0]?.address) }}
+                  style={styles.avatar}
+                />
+                <Text style={styles.walletAddress}>{truncatedAddress}</Text>
+              </LinearGradient>
+            </View>
 
             <View style={styles.header}>
               <TouchableOpacity onPress={handleBack} style={styles.backButton}>

@@ -14,5 +14,5 @@ export const PageHeader = ({ title, children }: { title: String, children?: Reac
       {children}
       <ProfileAvatar />
     </HeaderContainer>
-  )
-}
+  );
+};

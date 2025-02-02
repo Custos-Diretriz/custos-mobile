@@ -7,14 +7,25 @@ import CancelButton from '../CancelButton';
 import ContinueButton from '../ContinueButton';
 import { Text, TouchableOpacity, View } from 'react-native';
 import GradientDropdown from '../dropdown/CustomDropDown';
+import { BlurView } from 'expo-blur';
 
-const SelectAgreementScreen: React.FC<{ onContinue: () => void ,onCancel:()=>void}> = ({
+
+
+interface SelectAgreementScreenProps {
+  onContinue: () => void;
+  onCancel: () => void;
+}
+
+const SelectAgreementScreen: React.FC<SelectAgreementScreenProps> = ({
   onContinue,
   onCancel
 }) => {
+  const { colors } = useTheme();
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: 'Loan', value: 'loan' },
-    { label: 'Mortgage', value: 'mortgage' },
+    { label: "Loan", value: "loan" },
+    { label: "Mortgage", value: "mortgage" },
   ]);
   const handleSelect = (value: string) => {
     console.log("Selected:", value);
@@ -110,8 +121,6 @@ const SelectAgreementScreen: React.FC<{ onContinue: () => void ,onCancel:()=>voi
   );
 };
 
-export default SelectAgreementScreen;
-
 const OuterContainer = styled.View`
   margin-top: 100px;
   width: 50%;
@@ -120,11 +129,24 @@ const OuterContainer = styled.View`
   justify-content: center;
 `;
 
-const Container = styled.View<{ background: string }>`
-  background-color: ${(props) => props.background};
+const GradientBorder = styled(LinearGradient)`
+  width: 100%;
+  height: 100%;
+  padding: 0.2px;
+  border-radius: 20px;
+`;
+
+const StyledBlurView = styled(BlurView)`
+  flex: 1;
+  border-radius: 20px;
+  overflow: hidden;
+`;
+
+const BackgroundGradient = styled(LinearGradient)`
+  flex: 1;
   border-radius: 20px;
   padding: 20px;
-  width: 100%;
+  background-color: transparent;
 `;
 
 const DropDownPickerWrapper = styled(LinearGradient).attrs({
@@ -143,15 +165,30 @@ const StyledText = styled.Text<{ color: string }>`
   font-size: 16px;
   line-height: 20.16px;
   height: 85px;
+  font-weight: 400;
 `;
 
-const AgreementTypeText = styled.Text<{ color: string }>`
+const AgreementTypeText = styled.Text`
   margin-bottom: 10px;
-  color: ${(props) => props.color};
+  color: #ffffff;
   font-size: 20px;
 `;
 
-const ButtonsContainer = styled.View`
+const DropdownWrapper = styled(LinearGradient)`
+  height: 54px;
+  border-radius: 10px;
+  padding: 1px;
+  margin-bottom: 20px;
+`;
+
+const DropdownInner = styled.View`
+  flex: 1;
+  border-radius: 9px;
+  overflow: hidden;
+  background-color: #04080c;
+`;
+
+const ButtonContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -159,3 +196,22 @@ const ButtonsContainer = styled.View`
   width: 100%;
   gap: 30px;
 `;
+
+// DropDownPicker styles
+const dropdownStyles = {
+  dropdown: {
+    backgroundColor: "transparent",
+    borderWidth: 0,
+    height: 52,
+  },
+  dropdownContainer: {
+    backgroundColor: "#04080C",
+    borderWidth: 0,
+  },
+  dropdownPlaceholder: {
+    color: "#FFFFFF",
+    fontSize: 16,
+  },
+};
+
+export default SelectAgreementScreen;

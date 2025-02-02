@@ -20,6 +20,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Navbar, { DrawerContent } from "@/components/Navbar";
 import { Stack } from "expo-router";
 import WalletDetails from "./context/WalletContext";
+import { customDarkTheme } from "@/constants/theme";
 import { StatusBar } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
@@ -105,7 +106,7 @@ export default function RootLayout() {
           </PaperProvider>
         </ThemeProvider>
       </WalletDetails>
-      <StatusBar backgroundColor={colorScheme === "dark" ? '#050A0F' : "#FFFF"} barStyle={colorScheme === "dark" ? "light-content" : "dark-content"} />
+      <StatusBar backgroundColor={"#050A0F"} barStyle={"light-content"} />
     </>
   );
 }

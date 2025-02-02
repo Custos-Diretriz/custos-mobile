@@ -68,7 +68,7 @@ export default function Home() {
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({

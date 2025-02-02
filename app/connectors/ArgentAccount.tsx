@@ -115,6 +115,7 @@ const ArgentAccount: React.FC<WalletPop> = ({ isVisible, onClose }) => {
       await saveAccountsToStore(
         account ? JSON.stringify([newAccount]) : JSON.stringify([newAccount])
       );
+
       router.push("/(tabs)");
     } catch (err) {
       console.error("Error creating and deploying account:", err);
