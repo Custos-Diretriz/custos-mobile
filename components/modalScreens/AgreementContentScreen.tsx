@@ -6,60 +6,144 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import CancelButton from '../CancelButton';
 import ContinueButton from '../ContinueButton';
 import { TextInput } from 'react-native-paper';
+import { TouchableOpacity, View } from 'react-native';
+import { Text } from 'react-native';
 
-const SelectAgreementScreen: React.FC<{ onContinue: () => void }> = ({
+const SelectAgreementScreen: React.FC<{ onContinue: () => void, onCancel: () => void }> = ({
   onContinue,
+  onCancel
 }) => {
   const { colors } = useTheme();
 
   return (
-    <OuterContainer>
-      <LinearGradient
-        colors={['#19b1d2', '#0094ff']}
-        style={{ flex: 1, borderRadius: 20, padding: 2 }} // Padding to create space for the border
-      >
-        <Container background={colors.background}>
-          <StyledText color={colors.text}>Agreement Content</StyledText>
-          <AgreementTypeText color={colors.text}>
-            Agreement Title
-          </AgreementTypeText>
-          <InputWrapper
-            colors={['#19B1D2', '#0094FF']}
-            style={{ borderRadius: 10, padding: 2 }}
-          >
-            <TextInput
-              mode='outlined'
-              placeholder='Enter the title here'
-              right={<TextInput.Affix text='/100' />}
-            />
-          </InputWrapper>
-          <InputTitle color={colors.text}>Agreement Content</InputTitle>
-          <GradientWrapper
-            colors={['#BEBDBD', '#858585']}
-            style={{ borderRadius: 10, padding: 2 }}
-          >
-            <TextInput
-              mode='outlined'
-              placeholder='Write or paste the content of your agreement here'
-              right={<TextInput.Affix text='/100' />}
-              multiline
-              style={{ height: 146 }}
-            />
-          </GradientWrapper>
+    <>
+      <View style={{
+        width: "100%",
+        padding: 16,
+        borderRadius: 16,
+        backgroundColor: "#09131A"
+      }} >
+        <View>
+          <View style={{
+            width: "100%"
+          }} >
+            <Text
+              style={{
+                width: "100%",
+                color: "#EAFBFF",
+                fontSize: 20,
+                fontFamily: "Outfit-Regular"
+              }} >Agreement Content</Text>
+          </View>
 
-          <ButtonsContainer>
-            <CancelButton
-              onPress={onContinue}
-              title='Cancel'
-            />
-            <ContinueButton
-              onPress={onContinue}
-              title='Continue'
-            />
-          </ButtonsContainer>
-        </Container>
-      </LinearGradient>
-    </OuterContainer>
+          <View style={{
+            width: "100%",
+            marginTop: 24
+          }}>
+            <Text style={{
+              width: "100%",
+              color: "#EAFBFF",
+              fontSize: 16,
+              fontFamily: "Outfit-Regular"
+            }}>Agreement Title</Text>
+            <LinearGradient
+              colors={["#19B1D2", "#0094FF"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={{
+                borderRadius: 10,
+                borderWidth: 1,
+                padding: 2,
+                marginTop: 8
+              }}
+            >
+              <TextInput style={{
+                backgroundColor: "#09131A",
+                borderWidth: 0,
+                fontSize: 14,
+              }} placeholder='Enter the title of your agreement here' placeholderTextColor={"#EAF9FF"} />
+            </LinearGradient>
+          </View>
+
+          <View style={{
+            width: "100%",
+            marginTop: 16
+          }}>
+            <Text style={{
+              width: "100%",
+              color: "#EAFBFF",
+              fontSize: 16,
+              fontFamily: "Outfit-Regular"
+            }}>Agreement Content</Text>
+            <LinearGradient
+              colors={["#BEBDBD", "#858585"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={{
+                borderRadius: 10,
+                borderWidth: .3,
+                padding: 2,
+                marginTop: 8
+              }}
+            >
+              <TextInput style={{
+                backgroundColor: "#09131A",
+                height: 161,
+                width: "100%",
+                lineHeight: 17.64,
+                textAlign: "left",
+                borderWidth: 0,
+                fontSize: 14,
+              }} placeholder={"Write or paste the content of your\nagreement here"} placeholderTextColor={"#EAF9FF"} />
+            </LinearGradient>
+          </View>
+          <View style={{
+            width: "100%",
+            marginBottom: 16,
+            marginTop: 32
+          }}>
+
+            <View style={{
+              width: "100%",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingHorizontal: 16,
+              gap: 33,
+            }} >
+              <TouchableOpacity onPress={onCancel} style={{
+                width: "45%",
+                backgroundColor: "#2D485C",
+                paddingVertical: 16,
+                borderRadius: 32,
+                borderWidth: 1,
+                borderColor: "#9B9292"
+              }}>
+                <Text style={{
+                  textAlign: "center",
+                  color: "#9B9292",
+                  fontSize: 14,
+                }}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onContinue} style={{
+                width: "45%",
+                backgroundColor: "#0094FF",
+                paddingVertical: 16,
+                borderRadius: 32,
+                borderWidth: 1,
+                borderColor: "#A02294"
+              }}>
+                <Text style={{
+                  textAlign: "center",
+                  color: "#FFFF",
+                  fontSize: 14,
+                }}>Continue</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
+    </>
   );
 };
 

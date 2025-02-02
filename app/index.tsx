@@ -7,6 +7,8 @@ import {
   StyleSheet,
   Dimensions,
   ImageBackground,
+  Platform,
+  StatusBar,
 } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,7 +19,9 @@ import ArgentAccount, { provider } from "./connectors/ArgentAccount";
 import { WalletContext } from "./context/WalletContext";
 import { Account, Contract } from "starknet";
 import ERC20_ABI from "@/app/abi/ERC20.json";
-
+import ConnectWallet from "@/components/modalScreens/ConnetWallet";
+const deviceHeight = Dimensions.get("screen").height
+const isIoS = Platform.OS === "ios"
 const slides = [
   {
     id: "1",
@@ -25,6 +29,10 @@ const slides = [
     content:
       "Create new legal agreements by providing the \nagreement content, the address of the second \n party, and details about the first party.",
     imgSrc: require("../assets/images/slide1.png"),
+    dimension: {
+      width: 118,
+      height: 158.12
+    }
   },
   {
     id: "2",
@@ -32,6 +40,10 @@ const slides = [
     content:
       "We are providing an advanced platform \n for documenting and sharing crime \n events securely and transparently.",
     imgSrc: require("../assets/images/slide2.png"),
+    dimension: {
+      width: 150,
+      height: 115
+    }
   },
   {
     id: "3",
@@ -39,7 +51,12 @@ const slides = [
     content:
       "We paid the price to keep your videos \n and legal agreements safe. Connect \n your wallet to get started.",
     imgSrc: require("../assets/images/slide3.png"),
+    dimension: {
+      width: 224.11,
+      // height: 251.29
+    }
   },
+
 ];
 
 export default function SwiperScreen() {
@@ -75,47 +92,58 @@ export default function SwiperScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Swiper
-        style={styles.wrapper}
-        loop={false}
-        dot={<View style={styles.dot} />}
-        activeDot={
-          <LinearGradient
-            colors={["#2D8EFF", "#9C3FE4"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.activeDot}
-          />
-        }
-      >
-        {slides.map((slide) => (
-          <View style={styles.slideContainer} key={slide.id}>
-            <View style={styles.titleContainer}>
-              <MaskedView
-                maskElement={<Text style={styles.title}>{slide.title}</Text>}
-              >
-                <LinearGradient
-                  colors={["rgba(0, 148, 255, 1)", "rgba(160, 34, 148, 1)"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.gradient}
-                />
-              </MaskedView>
-            </View>
+    <>
+      <SafeAreaView style={styles.container}>
+        <Swiper
 
-            <Text style={styles.subtitle}>{slide.content}</Text>
-            <Image source={slide.imgSrc} style={styles.img} />
-          </View>
-        ))}
-      </Swiper>
-      <GradientButton onPress={handleConnect} width={248} />
-      <ArgentAccount isVisible={visible} onClose={() => setVisible(!visible)} />
-      <Image
-        source={require("../assets/images/ellipse.png")}
-        style={styles.backgroundImage}
-      />
-    </SafeAreaView>
+          style={styles.wrapper}
+          loop={false}
+          dot={<View style={styles.dot} />}
+          activeDot={
+            <LinearGradient
+              colors={["#2D8EFF", "#9C3FE4"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.activeDot}
+            />
+          }
+        >
+          {slides.map((slide) => (
+            <View style={styles.slideContainer} key={slide.id}>
+              <View style={styles.titleContainer}>
+                <MaskedView
+                  maskElement={<Text style={styles.title}>{slide.title}</Text>}
+                >
+                  <LinearGradient
+                    colors={["rgba(0, 148, 255, 1)", "rgba(160, 34, 148, 1)"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.gradient}
+                  />
+                </MaskedView>
+              </View>
+
+              <Text style={styles.subtitle}>{slide.content}</Text>
+              <Image source={slide.imgSrc} style={[styles.img, { ...slide.dimension }]} />
+            </View>
+          ))}
+        </Swiper>
+        <GradientButton onPress={handleConnect} width={248} style={{
+          top: 64,
+          borderColor: "#0094FF",
+          borderRadius: 104,
+          borderWidth: 2
+        }} />
+        {/* <ArgentAccount isVisible={visible} onClose={() => setVisible(!visible)} /> */}
+
+        <Image
+          source={require("../assets/images/ellipse.png")}
+          style={styles.backgroundImage}
+        />
+      </SafeAreaView>
+      <ConnectWallet isVisible={visible} onClose={() => { setVisible(!visible) }} />
+      <StatusBar backgroundColor={"#050A0F"} barStyle={"light-content"} />
+    </>
   );
 }
 
@@ -130,7 +158,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: "100%",
-    height: 300,
+    height: isIoS ? deviceHeight / 2.3 : deviceHeight / 2.7,
     zIndex: 0,
     resizeMode: "cover",
     opacity: 0.5,
@@ -147,7 +175,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   titleContainer: {
-    marginBottom: 20,
+    width: "100%"
   },
   title: {
     fontSize: 32,
@@ -183,6 +211,7 @@ const styles = StyleSheet.create({
     marginRight: 3,
     marginTop: 3,
     marginBottom: 3,
+    position: "relative"
   },
   activeDot: {
     width: 24,

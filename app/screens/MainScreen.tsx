@@ -23,9 +23,10 @@ const MainScreen: React.FC = () => {
         <Stack.Screen
           name="index"
           options={{
-            header: () => (
-              <Navbar/>
-            ),
+            // header: () => (
+            //   <Navbar/>
+            // ),
+            headerShown:false,
           }}
         />
         <Stack.Screen

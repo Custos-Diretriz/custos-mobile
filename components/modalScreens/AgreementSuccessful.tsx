@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components/native";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Text, Modal } from "react-native";
-import { useTheme } from "@react-navigation/native";
+import { View, Text, Modal, TouchableOpacity } from "react-native";
 import Done from "@/assets/svgs/done.svg";
 import { LinearGradient } from "expo-linear-gradient";
+import MaskedView from "@react-native-masked-view/masked-view";
 
 export type AgreementSuccessfulProp = {
   isVisible: boolean;
@@ -16,7 +16,6 @@ const AgreementSuccessful: React.FC<AgreementSuccessfulProp> = ({
   isVisible,
   onClose,
 }) => {
-  const { colors } = useTheme();
   return (
     <Modal
       visible={isVisible}
@@ -27,14 +26,26 @@ const AgreementSuccessful: React.FC<AgreementSuccessfulProp> = ({
       <BlurredBackground intensity={50} tint="dark">
         <LinearGradientWrapper
           colors={["#19b1d2", "#0094ff"]}
-          style={{ borderRadius: 20, padding: 2 }}
+          style={{ borderRadius: 20, padding: 2, borderWidth: 0.15 }}
         >
           <ModalContainer>
-            <Title color={colors.text}>Agreement Creation Successful</Title>
-            <CloseButton onPress={onClose}>
-              <Ionicons name="close" size={24} color="white" />
-            </CloseButton>
+            <View style={{
+              width: "100%",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}>
+              <MaskedView maskElement={<TitleText>Agreement Creation Successful</TitleText>}>
+                <GradientTitle colors={["#EAF9FF", "#8E9A9A"]}>
+                  <TitleText style={{ opacity: 0 }}>Agreement Creation Successful</TitleText>
+                </GradientTitle>
+              </MaskedView>
 
+              <TouchableOpacity onPress={onClose}>
+                <Ionicons name="close" size={24} color="white" />
+              </TouchableOpacity>
+
+            </View>
             <SuccessIconContainer>
               <Done />
             </SuccessIconContainer>
@@ -47,12 +58,7 @@ const AgreementSuccessful: React.FC<AgreementSuccessfulProp> = ({
 
 export default AgreementSuccessful;
 
-const StyledModal = styled(Modal)`
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-`;
-
+// Styled Components
 const LinearGradientWrapper = styled(LinearGradient).attrs({
   start: { x: 0, y: 0 },
   end: { x: 1, y: 0 },
@@ -60,6 +66,7 @@ const LinearGradientWrapper = styled(LinearGradient).attrs({
   border-radius: 20px;
   overflow: hidden;
   height: auto;
+  padding:1px
 `;
 
 export const BlurredBackground = styled(BlurView)`
@@ -71,7 +78,7 @@ export const BlurredBackground = styled(BlurView)`
 `;
 
 export const ModalContainer = styled(View)`
-  width: 80%;
+  width: 90%;
   height: 320px;
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 20px;
@@ -86,17 +93,23 @@ export const CloseButton = styled.TouchableOpacity`
   z-index: 1;
 `;
 
-const Title = styled(Text)<{ color: string }>`
-  position: absolute;
-  font-size: 18px;
-  color: ${(props) => props.color};
-  margin-bottom: 20px;
-  left: 20px;
-  top: 20px;
+const MaskedTitle = styled(MaskedView)`
+  align-self: center;
 `;
 
+const GradientTitle = styled(LinearGradient).attrs({
+  start: { x: 0, y: 0 },
+  end: { x: 1, y: 0 },
+})`
+  padding: 0px;
+`;
+
+const TitleText = styled(Text)`
+  font-size: 16px;
+  font-weight: bold;
+  text-align:left;
+  color: black;
+`;
 const SuccessIconContainer = styled(View)`
   margin-top: 50px;
 `;
-
-const SuccessIcon = styled(Ionicons)``;

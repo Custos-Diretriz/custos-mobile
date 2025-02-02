@@ -8,6 +8,7 @@ import {
   StatusBar,
   Modal,
   TextInput,
+  ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -27,6 +28,8 @@ import { PageHeader } from "@/components/PageHeader";
 import LottieView from "lottie-react-native";
 import emptyStateAnimation from "@/assets/animations/empty-state.json";
 import styled from "styled-components/native";
+import { Colors } from "@/constants/Colors";
+import MediaSavedSuccessModal from "@/components/modalScreens/MediaSavedSuccess";
 
 export default function VideoRecorderScreen() {
   const [showCamera, setShowCamera] = useState(false);
@@ -60,8 +63,8 @@ export default function VideoRecorderScreen() {
 
     setHasPermission(
       cameraStatus === "granted" &&
-        audioStatus === "granted" &&
-        libraryStatus === "granted"
+      audioStatus === "granted" &&
+      libraryStatus === "granted"
     );
 
     if (cameraStatus === "granted" && audioStatus === "granted") {
@@ -164,15 +167,27 @@ export default function VideoRecorderScreen() {
     <Modal transparent visible={showNamingModal} animationType="fade">
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setShowNamingModal(false)}
-          >
-            <X color="#fff" style={{ marginBottom: 10 }} size={24} />
-          </TouchableOpacity>
-          <Text style={styles.modalTitle}>
-            What would you like to name your evidence?
-          </Text>
+          <View style={{
+            width: "100%",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: 20
+          }} >
+            <Text style={styles.modalTitle}>
+              What would you like to name your evidence?
+            </Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => {
+                setShowNamingModal(false)
+                setMediaType("")
+
+              }}
+            >
+              <X color="#fff" size={20} />
+            </TouchableOpacity>
+          </View>
           <TextInput
             style={styles.evidenceInput}
             placeholder="Give Your Evidence a Name"
@@ -188,135 +203,146 @@ export default function VideoRecorderScreen() {
     </Modal>
   );
 
-  const SuccessModal = () => (
-    <Modal transparent visible={showSuccessModal} animationType="fade">
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.successIcon}>
-            <Check color="#00FF00" size={40} />
-          </View>
-          <Text style={styles.modalTitle}>
-            Your media is saved on the Blockchain
-          </Text>
-        </View>
-      </View>
-    </Modal>
-  );
 
   if (showCamera) {
     return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" />
+      <>
+        <SafeAreaView style={styles.container}>
+          <ImageBackground style={{
+            backgroundColor: Colors.transparentBg,
+          }} source={require("../../assets/images/background-image.png")} resizeMode="cover" >
 
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <ArrowLeft color="#fff" size={24} />
-            <Text style={styles.backText}>Back</Text>
-          </TouchableOpacity>
-          <LinearGradient
-            colors={["#2D8EFF", "#9C3FE4"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.profileContainer}
-          >
-            <Image
-              source={require("../../assets/images/avatar.png")}
-              style={styles.avatar}
-            />
-            <Text style={styles.walletAddress}>0xc...</Text>
-          </LinearGradient>
-        </View>
+            <StatusBar barStyle="light-content" backgroundColor={'#050A0F'} />
 
-        <Text style={styles.cameraText}>
-          {isRecording
-            ? "Recording in progress..."
-            : mediaType === "photo"
-            ? "Taking a picture..."
-            : "You can record a video, or take a picture to keep on the blockchain"}
-        </Text>
-
-        <View style={styles.cameraContainer}>
-          <CameraView ref={cameraRef} style={styles.camera} facing="back" />
-          <View style={styles.cameraControls}>
-            {isRecording ? (
-              <TouchableOpacity
-                style={[styles.cameraButton, styles.recordingButton]}
-                onPress={stopRecording}
-              >
-                <Pause size={32} color="#FF4444" />
-                <Text style={[styles.cameraButtonText, styles.recordingText]}>
-                  Stop Recording
-                </Text>
+            <View style={styles.header}>
+              <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+                <ArrowLeft color="#fff" size={24} />
+                <Text style={styles.backText}>Back</Text>
               </TouchableOpacity>
-            ) : (
-              <>
-                <TouchableOpacity
-                  style={styles.cameraButton}
-                  onPress={startRecording}
-                >
-                  <Video size={32} color="#2D8EFF" />
-                  <Text style={styles.cameraButtonText}>Record a Video</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.cameraButton}
-                  onPress={takePicture}
-                >
-                  <ImageIcon size={32} color="#2D8EFF" />
-                  <Text style={styles.cameraButtonText}>Take a Picture</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        </View>
-        <NamingModal />
-        <SuccessModal />
-      </SafeAreaView>
+              <LinearGradient
+                colors={["#2D8EFF", "#9C3FE4"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.profileContainer}
+              >
+                <Image
+                  source={require("../../assets/images/avatar.png")}
+                  style={styles.avatar}
+                />
+                <Text style={styles.walletAddress}>0xc...</Text>
+              </LinearGradient>
+            </View>
+
+            <Text style={styles.cameraText}>
+              {isRecording
+                ? "Recording in progress..."
+                : mediaType === "photo"
+                  ? "Taking a picture..."
+                  : "You can record a video, or take a\npicture to keep on the blockchain"}
+            </Text>
+
+            <View style={styles.cameraContainer}>
+              <CameraView ref={cameraRef} style={{
+                width: "90%",
+                alignSelf: "center",
+                height: 428,
+                borderRadius: 16
+              }} facing="back" />
+              <View style={styles.cameraControls}>
+                {isRecording ? (
+                  <TouchableOpacity
+                    style={[styles.cameraButton, styles.recordingButton]}
+                    onPress={stopRecording}
+                  >
+                    <Image source={require("../../assets/images/pause-icon.png")} />
+                    <Text style={[styles.cameraButtonText, styles.recordingText]}>
+                      Stop Recording
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      style={styles.cameraButton}
+                      onPress={startRecording}
+                    >
+                      <Image source={require("../../assets/images/play-icon.png")} />
+                      <Text style={styles.cameraButtonText}>Record a Video</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.cameraButton}
+                      onPress={takePicture}
+                    >
+                      <Image source={require("../../assets/images/take-picture.png")} />
+                      <Text style={styles.cameraButtonText}>Take a Picture</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+              </View>
+            </View>
+            <NamingModal />
+            <MediaSavedSuccessModal isVisible={showSuccessModal} onClose={() => {
+              setShowSuccessModal(false)
+            }} />
+
+          </ImageBackground>
+        </SafeAreaView>
+      </>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <>
+      <SafeAreaView style={styles.container}>
+        <ImageBackground style={{
+          backgroundColor: Colors.transparentBg,
+          flex: 1,
+        }} source={require("../../assets/images/background-image.png")} resizeMode="cover" >
 
-      <PageHeader title={"Video Recorder"} />
+          <StatusBar barStyle="light-content" backgroundColor={'#050A0F'} />
 
-      <ThemedView style={styles.content}>
-        <LottieContainer>
-          <LottieView
-            source={emptyStateAnimation}
-            autoPlay
-            loop
-            style={{ width: 280, height: 280 }}
-          />
-        </LottieContainer>
-        <ThemedText style={styles.message}>
-          You have not saved any video or image {"\n"}on the blockchain yet.
-          Launch your {"\n"}camera to record your evidence.
-        </ThemedText>
-        <TouchableOpacity onPress={requestPermissions}>
-          <LinearGradient
-            colors={["#2D8EFF", "#9C3FE4"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.recordButtonContainer}
-          >
-            <ThemedView style={styles.recordButton}>
-              <ThemedText style={styles.recordButtonText}>
-                Start Recording
-              </ThemedText>
-              <Video size={24} color="#fff" style={styles.recordIcon} />
-            </ThemedView>
-          </LinearGradient>
-        </TouchableOpacity>
-      </ThemedView>
-    </SafeAreaView>
+          <PageHeader title={"Video Recorder"} />
+
+          <View style={styles.content}>
+            <LottieContainer>
+              <LottieView
+                source={emptyStateAnimation}
+                autoPlay
+                loop
+                style={{ width: 280, height: 280 }}
+              />
+            </LottieContainer>
+            <Text style={styles.message}>
+              You have not saved any video or image {"\n"}on the blockchain yet.
+              Launch your {"\n"}camera to record your evidence.
+            </Text>
+            <TouchableOpacity onPress={requestPermissions}>
+              <LinearGradient
+                colors={["#2D8EFF", "#9C3FE4"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.recordButtonContainer}
+              >
+                <View style={styles.recordButton}>
+                  <Text style={styles.recordButtonText}>
+                    Start Recording
+                  </Text>
+                  <Video size={24} color="#fff" style={styles.recordIcon} />
+                </View>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+
+        </ImageBackground>
+      </SafeAreaView>
+    </>
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#000',
+    backgroundColor: Colors.transparentBg
   },
   header: {
     flexDirection: "row",
@@ -362,6 +388,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: Colors.transparentBg,
     paddingBottom: 5,
   },
   illustration: {
@@ -371,7 +398,7 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 16,
-    // color: '#fff',
+    color: '#fff',
     fontFamily: "Outfit-Regular",
     textAlign: "center",
     lineHeight: 24,
@@ -387,11 +414,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     // backgroundColor: '#000',
+    backgroundColor: Colors.primary_color,
     borderRadius: 30,
     paddingVertical: 16,
   },
   recordButtonText: {
-    // color: '#fff',
+    color: '#fff',
     fontSize: 18,
     fontFamily: "Outfit-Regular",
     fontWeight: "500",
@@ -402,24 +430,35 @@ const styles = StyleSheet.create({
   },
   cameraContainer: {
     flex: 1,
+    position: "relative",
     width: "100%",
     // backgroundColor: '#000',
   },
   camera: {
     flex: 1,
+    position: "relative"
   },
   cameraControls: {
     flexDirection: "row",
     justifyContent: "space-around",
     padding: 20,
-    backgroundColor: "rgba(0,0,0,0.8)",
+    // backgroundColor: "red",
+    zIndex: 1,
+    // top: 40,
+    position: "absolute",
+    left: 0,
+    height: "auto",
+    width: "100%",
+    top: 330
+    // backgroundColor: "rgba(0,0,0,0.8)",
   },
   cameraButton: {
     alignItems: "center",
   },
   cameraButtonText: {
-    color: "#fff",
+    color: "#FFF",
     marginTop: 8,
+    fontSize: 14,
     fontFamily: "Outfit-Regular",
   },
   cameraText: {
@@ -431,12 +470,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   recordingButton: {
-    backgroundColor: "rgba(255, 68, 68, 0.1)",
+    // backgroundColor: "rgba(255, 68, 68, 0.1)",
     padding: 16,
     borderRadius: 8,
   },
   recordingText: {
-    color: "#FF4444",
+    color: "#FFFF",
   },
   modalOverlay: {
     flex: 1,
@@ -445,19 +484,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "#1A1A1A",
+    backgroundColor: Colors.primary_color,
+    borderColor: "#0094FF",
+    borderWidth: .2,
     borderRadius: 20,
     padding: 25,
-    width: "80%",
+    width: "90%",
     height: 210,
     alignItems: "center",
   },
   modalTitle: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 14,
     fontFamily: "Outfit-SemiBold",
     textAlign: "center",
-    marginBottom: 20,
   },
   evidenceInput: {
     backgroundColor: "#2A2A2A",
@@ -474,9 +514,7 @@ const styles = StyleSheet.create({
     fontFamily: "Outfit-SemiBold",
   },
   closeButton: {
-    position: "absolute",
-    right: 10,
-    top: 10,
+
   },
   successIcon: {
     backgroundColor: "rgba(0, 255, 0, 0.1)",

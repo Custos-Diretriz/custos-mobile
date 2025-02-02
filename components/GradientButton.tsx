@@ -6,6 +6,7 @@ import {
   View,
   Platform,
   DimensionValue,
+  StyleProp,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
@@ -14,15 +15,17 @@ interface GradientButtonProps {
   onPress?: () => void;
   width?: DimensionValue;
   disabled?: boolean;
+  style?: StyleProp<{}>,
 }
 
 export default function Component({
-  onPress = () => {},
+  onPress = () => { },
   width = "100%",
   disabled = false,
+  style
 }: GradientButtonProps) {
   return (
-    <View style={[styles.container, { width }]}>
+    <View style={[styles.container, style, { width }]}>
       <Pressable
         onPress={onPress}
         disabled={disabled}
