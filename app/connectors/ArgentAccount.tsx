@@ -19,7 +19,7 @@ import {
   RawArgsObject,
 } from "starknet";
 import { I_Account, WalletContext } from "../context/WalletContext";
-import ERC20_ABI from "../abi/abi";
+import ERC20_ABI from "@/app/abi/ERC20.json";
 import { useRouter } from "expo-router";
 
 type WalletPop = {

@@ -8,6 +8,7 @@ import {
   StatusBar,
   Modal,
   TextInput,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -29,6 +30,9 @@ import emptyStateAnimation from "@/assets/animations/empty-state.json";
 import styled from "styled-components/native";
 import { WalletContext } from "../context/WalletContext";
 import { generateAvatarUrl } from "../utils";
+import { crimeContract, handleNewRecording } from "@/hooks/useCrimeContract";
+// import { useCrimeVideoContract } from "@/hooks/useCrimeContract";
+// import { useSendTransaction } from "@starknet-react/core";
 
 export default function VideoRecorderScreen() {
   const [showCamera, setShowCamera] = useState(false);
@@ -67,8 +71,8 @@ export default function VideoRecorderScreen() {
 
     setHasPermission(
       cameraStatus === "granted" &&
-        audioStatus === "granted" &&
-        libraryStatus === "granted"
+      audioStatus === "granted" &&
+      libraryStatus === "granted"
     );
 
     if (cameraStatus === "granted" && audioStatus === "granted") {
@@ -148,9 +152,18 @@ export default function VideoRecorderScreen() {
 
   const saveMedia = async () => {
     try {
-      if (capturedMedia) {
+      if (capturedMedia && crimeContract) {
         await MediaLibrary.saveToLibraryAsync(capturedMedia.uri);
-        // Here you would upload to blockchain with evidenceName
+
+        // Save to blockchain
+        const videoData = {
+          title: evidenceName,
+          timestamp: new Date().toISOString(),
+          uri: capturedMedia.uri,
+        };
+
+        await handleNewRecording(videoData);
+
         setShowNamingModal(false);
         setShowSuccessModal(true);
         setTimeout(() => {
@@ -238,8 +251,8 @@ export default function VideoRecorderScreen() {
           {isRecording
             ? "Recording in progress..."
             : mediaType === "photo"
-            ? "Taking a picture..."
-            : "You can record a video, or take a picture to keep on the blockchain"}
+              ? "Taking a picture..."
+              : "You can record a video, or take a picture to keep on the blockchain"}
         </Text>
 
         <View style={styles.cameraContainer}>

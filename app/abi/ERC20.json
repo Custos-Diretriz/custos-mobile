@@ -1,4 +1,4 @@
-export const ABI = [
+[
   {
     "name": "MintableToken",
     "type": "impl",
@@ -1026,4 +1026,4 @@ export const ABI = [
       }
     ]
   }
-] as const;
+]

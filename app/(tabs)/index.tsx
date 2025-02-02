@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -25,10 +25,8 @@ import { Plus, Video } from "lucide-react-native";
 import ArrowRight from "@/assets/svgs/arrowRight.svg";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { ScrollView } from "react-native-gesture-handler";
-import { Abi, useAccount, useContract, useReadContract, useSendTransaction } from "@starknet-react/core";
-import { ABI } from "@/app/abi/abi"
+import { crimeContract, crimeContractAddress, provider, useCrimeVideos, handleNewRecording } from "@/hooks/useCrimeContract";
 
-// const videos: { title: string; timestamp: string }[] = [
 //   {
 //     title: "Domestic Abuse From Husband",
 //     timestamp: "Tuesday, 24th January 2024. 10:39:21 a.m.",
@@ -45,7 +43,6 @@ import { ABI } from "@/app/abi/abi"
 //     title: "Theft",
 //     timestamp: "Monday, 4th March 2024. 10:39:21 a.m.",
 //   },
-// ];
 
 const agreements: { title: string; timestamp: string }[] = [
 
@@ -93,80 +90,35 @@ type RootStackParamList = {
   };
 };
 
-interface VideoData {
+export interface VideoData {
   title: string;
   timestamp: string;
   uri: string;
-  data?: any;
 }
 
 export default function Home() {
-  const { address } = useAccount();
-  const [videos, setVideos] = useState<{ title: String; timestamp: string }[]>([])
-  const [loading, setLoading] = useState(true);
+  const { videos, isLoading } = useCrimeVideos();
   const { colors } = useTheme();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const crimeContractAddress = "0x03cbefe95450dddc88638f7b23f34d83fc48b570e476d87a608c07724aaaa342"; // testnet
-  // const contractAddress = "0x020bd5ec01c672e69e3ca74df376620a6be8a2b104ab70a9f0885be00dd38fb9"; // mainnet
-  const typedABI = ABI as Abi;
-  const { contract } = useContract({
-    abi: typedABI,
-    address: crimeContractAddress
-  })
+  // import from from useCrimeContract hook
+  // const handleNewRecording = async (video: VideoData) => {
+  //   if (!crimeContract) {
+  //     Alert.alert("Error", "Please connect your wallet.");
+  //     return;
+  //   };
 
-  // Fetch crime records from blockchain
-  const fetchCrimeRecords = async () => {
-    if (!address || !contract ) return;
+  //   try {
 
-    try {
-      setLoading(true);
-      // Call contract method to get user's token IDs
-      const { data: tokenIds, error, isLoading } = useReadContract(
-        {
-          functionName: "get_all_user_uploads",
-          abi: typedABI,
-          address: crimeContractAddress,
-          watch: true,
-        }
-      )
+  //     const call = crimeContract.populate("crime_record", [video.uri]);
+  //     const res = await crimeContract.crime_record(call.calldata)
+  //     await provider.waitForTransaction(res.transaction_hash);
 
-      if (error) {
-        console.error("Error fetching crime records:", error);
-        return;
-      }
-
-      if (!tokenIds) {
-        console.log("No records found.");
-        return;
-      }
-
-      const numericTokenIds = (tokenIds as bigint[])?.map((id: bigint) => Number(id));
-
-      // Fetch metadata for each token
-      const videoPromises = numericTokenIds.map(async (id: number) => {
-        const uri = await contract.get_token_uri(id);
-        const metadata = await fetchIPFSData(uri);
-        return {
-          title: metadata.title || "Untitled Evidence",
-          timestamp: new Date(metadata.timestamp).toLocaleDateString(),
-          uri: metadata.videoUrl || uri,
-        };
-      });
-
-      const videoData = (await Promise.all(videoPromises)).filter(Boolean);
-      setVideos(videoData)
-    } catch (error) {
-      console.error("Error fetching crime records:", error);
-      Alert.alert("Error", "Failed to load crime records");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCrimeRecords();
-  }, [address]);
+  //   } catch (error) {
+  //     console.error("Error submitting crime record:", error);
+  //     Alert.alert("Error", "Failed to submit crime record");
+  //   }
+  // };
 
   const handleViewVideo = (video: VideoData) => {
     navigation.navigate("video-detail", {
@@ -176,54 +128,11 @@ export default function Home() {
     });
   };
 
-  const fetchIPFSData = async (ipfsHash: string) => {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000);
-
-      const response = await fetch(`https://ipfs.io/ipfs/${ipfsHash}`, {
-        signal: controller.signal
-      });
-
-      clearTimeout(timeout);
-      if (!response.ok) {
-        throw new Error(`IPFS request failed with status: ${response.status}`)
-      }
-      return await response.json();
-    } catch (error) {
-      console.error("Error fetching IPFS data:", error);
-      return {
-        title: "Unknown Crime",
-        timestamp: Date.now(),
-        videoUrl: ipfsHash
-      };
-    }
-  };
-
   const handlePress = (tab: "agreement" | "crime-video") => {
     if (tab === "crime-video") {
       navigation.navigate(tab, { onSubmit: handleNewRecording });
     } else {
       navigation.navigate(tab);
-    }
-  };
-  
-
-  const handleNewRecording = async (video: VideoData) => {
-    if (!address || !contract) return;
-
-    try {
-      // Call contract method to create new crime record
-      const { send, error, isPending } = useSendTransaction({
-        calls: contract && address
-          ? [contract.populate("crime_record", [video.uri,
-            video.data])]
-          : undefined,
-      }); 
-      // Refresh list after successful submission
-      await fetchCrimeRecords();
-    } catch (error) {
-      console.error("Error submitting crime record:", error);
     }
   };
 
@@ -239,7 +148,7 @@ export default function Home() {
           <WrapperContainer>
             <OuterContainer hasData={videos.length > 0}>
               <SectionTitle color={colors.text}>
-                My Videos ({loading ? "..." : videos.length})
+                My videos ({isLoading ? "..." : videos.length})
               </SectionTitle>
               <GradientBorder
                 colors={["#19B1D2", "#0094FF"]}
@@ -263,7 +172,7 @@ export default function Home() {
                           <View
                             style={{ flex: 1, gap: 12, paddingHorizontal: 6 }}
                           >
-                            {videos.map((video, index) => (
+                            {videos.map((record: any, index: Number) => (
                               <LinearGradient
                                 key={`agreement-${index}`}
                                 colors={[
@@ -288,12 +197,12 @@ export default function Home() {
                                             styles.gradientOverlayContainer
                                           }
                                         >
-                                          <CardTitle>{video.title}</CardTitle>
+                                          <CardTitle>{record.title}</CardTitle>
                                         </ThemedView>
                                         
                                       </LinearGradient>
 
-                                      <ViewButton onPress={() => handleViewVideo(video)}>
+                                      <ViewButton onPress={() => handleViewVideo(record)}>
                                         <ViewButtonText>View</ViewButtonText>
                                         <ViewButtonIcon>
                                           <ArrowRight />
@@ -304,7 +213,7 @@ export default function Home() {
                                       <TimestampLabel color={colors.text}>
                                         Time Stamp:{" "}
                                       </TimestampLabel>
-                                      <TimestampValue value={video.timestamp} />
+                                      <TimestampValue value={record.timestamp} />
                                     </TimestampContainer>
                                   </CardContent>
                                 </CardContainer>

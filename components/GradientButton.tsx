@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
-import { useAccount, useConnect } from "@starknet-react/core";
 
 interface GradientButtonProps {
   onPress?: () => void;
