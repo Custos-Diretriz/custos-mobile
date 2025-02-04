@@ -9,6 +9,7 @@ import {
   Modal,
   TextInput,
   ImageBackground,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -32,6 +33,21 @@ import { WalletContext } from "../context/WalletContext";
 import { generateAvatarUrl } from "../utils";
 import MediaSavedSuccessModal from "@/components/modalScreens/MediaSavedSuccess";
 import { Colors } from "@/constants/Colors";
+import { crimeContract, handleNewRecording } from "@/hooks/useCrimeContract";
+import {
+  executeCalls,
+  fetchAccountCompatibility,
+  fetchGasTokenPrices,
+  GaslessOptions,
+  GasTokenPrice,
+  getGasFeesInGasToken,
+  SEPOLIA_BASE_URL,
+} from "@avnu/gasless-sdk";
+import { Account, Call } from "starknet";
+// import { useCrimeVideoContract } from "@/hooks/useCrimeContract";
+// import { useSendTransaction } from "@starknet-react/core";
+
+const options: GaslessOptions = { baseUrl: SEPOLIA_BASE_URL };
 
 export default function VideoRecorderScreen() {
   const [showCamera, setShowCamera] = useState(false);
@@ -43,14 +59,20 @@ export default function VideoRecorderScreen() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [evidenceName, setEvidenceName] = useState("");
   const [capturedMedia, setCapturedMedia] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [gasTokenPrices, setGasTokenPrices] = useState<GasTokenPrice[]>([]);
+  const [gasTokenPrice, setGasTokenPrice] = useState<GasTokenPrice>();
+  const [maxGasTokenAmount, setMaxGasTokenAmount] = useState<bigint>();
+  const [gaslessCompatibility, setGaslessCompatibility] = useState<any>();
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   const cameraRef = useRef<any>(null);
   const recordingTimer = useRef<NodeJS.Timeout | null>(null);
 
-  // const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
-  // const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
-  // const account = JSON.parse(response);
-  // const truncatedAddress = account[0].address.slice(0, 3).concat("...");
+  const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
+  const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
+  const account = JSON.parse(response);
+  const truncatedAddress = account[0].address.slice(0, 3).concat("...");
 
   useEffect(() => {
     return () => {
@@ -59,6 +81,15 @@ export default function VideoRecorderScreen() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (account) {
+      fetchAccountCompatibility(account[0].address, options).then(
+        setGaslessCompatibility
+      );
+      fetchGasTokenPrices(options).then(setGasTokenPrices);
+    }
+  }, [account]);
 
   const requestPermissions = async () => {
     const { status: cameraStatus } =
@@ -151,15 +182,50 @@ export default function VideoRecorderScreen() {
 
   const saveMedia = async () => {
     try {
-      if (capturedMedia) {
+      if (capturedMedia && crimeContract) {
         await MediaLibrary.saveToLibraryAsync(capturedMedia.uri);
-        // Here you would upload to blockchain with evidenceName
-        setShowNamingModal(false);
-        setShowSuccessModal(true);
-        setTimeout(() => {
-          setShowSuccessModal(false);
-          handleBack();
-        }, 2000);
+
+        // Save to blockchain
+        const videoData = {
+          title: evidenceName,
+          timestamp: new Date().toISOString(),
+          uri: capturedMedia.uri,
+        };
+
+        await handleNewRecording(videoData);
+
+        const calls: Call[] = [
+          {
+            entrypoint: "coverCrime",
+            contractAddress: crimeContract.address,
+            calldata: [videoData.uri],
+          },
+        ];
+
+        setLoading(true);
+        await executeCalls(
+          account,
+          calls,
+          {
+            gasTokenAddress: gasTokenPrice?.tokenAddress,
+            maxGasTokenAmount,
+          },
+          options
+        )
+          .then((response) => {
+            setLoading(false);
+            setShowNamingModal(false);
+            setShowSuccessModal(true);
+            setTimeout(() => {
+              setShowSuccessModal(false);
+              handleBack();
+            }, 2000);
+          })
+          .catch((error) => {
+            setLoading(false);
+            console.error("Error executing transaction:", error);
+            setErrorMessage("Failed to execute transaction. Please try again.");
+          });
       }
     } catch (error) {
       console.error("Error saving media:", error);
