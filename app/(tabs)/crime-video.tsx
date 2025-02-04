@@ -31,8 +31,20 @@ import styled from "styled-components/native";
 import { WalletContext } from "../context/WalletContext";
 import { generateAvatarUrl } from "../utils";
 import { crimeContract, handleNewRecording } from "@/hooks/useCrimeContract";
+import {
+  executeCalls,
+  fetchAccountCompatibility,
+  fetchGasTokenPrices,
+  GaslessOptions,
+  GasTokenPrice,
+  getGasFeesInGasToken,
+  SEPOLIA_BASE_URL,
+} from "@avnu/gasless-sdk";
+import { Account, Call } from "starknet";
 // import { useCrimeVideoContract } from "@/hooks/useCrimeContract";
 // import { useSendTransaction } from "@starknet-react/core";
+
+const options: GaslessOptions = { baseUrl: SEPOLIA_BASE_URL };
 
 export default function VideoRecorderScreen() {
   const [showCamera, setShowCamera] = useState(false);
@@ -44,6 +56,12 @@ export default function VideoRecorderScreen() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [evidenceName, setEvidenceName] = useState("");
   const [capturedMedia, setCapturedMedia] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [gasTokenPrices, setGasTokenPrices] = useState<GasTokenPrice[]>([]);
+  const [gasTokenPrice, setGasTokenPrice] = useState<GasTokenPrice>();
+  const [maxGasTokenAmount, setMaxGasTokenAmount] = useState<bigint>();
+  const [gaslessCompatibility, setGaslessCompatibility] = useState<any>();
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   const cameraRef = useRef<any>(null);
   const recordingTimer = useRef<NodeJS.Timeout | null>(null);
@@ -61,6 +79,15 @@ export default function VideoRecorderScreen() {
     };
   }, []);
 
+  useEffect(() => {
+    if (account) {
+      fetchAccountCompatibility(account[0].address, options).then(
+        setGaslessCompatibility
+      );
+      fetchGasTokenPrices(options).then(setGasTokenPrices);
+    }
+  }, [account]);
+
   const requestPermissions = async () => {
     const { status: cameraStatus } =
       await ExpoCamera.requestCameraPermissionsAsync();
@@ -71,8 +98,8 @@ export default function VideoRecorderScreen() {
 
     setHasPermission(
       cameraStatus === "granted" &&
-      audioStatus === "granted" &&
-      libraryStatus === "granted"
+        audioStatus === "granted" &&
+        libraryStatus === "granted"
     );
 
     if (cameraStatus === "granted" && audioStatus === "granted") {
@@ -164,12 +191,38 @@ export default function VideoRecorderScreen() {
 
         await handleNewRecording(videoData);
 
-        setShowNamingModal(false);
-        setShowSuccessModal(true);
-        setTimeout(() => {
-          setShowSuccessModal(false);
-          handleBack();
-        }, 2000);
+        const calls: Call[] = [
+          {
+            entrypoint: "coverCrime",
+            contractAddress: crimeContract.address,
+            calldata: [videoData.uri],
+          },
+        ];
+
+        setLoading(true);
+        await executeCalls(
+          account,
+          calls,
+          {
+            gasTokenAddress: gasTokenPrice?.tokenAddress,
+            maxGasTokenAmount,
+          },
+          options
+        )
+          .then((response) => {
+            setLoading(false);
+            setShowNamingModal(false);
+            setShowSuccessModal(true);
+            setTimeout(() => {
+              setShowSuccessModal(false);
+              handleBack();
+            }, 2000);
+          })
+          .catch((error) => {
+            setLoading(false);
+            console.error("Error executing transaction:", error);
+            setErrorMessage("Failed to execute transaction. Please try again.");
+          });
       }
     } catch (error) {
       console.error("Error saving media:", error);
@@ -251,8 +304,8 @@ export default function VideoRecorderScreen() {
           {isRecording
             ? "Recording in progress..."
             : mediaType === "photo"
-              ? "Taking a picture..."
-              : "You can record a video, or take a picture to keep on the blockchain"}
+            ? "Taking a picture..."
+            : "You can record a video, or take a picture to keep on the blockchain"}
         </Text>
 
         <View style={styles.cameraContainer}>
