@@ -9,28 +9,7 @@ import { generateAvatarUrl } from "@/app/utils";
 export const ProfileAvatar = () => {
   const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
   const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
-  const [account, setAccount] = useState<any | null>(null);
-  // const account = JSON.parse(response);
-
-  useEffect(() => {
-    const fetchAccount = async () => {
-      try {
-        const response = await SecureStore.getItem(ACCOUNT_STORE_KEY);
-        if (response) {
-          setAccount(JSON.parse(response));
-        }
-      } catch (error) {
-        console.error("Error fetching account:", error);
-      }
-    };
-
-    fetchAccount();
-  }, []);
-
-  if (!account || !account[0]) {
-    return null; // Or return a placeholder UI
-  }
-
+  const account = JSON.parse(response);
   let address = account[0].address.slice(0, 3).concat("...");
 
   return (
