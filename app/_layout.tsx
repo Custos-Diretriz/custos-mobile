@@ -21,6 +21,7 @@ import Navbar, { DrawerContent } from "@/components/Navbar";
 import { Stack } from "expo-router";
 import WalletDetails from "./context/WalletContext";
 import { customDarkTheme } from "@/constants/theme";
+import { StatusBar } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,25 +46,24 @@ export default function RootLayout() {
   }
 
   return (
-    <WalletDetails>
-      <ThemeProvider
-        value={colorScheme === "dark" ? customDarkTheme : DefaultTheme}
-      >
-        <PaperProvider
-          theme={colorScheme === "dark" ? customDarkTheme : DefaultTheme}
-        >
-          <GestureHandlerRootView style={{ flex: 1, width: "100%" }}>
-            <Drawer
-              drawerContent={() => {
-                return <DrawerContent />;
-              }}
-              screenOptions={{
-                drawerContentStyle: {
-                  width: "100%",
-                },
-              }}
-            >
-              {/* <Drawer.Navigator
+    <>
+      <WalletDetails>
+        <ThemeProvider value={DarkTheme}>
+          <PaperProvider
+            theme={DarkTheme}
+          >
+            <GestureHandlerRootView style={{ flex: 1, width: "100%" }}>
+              <Drawer
+                drawerContent={() => {
+                  return <DrawerContent />;
+                }}
+                screenOptions={{
+                  drawerContentStyle: {
+                    width: "100%",
+                  },
+                }}
+              >
+                {/* <Drawer.Navigator
                   drawerContent={(props: any) => <CustomDrawerContent {...props} />}
                   ref={drawerRef}
                   screenOptions={{
@@ -72,22 +72,25 @@ export default function RootLayout() {
                     },
                   }}
                 > */}
-              <Drawer.Screen
-                name="index"
-                options={{
-                  header: () => <Navbar />,
-                }}
-              />
-              <Drawer.Screen
-                name="(tabs)"
-                options={{
-                  header: () => <Navbar />,
-                  headerShown: false,
-                }}
-              />
-              {/* </Drawer.Navigator> */}
-            </Drawer>
-            {/*<Stack>
+                <Drawer.Screen
+                  name="index"
+                  // options={{
+                  //   header: () => <Navbar />,
+                  // }}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Drawer.Screen
+                  name="(tabs)"
+                  options={{
+                    header: () => <Navbar />,
+                    headerShown: false,
+                  }}
+                />
+                {/* </Drawer.Navigator> */}
+              </Drawer>
+              {/*<Stack>
                 <Stack.Screen
                   name="index"
                   options={{
@@ -99,10 +102,12 @@ export default function RootLayout() {
                     headerShown: false
                   }}/>
               </Stack>*/}
-          </GestureHandlerRootView>
-        </PaperProvider>
-      </ThemeProvider>
-    </WalletDetails>
+            </GestureHandlerRootView>
+          </PaperProvider>
+        </ThemeProvider>
+      </WalletDetails>
+      <StatusBar backgroundColor={"#050A0F"} barStyle={"light-content"} />
+    </>
   );
 }
 

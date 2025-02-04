@@ -23,4 +23,7 @@ export const Colors = {
     tabIconDefault: "#9BA1A6",
     tabIconSelected: tintColorDark,
   },
+  transparentBg: "rgba(8, 33, 57, 0.23)",
+  primary_color: "#0e1821",
+  card_color: "#0b1319",
 };
