@@ -47,10 +47,10 @@ export default function VideoRecorderScreen() {
   const cameraRef = useRef<any>(null);
   const recordingTimer = useRef<NodeJS.Timeout | null>(null);
 
-  const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
-  const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
-  const account = JSON.parse(response);
-  const truncatedAddress = account[0].address.slice(0, 3).concat("...");
+  // const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
+  // const response = SecureStore.getItem(ACCOUNT_STORE_KEY);
+  // const account = JSON.parse(response);
+  // const truncatedAddress = account[0].address.slice(0, 3).concat("...");
 
   useEffect(() => {
     return () => {
@@ -230,11 +230,11 @@ export default function VideoRecorderScreen() {
                 end={{ x: 1, y: 0 }}
                 style={styles.profileContainer}
               >
-                <Image
+                {/* <Image
                   source={{ uri: generateAvatarUrl(account[0]?.address) }}
                   style={styles.avatar}
-                />
-                <Text style={styles.walletAddress}>{truncatedAddress}</Text>
+                /> */}
+                {/* <Text style={styles.walletAddress}>{truncatedAddress}</Text> */}
               </LinearGradient>
             </View>
 

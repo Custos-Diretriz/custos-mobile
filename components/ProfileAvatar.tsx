@@ -5,12 +5,12 @@ import React, { useContext, useEffect, useRef } from "react";
 import { ThemedView } from "@/components/ThemedView";
 import { I_Account, WalletContext } from "@/app/context/WalletContext";
 import { generateAvatarUrl } from "@/app/utils";
-
+import avatar from "@/assets/images/avatar.png"
 export const ProfileAvatar = () => {
-  const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
-  const response = SecureStore?.getItem(ACCOUNT_STORE_KEY);
-  const account = JSON.parse(response);
-  let address = account[0]?.address?.slice(0, 3)?.concat("...");
+  // const { SecureStore, ACCOUNT_STORE_KEY } = useContext(WalletContext);
+  // const response = SecureStore?.getItem(ACCOUNT_STORE_KEY);
+  // const account = JSON.parse(response);
+  // let address = account[0]?.address?.slice(0, 3)?.concat("...");
 
   return (
     <LinearGradient
@@ -20,8 +20,8 @@ export const ProfileAvatar = () => {
       style={styles.profileContainer}
     >
       <ThemedView style={styles.gradientOverlayContainer}>
-        <Image source={{ uri: generateAvatarUrl(account[0]?.address) }} style={styles.avatar} />
-        <ThemedText style={styles.walletAddress}>{address}</ThemedText>
+        <Image source={avatar} style={styles.avatar} />
+        <ThemedText style={styles.walletAddress}>{""}</ThemedText>
       </ThemedView>
     </LinearGradient>
   );
