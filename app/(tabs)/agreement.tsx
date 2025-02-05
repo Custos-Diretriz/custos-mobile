@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 import styled from 'styled-components/native';
 import { useTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -171,6 +171,11 @@ const Agreement = () => {
         flex: 1,
         width: "100%"
       }} >
+        <ImageBackground
+          source={require('@/assets/images/background.png')}
+          style={styles.background}
+          resizeMode='cover'
+        >
         <ScrollView contentContainerStyle={{
           width: "100%",
           flexGrow: 1,
@@ -188,7 +193,8 @@ const Agreement = () => {
           }}>
             {renderScreems()}
           </View>
-        </ScrollView>
+          </ScrollView>
+        </ImageBackground>
       </SafeAreaView>
 
     </>
@@ -197,51 +203,33 @@ const Agreement = () => {
 
 export default Agreement;
 
-const StyledView = styled.SafeAreaView<{ backgroundColor: string }>`
-  flex: 1;
-  background-color: ${(props) => props.backgroundColor};
-  //flex-direction: column;
-  //justify-content: center;
-`;
-
-const NavContainer = styled.View`
-  padding: 20px;
-`;
-
 const BackButtonContainer = styled.TouchableOpacity`
-    flex-direction: row;
-    justify-content:flex-start;
-    gap:8px;
-    align-items: center;
-    //margin-top: 40px;
-    padding-left: 24px;
-    width: 100%;
-    margin-top:24px;
-
-`;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  //margin-top: 40px;
+  padding-left: 10px;
+  width: 75px;
+`
 
 const StyledText = styled.Text<{ color: string }>`
-  color: ${(props) => props.color};
+  color: ${props => props.color};
   font-size: 16px;
-`;
+`
 
-const AgreementText = styled.Text<{ color: string }>`
-  color: ${(props) => props.color};
-  font-size: 24px;
-  font-weight: 600;
-  padding-left: 10px;
-  margin-top: 10px;
-`;
 
 const NoAgreementContainer = styled.View`
-    justify-content: center;
-    width:100%;
-    align-items: center;
-`;
+  justify-content: center;
+  align-items: center;
+`
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#000',
+    backgroundColor: '#1E2F37',
+    marginTop: 30,
   },
-});
+  background: {
+    ...StyleSheet.absoluteFillObject
+  }
+})

@@ -31,12 +31,14 @@ const NoAgreementScreen: React.FC<{ onContinue: () => void }> = ({
 };
 
 export default NoAgreementScreen;
+
 const Body = styled.View`
   margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: '#1E2F37',
 `;
 
 const LottieContainer = styled.View`

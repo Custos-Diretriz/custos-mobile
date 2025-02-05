@@ -15,11 +15,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import GradientButton from "@/components/GradientButton";
 import Swiper from "react-native-swiper";
 import { useRouter } from "expo-router";
-import ArgentAccount, { provider } from "./connectors/ArgentAccount";
+// import ArgentAccount, { provider } from "./connectors/ArgentAccount";
 import { WalletContext } from "./context/WalletContext";
 import { Account, Contract } from "starknet";
 import ERC20_ABI from "@/app/abi/ERC20.json";
-import ConnectWallet from "@/components/modalScreens/ConnetWallet";
+import ConnectWallet from "@/components/modalScreens/ConnectWallet";
+import WalletModal from "@/components/modalScreens/ConnectWallet";
+
 const deviceHeight = Dimensions.get("screen").height
 const isIoS = Platform.OS === "ios"
 const slides = [
@@ -67,7 +69,7 @@ export default function SwiperScreen() {
   const loaded = JSON.parse(SecureStore.getItem(ACCOUNT_STORE_KEY));
 
   const contractAddress = process.env.EXPO_PUBLIC_ERC20_ADDRESS;
-  const erc20 = new Contract(ERC20_ABI, contractAddress!, provider);
+  // const erc20 = new Contract(ERC20_ABI, contractAddress!, provider);
 
   const handleConnect = async () => {
     // if (!loaded) {
@@ -135,14 +137,12 @@ export default function SwiperScreen() {
           borderRadius: 104,
           borderWidth: 2
         }} />
-        {/* <ArgentAccount isVisible={visible} onClose={() => setVisible(!visible)} /> */}
-
+        <ConnectWallet isVisible={visible} onClose={() => setVisible(!visible)} />
         <Image
           source={require("../assets/images/ellipse.png")}
           style={styles.backgroundImage}
         />
       </SafeAreaView>
-      <ConnectWallet isVisible={visible} onClose={() => { setVisible(!visible) }} />
       <StatusBar backgroundColor={"#050A0F"} barStyle={"light-content"} />
     </>
   );
@@ -159,10 +159,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: "100%",
-    height: isIoS ? deviceHeight / 2.3 : deviceHeight / 2.7,
-    zIndex: 0,
+    height: 400,
+    zIndex: -5,
     resizeMode: "cover",
-    opacity: 0.5,
+    opacity: 0.8,
   },
   wrapper: {
     height: "100%",
@@ -172,15 +172,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 62,
+    paddingTop: 40,
     zIndex: 2,
   },
   titleContainer: {
-    width: "100%"
-  },
+top: 0  },
   title: {
-    fontSize: 32,
-    fontFamily: "Outfit-SemiBold",
+    fontSize: 35,
+    fontFamily: "Outfit-bold",
     textAlign: "center",
   },
   gradient: {

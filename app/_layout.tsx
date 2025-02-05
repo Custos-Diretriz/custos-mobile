@@ -48,9 +48,9 @@ export default function RootLayout() {
   return (
     <>
       <WalletDetails>
-        <ThemeProvider value={DarkTheme}>
+        <ThemeProvider value={colorScheme === "dark" ? customDarkTheme : DefaultTheme}>
           <PaperProvider
-            theme={DarkTheme}
+            theme={colorScheme === "dark" ? customDarkTheme : DefaultTheme}
           >
             <GestureHandlerRootView style={{ flex: 1, width: "100%" }}>
               <Drawer
@@ -63,20 +63,8 @@ export default function RootLayout() {
                   },
                 }}
               >
-                {/* <Drawer.Navigator
-                  drawerContent={(props: any) => <CustomDrawerContent {...props} />}
-                  ref={drawerRef}
-                  screenOptions={{
-                    drawerStyle: {
-                      width: '100%',
-                    },
-                  }}
-                > */}
                 <Drawer.Screen
                   name="index"
-                  // options={{
-                  //   header: () => <Navbar />,
-                  // }}
                   options={{
                     headerShown: false,
                   }}
@@ -88,20 +76,7 @@ export default function RootLayout() {
                     headerShown: false,
                   }}
                 />
-                {/* </Drawer.Navigator> */}
               </Drawer>
-              {/*<Stack>
-                <Stack.Screen
-                  name="index"
-                  options={{
-                    headerShown: false
-                  }}/>
-                <Stack.Screen
-                  name="(tabs)"
-                  options={{
-                    headerShown: false
-                  }}/>
-              </Stack>*/}
             </GestureHandlerRootView>
           </PaperProvider>
         </ThemeProvider>

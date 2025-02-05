@@ -16,7 +16,7 @@ export type ButtonProps = {
 };
 
 const GradientButton: React.FC<ButtonProps> = ({ text, textType, icon, onPress, children }) => {
-  const colorScheme = "dark";
+  const colorScheme = useColorScheme();
   const _textType = textType || 'default';
 
   return (
@@ -32,7 +32,7 @@ const GradientButton: React.FC<ButtonProps> = ({ text, textType, icon, onPress, 
         {
           children
           ?? <ThemedView style={styles.buttonContentContainer}>
-            <ThemedText style={{ color: "#EAFBFF" }} type={_textType}>{text}</ThemedText>
+            <ThemedText type={_textType}>{text}</ThemedText>
             {icon ?? <LucidePlus strokeWidth={3} color={Colors[colorScheme ?? "light"].text} />}
           </ThemedView>
         }
@@ -52,45 +52,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     columnGap: 8,
     justifyContent: "center",
-    backgroundColor: Colors.primary_color,
     borderRadius: 100,
     paddingHorizontal: 20,
     paddingVertical: 14,
   }
 })
-
-const GradientBorder = styled(LinearGradient).attrs({
-  start: { x: 0, y: 0 },
-  end: { x: 1, y: 0 },
-})`
-    padding: 3px;
-    border-radius: 100px 100px;
-    width: 292px;
-`;
-
-const ButtonContainer = styled(TouchableOpacity) <{ background: string }>`
-        //background-color: ${(props) => props.background};
-    border-radius: 100px;
-    padding: 15px 20px;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-`;
-
-const PlusIconContainer = styled(TouchableOpacity)`
-    margin-left: 10px;
-`;
-
-const ButtonView = styled(ThemedView)`
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    //background-color: #000;
-    border-radius: 30px;
-    padding: 16px 0;
-`;
-
-const ButtonText = styled(ThemedText) <{ color: string }>`
-    color: ${(props) => props.color};
-    font-size: 16px;
-`;

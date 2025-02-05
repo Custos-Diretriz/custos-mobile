@@ -236,35 +236,23 @@ export default function VideoRecorderScreen() {
   //     return `${String(seconds).padStart(2, '0')} sec`;
   // };
 
-  const NamingModal = () => (
-    <Modal transparent visible={showNamingModal} animationType="fade">
+   const NamingModal = () => (
+    <Modal transparent visible={showNamingModal} animationType='fade'>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <View style={{
-            width: "100%",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 20
-          }} >
-            <Text style={styles.modalTitle}>
-              What would you like to name your evidence?
-            </Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => {
-                setShowNamingModal(false)
-                setMediaType("")
-
-              }}
-            >
-              <X color="#fff" size={20} />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setShowNamingModal(false)}
+          >
+            <X color='#fff' style={{ marginBottom: 10 }} size={24} />
+          </TouchableOpacity>
+          <Text style={styles.modalTitle}>
+            What would you like to name your evidence?
+          </Text>
           <TextInput
             style={styles.evidenceInput}
-            placeholder="Give Your Evidence a Name"
-            placeholderTextColor="#666"
+            placeholder='Give Your Evidence a Name'
+            placeholderTextColor='#666'
             value={evidenceName}
             onChangeText={setEvidenceName}
           />
@@ -274,17 +262,18 @@ export default function VideoRecorderScreen() {
         </View>
       </View>
     </Modal>
-  );
+  )
 
 
   if (showCamera) {
     return (
       <>
         <SafeAreaView style={styles.container}>
-          <ImageBackground style={{
-            backgroundColor: Colors.transparentBg,
-          }} source={require("../../assets/images/background-image.png")} resizeMode="cover" >
-
+          <ImageBackground
+            source={require('@/assets/images/background.png')}
+            style={styles.background}
+            resizeMode='cover'
+          >
             <View style={styles.header}>
               <TouchableOpacity onPress={handleBack} style={styles.backButton}>
                 <ArrowLeft color="#fff" size={24} />
@@ -296,11 +285,11 @@ export default function VideoRecorderScreen() {
                 end={{ x: 1, y: 0 }}
                 style={styles.profileContainer}
               >
-                {/* <Image
-                  source={{ uri: generateAvatarUrl(account[0]?.address) }}
+                <Image
+                  source={require('../../assets/images/avatar.png')}
                   style={styles.avatar}
-                /> */}
-                {/* <Text style={styles.walletAddress}>{truncatedAddress}</Text> */}
+                />
+                <Text style={styles.walletAddress}>0xc...</Text>
               </LinearGradient>
             </View>
 
@@ -432,188 +421,180 @@ export default function VideoRecorderScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.transparentBg
+    backgroundColor: '#1E2F37',
+    marginTop: 30
+  },
+  background: {
+    ...StyleSheet.absoluteFillObject
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 16
   },
   backButton: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   backText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
-    fontFamily: "Outfit-Regular",
-    marginLeft: 8,
+    fontFamily: 'Outfit-Regular',
+    marginLeft: 8
   },
   title: {
-    fontFamily: "Outfit-SemiBold",
+    fontFamily: 'Outfit-SemiBold',
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: '600'
     // color: '#fff',
   },
   profileContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 4,
-    borderRadius: 20,
+    borderRadius: 20
   },
   avatar: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: 16
   },
   walletAddress: {
-    color: "#fff",
-    fontFamily: "Outfit-Regular",
+    color: '#fff',
+    fontFamily: 'Outfit-Regular',
     marginLeft: 8,
-    marginRight: 8,
+    marginRight: 8
   },
   content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: Colors.transparentBg,
-    paddingBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 5
   },
   illustration: {
     width: 250,
     height: 250,
-    marginBottom: 24,
+    marginBottom: 24
   },
   message: {
     fontSize: 16,
-    color: '#fff',
-    fontFamily: "Outfit-Regular",
-    textAlign: "center",
-    lineHeight: 24,
+    // color: '#fff',
+    fontFamily: 'Outfit-Regular',
+    textAlign: 'center',
+    lineHeight: 24
   },
   recordButtonContainer: {
     margin: 20,
     width: 292,
     borderRadius: 30,
-    padding: 3,
+    padding: 3
   },
   recordButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     // backgroundColor: '#000',
-    backgroundColor: Colors.primary_color,
     borderRadius: 30,
-    paddingVertical: 16,
+    paddingVertical: 16
   },
   recordButtonText: {
-    color: '#fff',
+    // color: '#fff',
     fontSize: 18,
-    fontFamily: "Outfit-Regular",
-    fontWeight: "500",
-    marginRight: 8,
+    fontFamily: 'Outfit-Regular',
+    fontWeight: '500',
+    marginRight: 8
   },
   recordIcon: {
-    marginLeft: 8,
+    marginLeft: 8
   },
   cameraContainer: {
     flex: 1,
-    position: "relative",
-    width: "100%",
+    width: '100%'
     // backgroundColor: '#000',
   },
   camera: {
-    flex: 1,
-    position: "relative"
+    flex: 1
   },
   cameraControls: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     padding: 20,
-    // backgroundColor: "red",
-    zIndex: 1,
-    // top: 40,
-    position: "absolute",
-    left: 0,
-    height: "auto",
-    width: "100%",
-    top: 330
-    // backgroundColor: "rgba(0,0,0,0.8)",
+    backgroundColor: 'rgba(0,0,0,0.8)'
   },
   cameraButton: {
-    alignItems: "center",
+    alignItems: 'center'
   },
   cameraButtonText: {
-    color: "#FFF",
+    color: '#fff',
     marginTop: 8,
-    fontSize: 14,
-    fontFamily: "Outfit-Regular",
+    fontFamily: 'Outfit-Regular'
   },
   cameraText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
     marginVertical: 20,
-    fontFamily: "Outfit-Regular",
-    paddingHorizontal: 20,
+    fontFamily: 'Outfit-Regular',
+    paddingHorizontal: 20
   },
   recordingButton: {
-    // backgroundColor: "rgba(255, 68, 68, 0.1)",
+    backgroundColor: 'rgba(255, 68, 68, 0.1)',
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 8
   },
   recordingText: {
-    color: "#FFFF",
+    color: '#FF4444'
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   modalContent: {
-    backgroundColor: Colors.primary_color,
-    borderColor: "#0094FF",
-    borderWidth: .2,
+    backgroundColor: '#1A1A1A',
     borderRadius: 20,
     padding: 25,
-    width: "90%",
+    width: '80%',
     height: 210,
-    alignItems: "center",
+    alignItems: 'center'
   },
   modalTitle: {
-    color: "#fff",
-    fontSize: 14,
-    fontFamily: "Outfit-SemiBold",
-    textAlign: "center",
+    color: '#fff',
+    fontSize: 20,
+    fontFamily: 'Outfit-SemiBold',
+    textAlign: 'center',
+    marginBottom: 20
   },
   evidenceInput: {
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     borderRadius: 10,
     padding: 15,
-    width: "100%",
-    color: "#fff",
-    fontFamily: "Outfit-Regular",
-    marginBottom: 20,
+    width: '100%',
+    color: '#fff',
+    fontFamily: 'Outfit-Regular',
+    marginBottom: 20
   },
   durationText: {
-    color: "#2D8EFF",
+    color: '#2D8EFF',
     fontSize: 24,
-    fontFamily: "Outfit-SemiBold",
+    fontFamily: 'Outfit-SemiBold'
   },
   closeButton: {
-
+    position: 'absolute',
+    right: 10,
+    top: 10
   },
   successIcon: {
-    backgroundColor: "rgba(0, 255, 0, 0.1)",
+    backgroundColor: 'rgba(0, 255, 0, 0.1)',
     borderRadius: 50,
     padding: 20,
-    marginBottom: 20,
-  },
-});
+    marginBottom: 20
+  }
+})
 const LottieContainer = styled.View`
   width: 280px;
   height: 280px;
-`;
+`
