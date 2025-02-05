@@ -1,30 +1,30 @@
-import React from "react";
-import styled from "styled-components/native";
-import { Ionicons } from "@expo/vector-icons";
-import { ScrollView } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { useTheme } from "@react-navigation/native";
-import Edit from "@/assets/svgs/edit.svg";
-import CancelButton from "../CancelButton";
-import ContinueButton from "../ContinueButton";
+import React from 'react';
+import styled from 'styled-components/native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import Edit from '@/assets/svgs/edit.svg';
 
 const PrintAgreementScreen: React.FC<{ onContinue: () => void }> = ({
   onContinue,
 }) => {
-  const { colors } = useTheme();
+  // const { colors } = useTheme();
   return (
-    <LinearGradientWrapper colors={["#19b1d2", "#0094ff"]}>
-      <Container>
-        <ContentContainer colors={["#19b1d2", "#0094ff"]}>
-          <ContentContainerWrapper background={colors.background}>
+    <LinearGradientWrapper colors={['#19b1d2', '#0094ff']}>
+      <Container >
+        <ContentContainer colors={['#19b1d2', '#0094ff']} >
+          <ContentContainerWrapper background={"#050A0F"} >
             <Header>
               <TitleContainer>
                 <GradientWrapper
-                  colors={["#19b1d2", "#0094ff"]}
-                  style={{ borderRadius: 20, padding: 1 }}
+                  colors={['#0094FF', '#A02294']}
+                  style={{ borderRadius: 20, padding: 0.4 }}
                 >
-                  <TitleWrapper background={colors.background}>
-                    <Title>Non Disclosure Agreement</Title>
+                  <TitleWrapper background={"#050A0F"} style={{
+                    height: 40
+                  }} >
+                    <Title style={{
+                      fontSize: 12
+                    }} >Non Disclosure Agreement</Title>
                   </TitleWrapper>
                 </GradientWrapper>
 
@@ -33,10 +33,10 @@ const PrintAgreementScreen: React.FC<{ onContinue: () => void }> = ({
                 </IconContainer>
               </TitleContainer>
               <GradientWrapper
-                colors={["#19b1d2", "#0094ff"]}
-                style={{ borderRadius: 20, padding: 1 }}
+                colors={['#19b1d2', '#0094ff']}
+                style={{ borderRadius: 20, padding: 1, marginTop: 12 }}
               >
-                <TitleWrapper background={colors.background}>
+                <TitleWrapper background={"#050A0F"}>
                   <Address>Second Party Address: 0xder25xeffthbac57uh</Address>
                 </TitleWrapper>
               </GradientWrapper>
@@ -47,19 +47,61 @@ const PrintAgreementScreen: React.FC<{ onContinue: () => void }> = ({
                 Tuesday, 24th January 2024, 10:39:21 a.m.
               </TimestampValue>
             </TimestampContainer>
-            <ScrollView>
+            <View style={{
+              paddingBottom: 18,
+              width: "100%"
+            }} >
               <AgreementText>
                 This Non-Disclosure Agreement (hereinafter the "Agreement") is
                 made and entered into on 2024-06-01 by and between Custos
                 Diretiz...
               </AgreementText>
-            </ScrollView>
+            </View>
           </ContentContainerWrapper>
         </ContentContainer>
 
         <ButtonContainer>
-          <CancelButton onPress={onContinue} title="Print Agreement" />
-          <ContinueButton onPress={onContinue} title="Validate Agreement" />
+          <LinearGradient start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }} colors={["#0094FF", "#A02294"]} style={{
+              width: "100%",
+              borderRadius: 30,
+              padding: 2
+            }} >
+            <TouchableOpacity style={{
+              backgroundColor: "#274962",
+              borderWidth: 0,
+              borderRadius: 30,
+              paddingVertical: 16,
+              alignItems: "center"
+            }} >
+              <Text style={{
+                fontSize: 14,
+                color: "#EAFBFF",
+                fontFamily: "Outfit-Regular"
+              }} >Print Agreement</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+          <LinearGradient start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }} colors={["#9B9292", "#9B9292"]} style={{
+              width: "100%",
+              borderRadius: 30,
+              padding: 2,
+              marginTop: 1
+            }} >
+            <TouchableOpacity onPress={onContinue} style={{
+              backgroundColor: "#04080C",
+              borderWidth: 0,
+              borderRadius: 30,
+              paddingVertical: 16,
+              alignItems: "center"
+            }} >
+              <Text style={{
+                fontSize: 14,
+                color: "#EAFBFF",
+                fontFamily: "Outfit-Regular"
+              }} >Validate Agreement</Text>
+            </TouchableOpacity>
+          </LinearGradient>
         </ButtonContainer>
       </Container>
     </LinearGradientWrapper>
@@ -72,14 +114,12 @@ const LinearGradientWrapper = styled(LinearGradient).attrs({
   start: { x: 0, y: 0 },
   end: { x: 1, y: 0 },
 })`
-  top: -50;
-  z-index: 1;
-  position: absolute;
   border-radius: 20px;
+  width:361px;
+  align-self:center;
   overflow: hidden;
   height: auto;
-  flex: 1;
-  padding: 1px;
+  padding: 1px
 `;
 
 const ContentContainer = styled(LinearGradient).attrs({
@@ -94,11 +134,9 @@ const ContentContainer = styled(LinearGradient).attrs({
 `;
 
 const ContentContainerWrapper = styled.View<{ background: string }>`
-  background-color: #04080c;
+  background-color: ${(props) => props.background};
   padding: 12px;
   border-radius: 8px;
-  overflow: scroll;
-  height: auto;
 `;
 
 const GradientWrapper = styled(LinearGradient).attrs({
@@ -112,7 +150,7 @@ const GradientWrapper = styled(LinearGradient).attrs({
 
 const Container = styled.View`
   padding: 20px;
-  background-color: #121212;
+  background-color: #09131A;
   border-radius: 20px;
   height: auto;
 `;
@@ -126,12 +164,11 @@ const TitleContainer = styled.View`
   align-items: center;
   justify-content: space-between;
   height: 33px;
-  margin-top: 5px;
-  margin-bottom: 15px;
+  margin-top: 12px;
 `;
 
 const TitleWrapper = styled.View<{ background: string }>`
-  background-color: #04080c;
+  background-color: ${(props) => props.background};
   padding: 4px;
   border-radius: 32px;
 `;
@@ -140,7 +177,6 @@ const Title = styled.Text`
   color: #19b1d2;
   padding: 8px 16px;
   font-weight: bold;
-  height: 27px;
 `;
 
 const IconContainer = styled.View`
@@ -151,8 +187,9 @@ const IconContainer = styled.View`
 
 const Address = styled.Text`
   color: #9b9292;
-  font-size: 12px;
-  padding: 8px 4px;
+  font-size: 10px;
+  text-align:center;
+  padding:8px 16px;
 `;
 
 const TimestampContainer = styled.View`
@@ -161,20 +198,20 @@ const TimestampContainer = styled.View`
 
 const TimestampLabel = styled.Text`
   color: #c1c1c1;
-  font-size: 14px;
+  font-size: 12px;
 `;
 
 const TimestampValue = styled.Text`
   color: #19b1d2;
-  font-size: 14px;
+  font-size:12px;
   font-weight: 400;
   margin-top: 15px;
 `;
 
 const AgreementText = styled.Text`
   color: #c1c1c1;
-  font-size: 13px;
-  line-height: 20px;
+  font-size: 12px;
+  line-height: 20px
 `;
 
 const ButtonContainer = styled.View`
@@ -182,4 +219,10 @@ const ButtonContainer = styled.View`
   justify-content: space-between;
   margin-top: 25px;
   gap: 25px;
+`;
+
+const ButtonText = styled.Text`
+  color: #c1c1c1;
+  font-size: 14px;
+  font-weight: bold;
 `;
